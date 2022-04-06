@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <style type="text/css">
+    html,
+    body {
+      overflow: hidden;
+      font-size: 14px;
+      font-family: Helvetica, sans-serif, Arial;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+      border: 0;
+    }
+
+    canvas {
+      margin: 0;
+      padding: 0;
+      display: block;
+    }
+
+    #drawing {
+      /* margin: 4px; */
+      border: 1px solid gray;
+      position: absolute;
+      /* left: 248px; */
+      /* top: 30px; */
+      width: 230px;
+      height: 100%
+    }
+
+    canvas {
+      cursor: default;
+    }
+
+    .textiocontainer {
+      position: relative;
+      font-size: 80%;
+      width: 216px;
+      background-color: #eee;
+      border: 1px solid #eee;
+      margin-top: 20px;
+      padding: 6px;
+      display: none;
+    }
+
+    .constructioncontainer {
+      position: relative;
+      font-size: 80%;
+      width: 216px;
+      background-color: #eee;
+      border: 1px solid #eee;
+      /* margin-top: -5px; */
+      /* padding: 6px; */
+      display: none;
+      padding-bottom: 0px;
+      padding-top: 0;
+    }
+
+    .textio {
+      position: relative;
+      display: none;
+      margin: 0;
+    }
+
+    .textiocontainer input[type='submit'] {
+      display: block;
+      position: relative;
+      width: 100%;
+      padding: 2px;
+      font-size: 110%;
+      margin: 12px 0px 0px -2px;
+    }
+
+    .textio input {
+      width: 85px;
+      float: right;
+      display: block;
+      margin-right: 3px;
+    }
+
+    .textio label {
+      width: 115px;
+      clear: both;
+      text-align: right;
+      display: block;
+      float: left;
+      padding: 2px;
+      padding-top: 5px;
+    }
+
+    #title {
+      height: 30px;
+      margin: 6px 0px 0px 258px;
+    }
+
+    .clearfix::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+  </style>
+</head>
+
+<body id="game">
+  <div id="drawing"> 
+    <canvas id="canvas"> </canvas> 
+  </div>
+</body>
+<script type="text/javascript" src="./src/scripts/utils.js"></script>
+<script type="text/javascript" src="./src/scripts/animate.js"></script>
+<script type="text/javascript" src="./src/scripts/drawer.js"></script>
+<script type="text/javascript" src="./src/scripts/arc.js"></script>
+<script type="text/javascript" src="./src/scripts/circle.js"></script>
+<script type="text/javascript" src="./src/scripts/events.js"></script>
+<script type="text/javascript" src="./src/scripts/line.js"></script>
+<script type="text/javascript" src="./src/scripts/point.js"></script>
+<script type="text/javascript" src="./src/scripts/vars.js"></script>
+<script type="text/javascript" src="./src/scripts/index.js"></script>
+
+</html>
