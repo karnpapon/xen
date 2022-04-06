@@ -2,18 +2,11 @@ function DrawText(text, x, y, color) {
   var xc = world.width / 2;
   var yc = world.height / 2;
 
-  context.font = "normal 11pt Arial";
-
-  context.fillStyle = WHITE;
-  context.strokeStyle = WHITE;
-  context.lineWidth = 3;
-  context.lineJoin = "round";
-  context.strokeText(text, xc + x, yc + y);
-
+  context.font = "normal 9pt Arial";
   context.lineWidth = 1;
   context.fillStyle = color;
   context.strokeStyle = color;
-  context.fillText(text, xc + x, yc + y);
+  context.fillText(text, xc + x + 5, yc + y);
 }
 
 function DrawCircle(point, radius, Color, LineWidth) {
@@ -37,7 +30,7 @@ function DrawCircle(point, radius, Color, LineWidth) {
 //   context.stroke();
 // }
 
-function DrawSlowBezier() {
+function DrawBezierSpline() {
 
   // if( DragPoint == DragPointStart+4 ) {
 	// 	dragpoints[DragPointStart+5].x += xOffset;
@@ -55,7 +48,7 @@ function DrawSlowBezier() {
     }
   }
   
-  drawControlLine()
+  // drawControlLine()
 
   // var closest = ClosestBezierPoint(dragpoints[DragPointStart + 4], dragpoints[DragPointStart + 0], dragpoints[DragPointStart + 1], dragpoints[DragPointStart + 2], dragpoints[DragPointStart + 3]);
   // var CloseLine = new Line(dragpoints[DragPointStart + 4].x, dragpoints[DragPointStart + 4].y, closest.x, closest.y);
@@ -74,38 +67,53 @@ function DrawSlowBezier() {
   // DrawCircle(dragpoints[DragPointStart + 4], BaseRadius, GRAY, 1);
 }
 
-function drawPartialBezier(points, color, amount) {
-  var point = new Point(-100, 0);
-  var t = amount;
+function drawPartialBezier(points, color, t) {
   const xc = world.width / 2.0;
   const yc = world.height / 2.0;
-  // const step_size = 0.001;
+  const initPos = { x: xc + points[0].x, y: yc + points[0].y }
+  let point = new Point(initPos.x, initPos.y);
+  
   context.strokeStyle = color;
   context.lineWidth = 1;
-  const initPos = { x: xc + points[0].x, y: yc + points[0].y }
 	context.beginPath();
   context.moveTo(initPos.x, initPos.y);
-	var Gap = stepSize;
-  // const stepGap = 0.2
-	for( let Step = 0; Step <= amount; Step += Gap ) {
-    point = getBezier( points, Step );
+	const gap = stepSize;
+	for( let step = 0; step <= t; step += gap ) {
+    point = getBezier( points, step );
 		context.lineTo( xc + point.x, yc + point.y );
 	}
 	context.stroke();
-  FillCircle( point, POINTRADIUS * 2, BOLDRED );
+  FillCircle( point, POINTRADIUS, BLACK );
 
+  for(let i = 0; i + 1 < points.length; i++){
+    const x1 = points[DragPointStart + i].x;
+    const y1 = points[DragPointStart + i].y;
+    const x2 = points[DragPointStart + i + 1].x;
+    const y2 = points[DragPointStart + i + 1].y;
+    const ControlLine1 = new Line( x1,y1,x2,y2);
+    ControlLine1.Draw(BLUE);
+
+    if (utils.linePointCollision(x1,y1,x2,y2,point.x,point.y) ) {
+      ControlLine1.Draw(BLACK);
+    }
+  }
 }
 
-function drawControlLine() {
-  for(let i = 0; i + 1 < dragpoints.length; i++){
-   const ControlLine1 = new Line(
-     dragpoints[DragPointStart + i].x, 
-     dragpoints[DragPointStart + i].y, 
-     dragpoints[DragPointStart + i + 1].x, 
-     dragpoints[DragPointStart + i + 1].y);
-   ControlLine1.Draw(BLUE);
- }
-}
+// function drawControlLine() {
+//   for(let i = 0; i + 1 < dragpoints.length; i++){
+//     const x1 = dragpoints[DragPointStart + i].x;
+//     const y1 = dragpoints[DragPointStart + i].y;
+//     const x2 = dragpoints[DragPointStart + i + 1].x;
+//     const y2 = dragpoints[DragPointStart + i + 1].y;
+//     const ControlLine1 = new Line( x1,y1,x2,y2);
+//     ControlLine1.Draw(BLUE);
+
+//     if (utils.linePointCollision(x1,y1,x2,y2,point.x,point.y) ) {
+//       console.log("point collide!!!")
+//     }
+
+//   }
+// }
 
 // function DrawBezierCurve(points, color) {
 //   // if (points.length === 1) {
@@ -166,4 +174,20 @@ function drawBezier(points, color){
 		progress += stepSize;
 	}
 	context.stroke();
+}
+
+function drawBezierControlLine(points, color){
+  if(points.length == 1){
+		return {x: points[0].x, y:points[0].y};
+	} else{
+		let newpoints = [];
+		for(let i = 0; i + 1 < points.length; i++){
+			let point = {
+        x: ( (1-t) * points[i].x ) + ( t * points[i+1].x ),
+        y: ( (1-t) * points[i].y ) + ( t * points[i+1].y )
+      };
+      newpoints.push(point);
+		}
+		return getBezier(newpoints, t);
+	}
 }

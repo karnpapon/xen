@@ -14,28 +14,29 @@ window.requestAnimFrame = (function () {
 
 function animate() {
   context.clearRect(0, 0, canvas.width, canvas.height);
-  DrawSlowBezier();
+  DrawBezierSpline();
 
   // draw colored points on top of black points.
   for (
-    var Index = DragPointStart;
-    Index < DragPointStart + DragPointCount;
-    ++Index
+    var idx = DragPointStart;
+    idx < DragPointStart + DragPointCount;
+    ++idx
   ) {
-    if (dragpoints[Index].color != BLACK) continue;
-    FillCircle(dragpoints[Index], POINTRADIUS, dragpoints[Index].color);
+    if (dragpoints[idx].color != BLACK) continue;
+    FillCircle(dragpoints[idx], POINTRADIUS, dragpoints[idx].color);
+    const text = `P${idx} (${dragpoints[idx].x},${dragpoints[idx].y})`
     DrawText(
-      "P" + Index,
-      dragpoints[Index].x + POINTRADIUS,
-      dragpoints[Index].y,
-      dragpoints[Index].color
+      text,
+      dragpoints[idx].x + POINTRADIUS,
+      dragpoints[idx].y,
+      dragpoints[idx].color
     );
   }
-  // for (var Index = DragPointStart; Index < DragPointStart + DragPointCount; ++Index) {
-  //   if (dragpoints[Index].color == BLACK)
+  // for (var idx = DragPointStart; idx < DragPointStart + DragPointCount; ++idx) {
+  //   if (dragpoints[idx].color == BLACK)
   //     continue;
-  //   FillCircle(dragpoints[Index], POINTRADIUS, dragpoints[Index].color);
-  //   // DrawText( "P" + Index, dragpoints[Index].x + POINTRADIUS, dragpoints[Index].y, dragpoints[Index].color );
+  //   FillCircle(dragpoints[idx], POINTRADIUS, dragpoints[idx].color);
+  //   DrawText( "P" + idx, dragpoints[idx].x + POINTRADIUS, dragpoints[idx].y, dragpoints[idx].color );
   // }
 
   xOffset = 0;

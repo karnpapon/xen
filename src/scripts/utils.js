@@ -15,13 +15,7 @@ var utils = {
 		return Math.min(Math.max(value, Math.min(min, max)), Math.max(min, max));
 	},
 
-	distance: function(p0, p1) {
-		var dx = p1.x - p0.x,
-			dy = p1.y - p0.y;
-		return Math.sqrt(dx * dx + dy * dy);
-	},
-
-	distanceXY: function(x0, y0, x1, y1) {
+	dist: function(x0, y0, x1, y1) {
 		var dx = x1 - x0,
 			dy = y1 - y0;
 		return Math.sqrt(dx * dx + dy * dy);
@@ -129,10 +123,30 @@ var utils = {
   },
 
   distance: function(point1, point2) {
-    var dx = abs(point1.x - point2.x);
-    var dy = abs(point1.y - point2.y);
+    const dx = abs(point1.x - point2.x);
+    const dy = abs(point1.y - point2.y);
     return sqrt(dx * dx + dy * dy);
-  }
+  },
 
+  linePointCollision: function(x1, y1, x2, y2, px, py) {
+
+    // get distance from the point to the two ends of the line
+    const d1 = this.dist(px,py, x1,y1);
+    const d2 = this.dist(px,py, x2,y2);
+    const lineLen = this.dist(x1,y1, x2,y2);
+  
+    // since floats are so minutely accurate, add
+    // a little buffer zone that will give collision
+    const buffer = 0.1;    // higher # = less accurate
+  
+    // if the two distances are equal to the line's 
+    // length, the point is on the line!
+    // note we use the buffer here to give a range, 
+    // rather than one #
+    if (d1+d2 >= lineLen - buffer && d1 + d2 <= lineLen + buffer) {
+      return true;
+    }
+    return false;
+  }
 
 }
