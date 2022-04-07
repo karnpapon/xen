@@ -100,6 +100,9 @@ function drawPartialBezier(points, color, t) {
 }
 
 function trigger(){
+  let output = WebMidi.outputs[0];
+  let channel = output.channels[1];
+  channel.playNote("C3");
   console.log("triggerr")
 }
 

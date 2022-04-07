@@ -3,6 +3,10 @@ function init() {
   drawing = document.getElementById("drawing");
   btn = document.getElementById("play-btn");
 
+  // Enable WebMidi.js and trigger the onEnabled() function when ready.
+  WebMidi.enable()
+    .then(onEnabled)
+    .catch((err) => alert(err));
 
   btn.onclick = playBtnClick;
 
@@ -31,6 +35,5 @@ function init() {
   animBezier();
   animationLoop();
 }
-
 
 init();

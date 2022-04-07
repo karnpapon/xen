@@ -79,7 +79,7 @@ function dragMove(event) {
 
     //ProportionalDistance = 0.0
 
-    animate();
+    // animate();
   }
 }
 
@@ -169,7 +169,7 @@ function dragStart(event, Fingers) {
       DragPoint = idx;
       xOffset = p.x - dragpoints[DragPoint].x;
       yOffset = p.y - dragpoints[DragPoint].y;
-      animate();
+      // animate();
       return;
     }
   }

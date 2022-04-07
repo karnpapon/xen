@@ -4,6 +4,7 @@
 
 <head>
   <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/webmidi@3.0.14/dist/iife/webmidi.iife.js"></script>
   <style type="text/css">
     html,
     body {
@@ -111,10 +112,12 @@
 <body id="game">
   <div id="drawing"> 
     <button id="play-btn">play/pause</button>
+    <div id="midi-device"></div>
     <canvas id="canvas"> </canvas> 
   </div>
 </body>
 <script type="text/javascript" src="./src/scripts/utils.js"></script>
+<script type="text/javascript" src="./src/scripts/midi.js"></script>
 <script type="text/javascript" src="./src/scripts/animate.js"></script>
 <script type="text/javascript" src="./src/scripts/drawer.js"></script>
 <script type="text/javascript" src="./src/scripts/arc.js"></script>
