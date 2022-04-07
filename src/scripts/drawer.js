@@ -38,7 +38,7 @@ function drawBezierSpline() {
 
   // play animated spline.
   if (!Pause) {
-    ProportionalDistance += 0.004
+    ProportionalDistance += distSpeed
     if (ProportionalDistance > 1.0) {
       ProportionalDistance = 0.0
     }
