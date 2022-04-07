@@ -10,18 +10,15 @@ function Point(x, y, color) {
   else this.color = BLACK;
 }
 
-function MidPoint(line) {
+function midPoint(line) {
   return new Point((line.x1 + line.x2) / 2, (line.y1 + line.y2) / 2);
 }
 
-// function MovePoint(point, angle, distance) {
-//   var offset = getOffset(angle, distance);
-//   point.x += offset.x;
-//   point.y += offset.y;
-// }
+function removePoint(index) {
+  dragpoints.splice(index, 1)
+}
 
-function GetBezierPoint( point0, point1, point2, point3, position )
-{
+function getBezierPoint( point0, point1, point2, point3, position ) {
 	var point = new Point( 0, 0 );
 	var t = position;
 	var mt = 1-t;
@@ -34,4 +31,12 @@ function GetBezierPoint( point0, point1, point2, point3, position )
 	point.y = (point0.y * mt_mt_mt) + 3 * point1.y * t_mt_mt + 3 * point2.y * t_t_mt + point3.y*t_t_t;
 
 	return point;
+}
+
+function isFirstLine(i){
+  return i === 0 || i === 1
+}
+
+function isLastLine(i, points){
+  return i === points.length - 1 || i === points.length - 2
 }

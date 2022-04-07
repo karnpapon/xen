@@ -1,10 +1,10 @@
-function Arc(Center, Radius, Start, End, Direction) {
+function Arc(Center, Radius, start, end, Direction) {
   this.x = Center.x;
   this.y = Center.y;
   this.r = Radius;
-  this.xStart = Start.x;
-  this.yStart = Start.y;
-  this.xEnd = End.x;
-  this.yEnd = End.y;
+  this.xStart = start.x;
+  this.yStart = start.y;
+  this.xEnd = end.x;
+  this.yEnd = end.y;
   this.d = Direction;
 }

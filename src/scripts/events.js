@@ -27,14 +27,35 @@ function relMouseCoords(event) {
 
 HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords;
 
+function checkMouseOver(e, points) {
+  // Get the current mouse position
+  const xc = world.width / 2;
+  const yc = world.height / 2;
+  const newPoint = { x: e.offsetX - xc, y: e.offsetY - yc };
+  let  x = newPoint.x;
+  let  y = newPoint.y;
+  hover = false;
 
-function MouseMove(event) {
-  if (!MouseDrag) return;
-  Position = canvas.relMouseCoords(event);
-  DragMove(event);
+  // context.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (let i = points.length - 1, b; (b = points[i]); i--) {
+    if (x >= b.x && x <= b.x + 8 && y >= b.y && y <= b.y + 8) {
+      hover = true;
+      id = i;
+      break;
+    }
+  }
+  // Draw the rectangles by Z (ASC)
+  // animate();
 }
 
-function DragMove(event) {
+function mouseMove(event) {
+  if (!MouseDrag) return 
+  Position = canvas.relMouseCoords(event);
+  dragMove(event);
+}
+
+function dragMove(event) {
   if (DragPoint >= 0) {
     var xc = world.width / 2;
     var yc = world.height / 2;
@@ -62,7 +83,14 @@ function DragMove(event) {
   }
 }
 
-function MouseClick(event) {
+function mouseClick(e) {
+  if (e.ctrlKey || e.metaKey) {
+    handleAddPoint(e);
+    return;
+  }
+}
+
+function handleAddPoint(e) {
   const xc = world.width / 2;
   const yc = world.height / 2;
 
@@ -72,61 +100,84 @@ function MouseClick(event) {
   DragPointCount = dragpoints.length;
 }
 
-function ButtonDown(event) {
+function rightMouseClick(event) {
+  event.preventDefault()
   Position = canvas.relMouseCoords(event);
-  MouseDrag = true;
-  Pause = true;
-  DragStart(event, false);
+
+  if (Position == null) return;
+  const xc = world.width / 2;
+  const yc = world.height / 2;
+
+  const SearchRadius = POINTRADIUS;
+
+  const p = new Point(Position.x - xc, Position.y - yc);
+  xOffset = 0;
+  yOffset = 0;
+
+  for (let idx = DragPointStart; idx < DragPointStart + DragPointCount; ++idx) {
+    if (utils.distance(dragpoints[idx], p) < SearchRadius + 3) {
+      // DragPoint = idx;
+      // xOffset = p.x - dragpoints[idx].x;
+      // yOffset = p.y - dragpoints[idx].y;
+      removePoint(idx)
+      // animate();
+      return;
+    }
+  }
+
+  // DragPoint = -1;
+
 }
 
-function DragStart(event, Fingers) {
+function buttonDown(event) {
+  Position = canvas.relMouseCoords(event);
+  MouseDrag = true;
+  // Pause = true;
+  dragStart(event, false);
+}
+
+function dragStart(event, Fingers) {
   if (Position == null) return;
 
-  var xc = world.width / 2;
-  var yc = world.height / 2;
+  const xc = world.width / 2;
+  const yc = world.height / 2;
 
-  var SearchRadius = POINTRADIUS;
+  const SearchRadius = POINTRADIUS;
   if (Fingers) SearchRadius *= 4;
 
-  var p = new Point(Position.x - xc, Position.y - yc);
+  const p = new Point(Position.x - xc, Position.y - yc);
   xOld = p.x;
   yOld = p.y;
   xOffset = 0;
   yOffset = 0;
-  for (
-    var Index = DragPointStart;
-    Index < DragPointStart + DragPointCount;
-    ++Index
-  ) {
-    // The first time through, look only for black points. This
-    // is based on the assumption that black points are control
-    // points and that they need to be checked first!
-    if (dragpoints[Index].color == BLACK) continue;
-    if (utils.distance(dragpoints[Index], p) < SearchRadius + 3) {
-      DragPoint = Index;
+  // for ( let idx = DragPointStart; idx < DragPointStart + DragPointCount; ++idx) {
+  //   // The first time through, look only for black points. This
+  //   // is based on the assumption that black points are control
+  //   // points and that they need to be checked first!
+  //   if (dragpoints[idx].color == BLACK) continue;
+  //   if (utils.distance(dragpoints[idx], p) < SearchRadius + 3) {
+  //     DragPoint = idx;
+  //     xOffset = p.x - dragpoints[DragPoint].x;
+  //     yOffset = p.y - dragpoints[DragPoint].y;
+  //     animate();
+  //     return;
+  //   }
+  // }
+
+  for (let idx = DragPointStart; idx < DragPointStart + DragPointCount; ++idx) {
+    if (utils.distance(dragpoints[idx], p) < SearchRadius + 3) {
+      DragPoint = idx;
       xOffset = p.x - dragpoints[DragPoint].x;
       yOffset = p.y - dragpoints[DragPoint].y;
       animate();
       return;
     }
   }
-  for (
-    var Index = DragPointStart;
-    Index < DragPointStart + DragPointCount;
-    ++Index
-  ) {
-    if (utils.distance(dragpoints[Index], p) < SearchRadius + 3) {
-      DragPoint = Index;
-      xOffset = p.x - dragpoints[DragPoint].x;
-      yOffset = p.y - dragpoints[DragPoint].y;
-      animate();
-      return;
-    }
-  }
+
   DragPoint = -1;
 }
 
-function ButtonUp(event) {
+function buttonUp(event) {
   Pause = false;
   if (!MouseDrag) return;
 
@@ -150,4 +201,9 @@ function windowResizeHandler() {
   canvas.height = world.height;
 
   animate();
+}
+
+
+function playBtnClick(){
+  Pause = !Pause
 }

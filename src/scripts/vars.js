@@ -16,10 +16,12 @@ var MouseDrag = false;
 
 var BLUE = utils.makeRGB(170, 200, 255);
 var GREEN = utils.makeRGB(120, 255, 120);
-var RED = utils.makeRGB(255, 180, 180);
+var RED = utils.makeRGB(255, 0, 0);
 var BOLDRED = utils.makeRGB(255, 64, 64);
 var YELLOW =utils.makeRGB(232, 215, 100);
 var WHITE = utils.makeRGB(255, 255, 255);
+
+var COLORS = [  RED, GREEN]
 
 var POINTRADIUS = 4;
 var BLACK = utils.makeRGB(0.0, 0.0, 0.0);
@@ -29,8 +31,6 @@ var LIGHTGRAY = utils.makeRGB(220, 220, 220);
 var pinCount = 1;
 var slotCount = 4;
 
-// var ShowConstructionDescriptions = false;
-// var ConstructionIndex = 0;
 var MaxConstructionDescriptions = 0;
 
 var RotationAngle = 0;
@@ -78,6 +78,7 @@ var xOld = 0;
 var yOld = 0;
 var xOffset = 0;
 var yOffset = 0;
+var hover = false, id;
 
 var stepSize = 0.001;
 

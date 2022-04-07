@@ -1,16 +1,21 @@
 function init() {
   canvas = document.getElementById("canvas");
   drawing = document.getElementById("drawing");
+  btn = document.getElementById("play-btn");
+
+
+  btn.onclick = playBtnClick;
 
   canvas.onclick = (e) => {
     if (e.ctrlKey || e.metaKey) {
-      MouseClick(e);
+      mouseClick(e);
       return;
     }
   };
-  canvas.onmousedown = ButtonDown;
-  canvas.onmouseup = ButtonUp;
-  canvas.onmousemove = MouseMove;
+  canvas.onmousedown = buttonDown;
+  canvas.onmouseup = buttonUp;
+  canvas.onmousemove = mouseMove;
+  canvas.oncontextmenu = rightMouseClick;
 
   timer = window.setInterval(function () {
     enableHandler = true;
@@ -24,7 +29,7 @@ function init() {
   }
 
   animBezier();
-  AnimationLoop();
+  animationLoop();
 }
 
 

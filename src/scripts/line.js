@@ -21,7 +21,7 @@ function Line(x1, y1, x2, y2) {
   }
 }
 
-Line.prototype.Draw = function (color, width) {
+Line.prototype.draw = function (color, width) {
   var xc = world.width / 2;
   var yc = world.height / 2;
   context.strokeStyle = color;
@@ -37,30 +37,30 @@ Line.prototype.Draw = function (color, width) {
 };
 
 
-Line.prototype.Start = function () {
+Line.prototype.start = function () {
   return new Point(this.x1, this.y1);
 };
 
-Line.prototype.End = function () {
+Line.prototype.end = function () {
   return new Point(this.x2, this.y2);
 };
 
 Line.prototype.SetLength = function (NewLength) {
   var dx = this.x2 - this.x1;
   var dy = this.y2 - this.y1;
-  var Length = sqrt(dx * dx + dy * dy);
-  var Ratio = NewLength / Length;
+  var length = sqrt(dx * dx + dy * dy);
+  var Ratio = NewLength / length;
   dx *= Ratio;
   dy *= Ratio;
   this.x2 = this.x1 + dx;
   this.y2 = this.y1 + dy;
 };
 
-Line.prototype.Extend = function (Add) {
+Line.prototype.extend = function (Add) {
   var dx = this.x2 - this.x1;
   var dy = this.y2 - this.y1;
-  var Length = sqrt(dx * dx + dy * dy);
-  var Ratio = (Length + Add) / Length;
+  var length = sqrt(dx * dx + dy * dy);
+  var Ratio = (length + Add) / length;
   dx *= Ratio;
   dy *= Ratio;
   this.x2 = this.x1 + dx;
@@ -69,8 +69,8 @@ Line.prototype.Extend = function (Add) {
   this.y1 = this.y2 - dy * 2;
 };
 
-Line.prototype.Move = function (point) {
-  var Temp = MoveLine(this, point);
+Line.prototype.move = function (point) {
+  var Temp = moveLine(this, point);
   this.x1 = Temp.x1;
   this.y1 = Temp.y1;
   this.x2 = Temp.x2;
@@ -78,13 +78,13 @@ Line.prototype.Move = function (point) {
 };
 
 
-Line.prototype.Length = function () {
+Line.prototype.length = function () {
   var dx = abs(this.x1 - this.x2);
   var dy = abs(this.y1 - this.y2);
   return sqrt(dx * dx + dy * dy);
 };
 
-Line.prototype.Reverse = function () {
+Line.prototype.reverse = function () {
   var tx = this.x2;
   var ty = this.y2;
   this.x2 = this.x1;
@@ -94,7 +94,7 @@ Line.prototype.Reverse = function () {
 };
 
 
-function MoveLine(line, point) {
+function moveLine(line, point) {
   var newline = new Line();
   newline.x2 = line.x2 - line.x1 + point.x;
   newline.y2 = line.y2 - line.y1 + point.y;

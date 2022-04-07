@@ -6,7 +6,7 @@ window.requestAnimFrame = (function () {
     window.mozRequestAnimationFrame ||
     window.oRequestAnimationFrame ||
     window.msRequestAnimationFrame ||
-    function (/* function */ callback, /* DOMElement */ element) {
+    function (callback, element) {
       window.setTimeout(callback, 1000 / 60);
     }
   );
@@ -14,7 +14,7 @@ window.requestAnimFrame = (function () {
 
 function animate() {
   context.clearRect(0, 0, canvas.width, canvas.height);
-  DrawBezierSpline();
+  drawBezierSpline();
 
   // draw colored points on top of black points.
   for (
@@ -23,7 +23,7 @@ function animate() {
     ++idx
   ) {
     if (dragpoints[idx].color != BLACK) continue;
-    FillCircle(dragpoints[idx], POINTRADIUS, dragpoints[idx].color);
+    fillCircle(dragpoints[idx], POINTRADIUS, dragpoints[idx].color);
     const text = `P${idx} (${dragpoints[idx].x},${dragpoints[idx].y})`
     DrawText(
       text,
@@ -32,20 +32,22 @@ function animate() {
       dragpoints[idx].color
     );
   }
+  if (hover) {dragpoints[id].color = BLUE }
   // for (var idx = DragPointStart; idx < DragPointStart + DragPointCount; ++idx) {
   //   if (dragpoints[idx].color == BLACK)
   //     continue;
-  //   FillCircle(dragpoints[idx], POINTRADIUS, dragpoints[idx].color);
+  //   fillCircle(dragpoints[idx], POINTRADIUS, dragpoints[idx].color);
   //   DrawText( "P" + idx, dragpoints[idx].x + POINTRADIUS, dragpoints[idx].y, dragpoints[idx].color );
   // }
 
   xOffset = 0;
   yOffset = 0;
+  
 }
 
-function AnimationLoop() {
+function animationLoop() {
   if (ConstantAnimation) animate();
-  requestAnimFrame(AnimationLoop);
+  requestAnimFrame(animationLoop);
 }
 
 function animBezier() {

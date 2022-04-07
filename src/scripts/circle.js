@@ -34,7 +34,7 @@ function Circle(x, y, r) {
   }
 }
 
-Circle.prototype.Draw = function (Color, LineWidth) {
+Circle.prototype.draw = function (Color, LineWidth) {
   var xc = world.width / 2;
   var yc = world.height / 2;
   context.strokeStyle = Color;
@@ -45,7 +45,7 @@ Circle.prototype.Draw = function (Color, LineWidth) {
   context.stroke();
 };
 
-Circle.prototype.Fill = function (Color) {
+Circle.prototype.fill = function (Color) {
   var xc = world.width / 2;
   var yc = world.height / 2;
   context.strokeStyle = Color;
@@ -59,7 +59,7 @@ Circle.prototype.Fill = function (Color) {
 };
 
 
-function FillCircle(point, radius, Color) {
+function fillCircle(point, radius, Color) {
   circle = new Circle(point.x, point.y, radius);
-  circle.Fill(Color);
+  circle.fill(Color);
 }

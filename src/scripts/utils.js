@@ -1,110 +1,121 @@
+var throttleTimer
 var utils = {
-	norm: function(value, min, max) {
-		return (value - min) / (max - min);
-	},
+  norm: function (value, min, max) {
+    return (value - min) / (max - min);
+  },
 
-	lerp: function(norm, min, max) {
-		return (max - min) * norm + min;
-	},
+  lerp: function (norm, min, max) {
+    return (max - min) * norm + min;
+  },
 
-	map: function(value, sourceMin, sourceMax, destMin, destMax) {
-		return utils.lerp(utils.norm(value, sourceMin, sourceMax), destMin, destMax);
-	},
+  map: function (value, sourceMin, sourceMax, destMin, destMax) {
+    return utils.lerp(
+      utils.norm(value, sourceMin, sourceMax),
+      destMin,
+      destMax
+    );
+  },
 
-	clamp: function(value, min, max) {
-		return Math.min(Math.max(value, Math.min(min, max)), Math.max(min, max));
-	},
+  clamp: function (value, min, max) {
+    return Math.min(Math.max(value, Math.min(min, max)), Math.max(min, max));
+  },
 
-	dist: function(x0, y0, x1, y1) {
-		var dx = x1 - x0,
-			dy = y1 - y0;
-		return Math.sqrt(dx * dx + dy * dy);
-	},
+  dist: function (x0, y0, x1, y1) {
+    var dx = x1 - x0,
+      dy = y1 - y0;
+    return Math.sqrt(dx * dx + dy * dy);
+  },
 
-	circleCollision: function(c0, c1) {
-		return utils.distance(c0, c1) <= c0.radius + c1.radius;
-	},
+  circleCollision: function (c0, c1) {
+    return utils.distance(c0, c1) <= c0.radius + c1.radius;
+  },
 
-	circlePointCollision: function(x, y, circle) {
-		return utils.distanceXY(x, y, circle.x, circle.y) < circle.radius;
-	},
+  circlePointCollision: function (x, y, circle) {
+    return utils.distanceXY(x, y, circle.x, circle.y) < circle.radius;
+  },
 
-	pointInRect: function(x, y, rect) {
-		return utils.inRange(x, rect.x, rect.x + rect.width) &&
-		       utils.inRange(y, rect.y, rect.y + rect.height);
-	},
+  pointInRect: function (x, y, rect) {
+    return (
+      utils.inRange(x, rect.x, rect.x + rect.width) &&
+      utils.inRange(y, rect.y, rect.y + rect.height)
+    );
+  },
 
-	inRange: function(value, min, max) {
-		return value >= Math.min(min, max) && value <= Math.max(min, max);
-	},
+  inRange: function (value, min, max) {
+    return value >= Math.min(min, max) && value <= Math.max(min, max);
+  },
 
-	rangeIntersect: function(min0, max0, min1, max1) {
-		return Math.max(min0, max0) >= Math.min(min1, max1) && 
-			   Math.min(min0, max0) <= Math.max(min1, max1);
-	},
+  rangeIntersect: function (min0, max0, min1, max1) {
+    return (
+      Math.max(min0, max0) >= Math.min(min1, max1) &&
+      Math.min(min0, max0) <= Math.max(min1, max1)
+    );
+  },
 
-	rectIntersect: function(r0, r1) {
-		return utils.rangeIntersect(r0.x, r0.x + r0.width, r1.x, r1.x + r1.width) &&
-			   utils.rangeIntersect(r0.y, r0.y + r0.height, r1.y, r1.y + r1.height);
-	},
+  rectIntersect: function (r0, r1) {
+    return (
+      utils.rangeIntersect(r0.x, r0.x + r0.width, r1.x, r1.x + r1.width) &&
+      utils.rangeIntersect(r0.y, r0.y + r0.height, r1.y, r1.y + r1.height)
+    );
+  },
 
-	degreesToRads: function(degrees) {
-		return degrees / 180 * Math.PI;
-	},
+  degreesToRads: function (degrees) {
+    return (degrees / 180) * Math.PI;
+  },
 
-	radsToDegrees: function(radians) {
-		return radians * 180 / Math.PI;
-	},
+  radsToDegrees: function (radians) {
+    return (radians * 180) / Math.PI;
+  },
 
-	randomRange: function(min, max) {
-		return min + Math.random() * (max - min);
-	},
+  randomRange: function (min, max) {
+    return min + Math.random() * (max - min);
+  },
 
-	randomInt: function(min, max) {
-		return Math.floor(min + Math.random() * (max - min + 1));
-	},
+  randomInt: function (min, max) {
+    return Math.floor(min + Math.random() * (max - min + 1));
+  },
 
-	roundToPlaces: function(value, places) {
-		var mult = Math.pow(10, places);
-		return Math.round(value * mult) / mult;
-	},
+  roundToPlaces: function (value, places) {
+    var mult = Math.pow(10, places);
+    return Math.round(value * mult) / mult;
+  },
 
-	roundNearest: function(value, nearest) {
-		return Math.round(value / nearest) * nearest;
-	},
+  roundNearest: function (value, nearest) {
+    return Math.round(value / nearest) * nearest;
+  },
 
-	quadraticBezier: function(p0, p1, p2, t, pFinal) {
-		pFinal = pFinal || {};
-		pFinal.x = Math.pow(1 - t, 2) * p0.x + 
-				   (1 - t) * 2 * t * p1.x + 
-				   t * t * p2.x;
-		pFinal.y = Math.pow(1 - t, 2) * p0.y + 
-				   (1 - t) * 2 * t * p1.y + 
-				   t * t * p2.y;
-		return pFinal;
-	},
+  quadraticBezier: function (p0, p1, p2, t, pFinal) {
+    pFinal = pFinal || {};
+    pFinal.x =
+      Math.pow(1 - t, 2) * p0.x + (1 - t) * 2 * t * p1.x + t * t * p2.x;
+    pFinal.y =
+      Math.pow(1 - t, 2) * p0.y + (1 - t) * 2 * t * p1.y + t * t * p2.y;
+    return pFinal;
+  },
 
-	cubicBezier: function(p0, p1, p2, p3, t, pFinal) {
-		pFinal = pFinal || {};
-		pFinal.x = Math.pow(1 - t, 3) * p0.x + 
-				   Math.pow(1 - t, 2) * 3 * t * p1.x + 
-				   (1 - t) * 3 * t * t * p2.x + 
-				   t * t * t * p3.x;
-		pFinal.y = Math.pow(1 - t, 3) * p0.y + 
-				   Math.pow(1 - t, 2) * 3 * t * p1.y + 
-				   (1 - t) * 3 * t * t * p2.y + 
-				   t * t * t * p3.y;
-		return pFinal;
-	},
+  cubicBezier: function (p0, p1, p2, p3, t, pFinal) {
+    pFinal = pFinal || {};
+    pFinal.x =
+      Math.pow(1 - t, 3) * p0.x +
+      Math.pow(1 - t, 2) * 3 * t * p1.x +
+      (1 - t) * 3 * t * t * p2.x +
+      t * t * t * p3.x;
+    pFinal.y =
+      Math.pow(1 - t, 3) * p0.y +
+      Math.pow(1 - t, 2) * 3 * t * p1.y +
+      (1 - t) * 3 * t * t * p2.y +
+      t * t * t * p3.y;
+    return pFinal;
+  },
 
-  randomInt: function(minimum, maximum) {
+  randomInt: function (minimum, maximum) {
     if (minimum == undefined || maximum == undefined) return 0;
     var temp = maximum - minimum;
     temp += 0.9999999;
     return minimum + floor(random() * temp);
   },
 
-  makeRGBA: function(r, g, b, a) {
+  makeRGBA: function (r, g, b, a) {
     return (
       "rgba( " +
       floor(r) +
@@ -117,36 +128,43 @@ var utils = {
       " )"
     );
   },
-  
-  makeRGB: function(r, g, b) {
+
+  makeRGB: function (r, g, b) {
     return "rgb( " + floor(r) + "," + floor(g) + "," + floor(b) + " )";
   },
 
-  distance: function(point1, point2) {
+  distance: function (point1, point2) {
     const dx = abs(point1.x - point2.x);
     const dy = abs(point1.y - point2.y);
     return sqrt(dx * dx + dy * dy);
   },
 
-  linePointCollision: function(x1, y1, x2, y2, px, py) {
-
+  linePointCollision: function (x1, y1, x2, y2, px, py) {
     // get distance from the point to the two ends of the line
-    const d1 = this.dist(px,py, x1,y1);
-    const d2 = this.dist(px,py, x2,y2);
-    const lineLen = this.dist(x1,y1, x2,y2);
-  
+    const d1 = this.dist(px, py, x1, y1);
+    const d2 = this.dist(px, py, x2, y2);
+    const lineLen = this.dist(x1, y1, x2, y2);
+
     // since floats are so minutely accurate, add
     // a little buffer zone that will give collision
-    const buffer = 0.1;    // higher # = less accurate
-  
-    // if the two distances are equal to the line's 
+    const buffer = 0.1; // higher # = less accurate
+
+    // if the two distances are equal to the line's
     // length, the point is on the line!
-    // note we use the buffer here to give a range, 
+    // note we use the buffer here to give a range,
     // rather than one #
-    if (d1+d2 >= lineLen - buffer && d1 + d2 <= lineLen + buffer) {
+    if (d1 + d2 >= lineLen - buffer && d1 + d2 <= lineLen + buffer) {
       return true;
     }
     return false;
-  }
+  },
 
-}
+  throttle: function (callback, time) {
+    if (throttleTimer) return;
+    throttleTimer = true;
+    setTimeout(() => {
+      callback();
+      throttleTimer = false;
+    }, time);
+  },
+};
