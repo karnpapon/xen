@@ -1,9 +1,10 @@
-(async function() {
+async function initGUI() {
   await ImGui.default();
-  // const canvas = document.getElementById("output");
+  
   const devicePixelRatio = window.devicePixelRatio || 1;
   canvas.width = canvas.scrollWidth * devicePixelRatio;
   canvas.height = canvas.scrollHeight * devicePixelRatio;
+
   window.addEventListener("resize", () => {
     const devicePixelRatio = window.devicePixelRatio || 1;
     canvas.width = canvas.scrollWidth * devicePixelRatio;
@@ -12,13 +13,11 @@
 
   ImGui.CreateContext();
   ImGui_Impl.Init(canvas);
-
   ImGui.StyleColorsClassic();
 
   const col1 = new ImGui.ImVec4(customColor.x,customColor.y,customColor.z,customColor.w);
   const col2 = new ImGui.ImVec4(customRecursiveBezierColor.x,customRecursiveBezierColor.y,customRecursiveBezierColor.z,customRecursiveBezierColor.w);
   
-  // let buf = "Quick brown fox";
   let hideMap = false;
   distSpeed = 0.004
   let done = false;
@@ -27,7 +26,7 @@
   function _loop(time) {
     ImGui_Impl.NewFrame(time);
     ImGui.NewFrame();
-// console.log("customColor", customColor)
+    
     ImGui.SetNextWindowPos(new ImGui.ImVec2(20, 20), ImGui.Cond.FirstUseEver);
     ImGui.SetNextWindowSize(new ImGui.ImVec2(294, 140), ImGui.Cond.FirstUseEver);
     ImGui.Begin("Controller");
@@ -45,7 +44,8 @@
       hideMap = !hideMap
       canvas.dispatchEvent(new CustomEvent('toggleMap', {detail: { hideMap: hideMap }}))
     } 
-    // ImGui.InputText("some title", (_ = buf) => buf = _, 156)
+    ImGui.Checkbox("Show L points",(value = ShowLPoints) => ShowLPoints = value)
+    ImGui.Checkbox("Show R points",(value = ShowRPoints) => ShowRPoints = value)
     ImGui.SliderFloat("speed", (_ = distSpeed) => distSpeed = _ ,0.0,0.05)
     ImGui.SliderFloat("step", (_ = stepSize) => stepSize = _ ,0.001,1)
     ImGui.ColorEdit4("control spline", customColor = col1)
@@ -79,4 +79,4 @@
     ImGui_Impl.Shutdown();
     ImGui.DestroyContext();
   }
-})();
+};

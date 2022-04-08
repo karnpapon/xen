@@ -45,19 +45,41 @@ SynthDef(\midisynth1, {arg freq=440, amp=0.1, dec=1, rel=0.8;
     env = EnvGen.ar(Env.linen(0.01, 0.2, dec,rel), doneAction:2);
     Out.ar(0, signal*env*amp);
 }).add;
+
+
+SynthDef(\gabber, {
+		arg out=0, pan, atk=0.01, sus=0.5, rel=0.25,f=50, amp=0.25, filterFreq=1550, rroom=10, rtime=2, tlo=0, thigh=0.5;
+		var sig, demand, decay, env;
+		sig = Impulse.ar(1);
+		env = EnvGen.ar(
+			Env([0,1,1,0],[atk,sus,rel]),
+			doneAction:2
+		);
+		sig = Decay.ar(sig, TRand.ar(tlo, thigh, sig)) * Pulse.ar(f * Decay.ar(sig, 0.1, 20, 1));
+		sig = sig * env * amp ;
+		sig = RLPF.ar(sig, filterFreq);
+		sig = Pan2.ar(sig, TRand.ar(-1, 1, sig));
+		// + GVerb.ar(FreqShift.ar(sig.sum, 300), rroom, rtime)
+		Out.ar(out, LeakDC.ar(tanh((16*sig) )));
+	}).add;
 )
 
+Synth(\gabber)
 Synth(\midisynth1) // let's try it
+
+CmdPeriod.run
 
 (
 // and now we can play the synth
 MIDIdef.noteOn(\mydef, {arg vel, key, channel, device;
-	Synth(\midisynth1, [
-    \freq, Scale.major.degreeToFreq([ 0, 2, 4, 5, 7, 9, 11 ].choose, 42.midicps, 1), 
-    \amp, vel/127,
-    \rel, 0.5,
-    \dec, 0.5
-  ]);
+	// Synth(\midisynth1, [
+ //    \freq, Scale.major.degreeToFreq([ 0, 2, 4, 5, 7, 9, 11 ].choose, 20.midicps, 1), 
+ //    \amp, vel/127,
+ //    \rel, 0.2,
+ //    \dec, 0.2
+ //  ]);
+
+  Synth(\gabber)
     // [key, vel].postln;
 });
 )

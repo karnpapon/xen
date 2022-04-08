@@ -34,16 +34,16 @@ function Circle(x, y, r) {
   }
 }
 
-Circle.prototype.draw = function (Color, LineWidth) {
-  var xc = world.width / 2;
-  var yc = world.height / 2;
-  context.strokeStyle = Color;
-  context.lineWidth = 0.8;
-  if (LineWidth > 1) context.lineWidth += 0.7 * (LineWidth - 1);
-  context.beginPath();
-  context.arc(xc + this.x, yc + this.y, this.r, 0, Math.PI * 2, false);
-  context.stroke();
-};
+// Circle.prototype.draw = function (Color, LineWidth) {
+//   var xc = world.width / 2;
+//   var yc = world.height / 2;
+//   context.strokeStyle = Color;
+//   context.lineWidth = 0.8;
+//   if (LineWidth > 1) context.lineWidth += 0.7 * (LineWidth - 1);
+//   context.beginPath();
+//   context.arc(xc + this.x, yc + this.y, this.r, 0, Math.PI * 2, false);
+//   context.stroke();
+// };
 
 Circle.prototype.fill = function (Color) {
   var xc = world.width / 2;

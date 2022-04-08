@@ -27,7 +27,8 @@ var COLORS = [  RED, GREEN]
 
 var POINTRADIUS = 4;
 var BLACK = utils.makeRGB(0.0, 0.0, 0.0);
-var GRAY = utils.makeRGB(150, 150, 150);
+var BLACKTRANSPARENT = utils.makeRGBA(0.0, 0.0, 0.0, 0.5)
+var GRAY = utils.makeRGB(192,192,192);
 var LIGHTGRAY = utils.makeRGB(220, 220, 220);
 
 var pinCount = 1;
@@ -60,6 +61,9 @@ var yOld = 0;
 var xOffset = 0;
 var yOffset = 0;
 var hover = false, id;
+
+var ShowLPoints = false;
+var ShowRPoints = false;
 
 var stepSize = 0.001;
 var dashedLineStyle1 = [2, 2]

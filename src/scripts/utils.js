@@ -1,4 +1,4 @@
-var throttleTimer
+var throttleTimer;
 var utils = {
   norm: function (value, min, max) {
     return (value - min) / (max - min);
@@ -154,6 +154,28 @@ var utils = {
     // note we use the buffer here to give a range,
     // rather than one #
     if (d1 + d2 >= lineLen - buffer && d1 + d2 <= lineLen + buffer) {
+      return true;
+    }
+    return false;
+  },
+
+  pointPointCollision(x1, y1, x2, y2) {
+    if (x1 == x2 && y1 == y2) {
+      return true;
+    }
+    return false;
+  },
+
+  circleCircleCollision(c1x, c1y, c1r, c2x, c2y, c2r) {
+    // get distance between the circle's centers
+    // use the Pythagorean Theorem to compute the distance
+    distX = c1x - c2x;
+    distY = c1y - c2y;
+    distance = sqrt(distX * distX + distY * distY);
+
+    // if the distance is less than the sum of the circle's
+    // radii, the circles are touching!
+    if (distance <= c1r + c2r) {
       return true;
     }
     return false;

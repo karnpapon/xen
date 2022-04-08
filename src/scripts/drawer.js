@@ -15,60 +15,63 @@ function DrawCircle(point, radius, Color, LineWidth) {
 }
 
 function drawBezierSpline() {
-
-  drawBezierControlLine(dragpoints, ProportionalDistance)
-  drawBezier( dragpoints, GRAY);
-  drawPartialBezier(dragpoints, BLACK, ProportionalDistance);
+  // drawRecursiveLine(dragpoints, ProportionalDistance);
+  drawBezierGuidePath(dragpoints, GRAY);
+  drawControlSplineAndBezierPoint(dragpoints, BLACK, ProportionalDistance);
 
   // play animated spline.
   if (!Pause) {
-    ProportionalDistance += distSpeed
+    ProportionalDistance += distSpeed;
     if (ProportionalDistance > 1.0) {
-      ProportionalDistance = 0.0
+      ProportionalDistance = 0.0;
     }
   }
 }
 
-var alpha = 0,   /// current alpha value
-    delta = 0.1; /// delta = speed
+// var alpha = 0, /// current alpha value
+  // delta = 0.1; /// delta = speed
 
-function drawPartialBezier(points, color, t) {
+function drawControlSplineAndBezierPoint(points, color, t) {
   const xc = world.width / 2.0;
   const yc = world.height / 2.0;
-  const initPos = { x: xc + points[0].x, y: yc + points[0].y }
+  const initPos = { x: xc + points[0].x, y: yc + points[0].y };
   let point = new Point(initPos.x, initPos.y);
-  
+
   context.strokeStyle = color;
   context.lineWidth = 2;
-	context.beginPath();
+  context.beginPath();
   context.setLineDash([]);
   context.moveTo(initPos.x, initPos.y);
-	const gap = stepSize;
-	for( let step = 0; step <= t; step += gap ) {
-    point = getBezier( points, step );
-		context.lineTo( xc + point.x, yc + point.y );
-	}
-	context.stroke();
-  fillCircle( point, POINTRADIUS, BLUE );
+  const gap = stepSize;
+  for (let step = 0; step <= t; step += gap) {
+    point = getBezier(points, step);
+    context.lineTo(xc + point.x, yc + point.y);
+  }
+  context.stroke();
+  drawRecursiveLine(points, t, point);
+  fillCircle(point, POINTRADIUS, BLUE);
 
   // control line (spline)
-  for(let i = 0; i + 1 < points.length; i++){
+  for (let i = 0; i + 1 < points.length; i++) {
     const x1 = points[DragPointStart + i].x;
     const y1 = points[DragPointStart + i].y;
     const x2 = points[DragPointStart + i + 1].x;
     const y2 = points[DragPointStart + i + 1].y;
-    const ControlLine1 = new Line( x1,y1,x2,y2);
+    const ControlLine1 = new Line(x1, y1, x2, y2);
     ControlLine1.draw(
       utils.makeRGB(
-        Math.floor( customColor.x * 255 ),
-        Math.floor( customColor.y * 255 ),
-        Math.floor( customColor.z * 255 )
-      ), 2, dashedLineStyle1);
+        Math.floor(customColor.x * 255),
+        Math.floor(customColor.y * 255),
+        Math.floor(customColor.z * 255)
+      ),
+      2,
+      dashedLineStyle1
+    );
 
     // prevent unneccessary triggering on first & last line(spline).
-    // if(isFirstLine(i) || isLastLine(i, points)) continue;
+    if(isFirstLine(i) || isLastLine(i, points)) continue;
 
-    if (utils.linePointCollision(x1,y1,x2,y2,point.x,point.y) ) {
+    if (utils.linePointCollision(x1, y1, x2, y2, point.x, point.y)) {
       utils.throttle(trigger, 60);
       ControlLine1.draw(BLUE, 6);
     }
@@ -76,7 +79,7 @@ function drawPartialBezier(points, color, t) {
 }
 
 // TODO: elaborate this.
-function trigger(){
+function trigger() {
   let output = WebMidi.outputs[0];
   let channel = output.channels[1];
   channel.playNote("C3");
@@ -122,70 +125,93 @@ function trigger(){
 //   context.stroke();
 // }
 
-
 // casteljau's algorithm (cursived lerp)
 // P(t)=(1−t)A+tB
-function getBezier(points, t){
-	if(points.length == 1){
-		return {x: points[0].x, y:points[0].y};
-	} else{
-		let newpoints = [];
-		for(let i = 0; i + 1 < points.length; i++){
-			let point = {
-        x: ( (1-t) * points[i].x ) + ( t * points[i+1].x ),
-        y: ( (1-t) * points[i].y ) + ( t * points[i+1].y )
+function getBezier(points, t) {
+  if (points.length == 1) {
+    return { x: points[0].x, y: points[0].y };
+  } else {
+    let newpoints = [];
+    for (let i = 0; i + 1 < points.length; i++) {
+      let point = {
+        x: (1 - t) * points[i].x + t * points[i + 1].x,
+        y: (1 - t) * points[i].y + t * points[i + 1].y,
       };
       newpoints.push(point);
-		}
-		return getBezier(newpoints, t);
-	}
+    }
+    return getBezier(newpoints, t);
+  }
 }
 
-function drawBezierControlLine(points, t){
-  if(points.length == 1){
+function drawRecursiveLine(points, t, movingPoint) {
+  if (points.length == 1) {
     // var constructionLine = new Line( points[0].x,  points[0].y, points[1].x, points[1].y );
     // constructionLine.draw( GOLD, 2 );
-		return;
-	} else{
-		let newpoints = [];
-    let constructionLine
-		for(let i = 0; i < points.length - 1; i++){
-			let point = {
-        x: ( (1-t) * points[i].x ) + ( t * points[i+1].x ),
-        y: ( (1-t) * points[i].y ) + ( t * points[i+1].y )
+    return;
+  } else {
+    let newpoints = [];
+    let constructionLine;
+    for (let i = 0; i < points.length - 1; i++) {
+      let point = {
+        x: (1 - t) * points[i].x + t * points[i + 1].x,
+        y: (1 - t) * points[i].y + t * points[i + 1].y,
       };
       newpoints.push(point);
-		}
+    }
 
-    for(let i = 0; i < newpoints.length - 1; i++){
-      constructionLine = new Line( newpoints[i].x,  newpoints[i].y, newpoints[i + 1].x, newpoints[i + 1].y );
+    for (let i = 0; i < newpoints.length - 1; i++) {
+      const x1 = newpoints[i].x;
+      const y1 = newpoints[i].y;
+      const x2 = newpoints[i + 1].x;
+      const y2 = newpoints[i + 1].y;
+
+      constructionLine = new Line(x1, y1, x2, y2);
       constructionLine.draw(
         utils.makeRGB(
-          Math.floor( customRecursiveBezierColor.x * 255 ),
-          Math.floor( customRecursiveBezierColor.y * 255 ),
-          Math.floor( customRecursiveBezierColor.z * 255 )
-        ), 0.5, dashedLineStyle3);
+          Math.floor(customRecursiveBezierColor.x * 255),
+          Math.floor(customRecursiveBezierColor.y * 255),
+          Math.floor(customRecursiveBezierColor.z * 255)
+        ),
+        0.5,
+        dashedLineStyle3
+      );
+
+      // points along odd spline (left)
+      if(ShowLPoints){
+        fillCircle({ x: x1, y: y1 }, POINTRADIUS, GRAY);
+        if (utils.circleCircleCollision(x1,y1,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
+          utils.throttle(trigger, 120);
+          fillCircle({ x: x1, y: y1 }, POINTRADIUS * 2, BLACKTRANSPARENT);
+        }
+      }
+
+      // points along even spline (right)
+      if(ShowRPoints){
+        fillCircle({ x: x2, y: y2 }, POINTRADIUS, GRAY);
+        if (utils.circleCircleCollision(x2,y2,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
+          utils.throttle(trigger, 120);
+          fillCircle({ x: x2, y: y2 }, POINTRADIUS * 2, BLACKTRANSPARENT);
+        }
+      }
     }
-    
-		return drawBezierControlLine(newpoints, t);
-	}
+    return drawRecursiveLine(newpoints, t, movingPoint);
+  }
 }
 
-function drawBezier(points, color){
-	let progress = 0;
+function drawBezierGuidePath(points, color) {
+  let progress = 0;
   const xc = world.width / 2.0;
   const yc = world.height / 2.0;
   context.setLineDash(dashedLineStyle3);
   context.strokeStyle = color;
   // context.setLineDash([]);
   context.lineWidth = 2;
-	context.beginPath();
+  context.beginPath();
   context.moveTo(xc + points[0].x, yc + points[0].y);
-	while(progress < 1){
-		let point = getBezier(points, progress);
+  while (progress < 1) {
+    let point = getBezier(points, progress);
     context.lineTo(xc + point.x, yc + point.y);
-		progress += stepSize;
-	}
-	context.stroke();
+    progress += stepSize;
+  }
+  context.stroke();
 }
-

@@ -3,6 +3,7 @@ function init() {
   canvas = document.getElementById("canvas");
   drawing = document.getElementById("drawing");
 
+  initGUI()
   enableMidi()
 
   canvas.onclick = mouseClick;
