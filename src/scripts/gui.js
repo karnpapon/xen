@@ -15,31 +15,41 @@
 
   ImGui.StyleColorsClassic();
 
-  const clear_color = new ImGui.ImVec4(0.45, 0.55, 0.60, 1.00);
-
-  let buf = "Quick brown fox";
-  let f = 0.6;
+  const col1 = new ImGui.ImVec4(customColor.x,customColor.y,customColor.z,customColor.w);
+  const col2 = new ImGui.ImVec4(customRecursiveBezierColor.x,customRecursiveBezierColor.y,customRecursiveBezierColor.z,customRecursiveBezierColor.w);
+  
+  // let buf = "Quick brown fox";
+  let hideMap = false;
   distSpeed = 0.004
-
   let done = false;
   window.requestAnimationFrame(_loop);
+
   function _loop(time) {
     ImGui_Impl.NewFrame(time);
     ImGui.NewFrame();
-
+// console.log("customColor", customColor)
     ImGui.SetNextWindowPos(new ImGui.ImVec2(20, 20), ImGui.Cond.FirstUseEver);
     ImGui.SetNextWindowSize(new ImGui.ImVec2(294, 140), ImGui.Cond.FirstUseEver);
     ImGui.Begin("Controller");
 
     ImGui.Text(midi)
     let play = Pause ? "Pause" : "Play"
-    if(ImGui.Button(play)){
-      playBtnClick()
-    }
+    let mapShow = !hideMap ? "hide map" : "show map"
 
-    ImGui.InputText("some title", (_ = buf) => buf = _, 156)
+    if(ImGui.Button(play)){ playBtnClick() }
+   
+    // semantically we need to use ImGui.Checkbox 
+    // but we can't. Since we wanted to communicate between canvas (60fps) and div, 
+    // otherwise the msg will be sent 60times/sec.
+    if (ImGui.Button(mapShow)) {
+      hideMap = !hideMap
+      canvas.dispatchEvent(new CustomEvent('toggleMap', {detail: { hideMap: hideMap }}))
+    } 
+    // ImGui.InputText("some title", (_ = buf) => buf = _, 156)
     ImGui.SliderFloat("speed", (_ = distSpeed) => distSpeed = _ ,0.0,0.05)
-    ImGui.ColorEdit4("clear color", clear_color)
+    ImGui.SliderFloat("step", (_ = stepSize) => stepSize = _ ,0.001,1)
+    ImGui.ColorEdit4("control spline", customColor = col1)
+    ImGui.ColorEdit4("casteljau spline", customRecursiveBezierColor = col2)
 
     try {
       // eval(editor.getValue());
@@ -56,9 +66,9 @@
     ImGui.Render();
     const gl = ImGui_Impl.gl;
     gl && gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    gl && gl.clearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    gl && gl.clearColor(col1.x, col1.y, col1.z, col1.w);
+    gl && gl.clearColor(col2.x, col2.y, col2.z, col2.w);
     gl && gl.clear(gl.COLOR_BUFFER_BIT);
-    //gl.useProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
 
     ImGui_Impl.RenderDrawData(ImGui.GetDrawData());
 

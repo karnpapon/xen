@@ -7,3 +7,9 @@ function onEnabled() {
     });
   } 
 }
+
+function enableMidi(){
+  WebMidi.enable()
+    .then(onEnabled)
+    .catch((err) => alert(err));
+}

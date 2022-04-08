@@ -50,6 +50,7 @@ Circle.prototype.fill = function (Color) {
   var yc = world.height / 2;
   context.strokeStyle = Color;
   context.fillStyle = Color;
+  context.setLineDash([]);
   context.lineWidth = 0.8;
   if (Color == BLACK) context.lineWidth = 1.5;
   context.beginPath();

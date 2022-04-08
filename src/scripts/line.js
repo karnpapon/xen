@@ -21,10 +21,11 @@ function Line(x1, y1, x2, y2) {
   }
 }
 
-Line.prototype.draw = function (color, width) {
+Line.prototype.draw = function (color, width, dashed = []) {
   var xc = world.width / 2;
   var yc = world.height / 2;
   context.strokeStyle = color;
+  context.setLineDash(dashed);
   if (width == undefined || width == null) {
     width = 0.8;
     if (color == BLACK) width = 1.5;

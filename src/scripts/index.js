@@ -1,22 +1,18 @@
 function init() {
+  mapSrc = document.getElementById("mapId");
   canvas = document.getElementById("canvas");
   drawing = document.getElementById("drawing");
 
-  // Enable WebMidi.js and trigger the onEnabled() function when ready.
-  WebMidi.enable()
-    .then(onEnabled)
-    .catch((err) => alert(err));
+  enableMidi()
 
-  canvas.onclick = (e) => {
-    if (e.ctrlKey || e.metaKey) {
-      mouseClick(e);
-      return;
-    }
-  };
+  canvas.onclick = mouseClick;
   canvas.onmousedown = buttonDown;
   canvas.onmouseup = buttonUp;
   canvas.onmousemove = mouseMove;
   canvas.oncontextmenu = rightMouseClick;
+  canvas.addEventListener('toggleMap', function (e) {
+    mapSrc.style.display = e.detail.hideMap ? "none" : "block"
+  });
 
   timer = window.setInterval(function () {
     enableHandler = true;
@@ -24,7 +20,6 @@ function init() {
 
   if (canvas && canvas.getContext) {
     context = canvas.getContext("2d");
-
     window.addEventListener("resize", windowResizeHandler, false);
     windowResizeHandler();
   }
@@ -34,3 +29,5 @@ function init() {
 }
 
 init();
+
+

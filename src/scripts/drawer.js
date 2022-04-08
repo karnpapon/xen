@@ -14,26 +14,10 @@ function DrawCircle(point, radius, Color, LineWidth) {
   circle.draw(Color, LineWidth);
 }
 
-// function DrawSquare(point, radius, color) {
-//   var xc = world.width / 2;
-//   var yc = world.height / 2;
-//   context.strokeStyle = color;
-//   context.lineWidth = 0.8;
-//   if (color == BLACK)
-//     context.lineWidth = 1.5;
-//   context.beginPath();
-//   context.moveTo(xc + point.x - radius, yc + point.y - radius);
-//   context.lineTo(xc + point.x + radius, yc + point.y - radius);
-//   context.lineTo(xc + point.x + radius, yc + point.y + radius);
-//   context.lineTo(xc + point.x - radius, yc + point.y + radius);
-//   context.lineTo(xc + point.x - radius, yc + point.y - radius);
-//   context.stroke();
-// }
-
 function drawBezierSpline() {
 
   drawBezierControlLine(dragpoints, ProportionalDistance)
-  drawBezier( dragpoints, LIGHTGRAY);
+  drawBezier( dragpoints, GRAY);
   drawPartialBezier(dragpoints, BLACK, ProportionalDistance);
 
   // play animated spline.
@@ -43,25 +27,10 @@ function drawBezierSpline() {
       ProportionalDistance = 0.0
     }
   }
-  
-  // drawControlLine()
-
-  // var closest = ClosestBezierPoint(dragpoints[DragPointStart + 4], dragpoints[DragPointStart + 0], dragpoints[DragPointStart + 1], dragpoints[DragPointStart + 2], dragpoints[DragPointStart + 3]);
-  // var CloseLine = new Line(dragpoints[DragPointStart + 4].x, dragpoints[DragPointStart + 4].y, closest.x, closest.y);
-  // CloseLine.draw(GREEN);
-  // DrawCircle(closest, POINTRADIUS, BOLDRED, 1);
-
-  // var BaseRadius = utils.distance(dragpoints[DragPointStart + 4], dragpoints[DragPointStart + 5]);
-  // Find the circle intersection to the bezier curve
-  // var intersections = CircleBezierIntersections(dragpoints[DragPointStart + 4], BaseRadius, dragpoints[DragPointStart + 0], dragpoints[DragPointStart + 1], dragpoints[DragPointStart + 2], dragpoints[DragPointStart + 3]);
-
-  // intersections.forEach(function (element) {
-  //   var curvePoint = getBezierPoint(dragpoints[DragPointStart + 0], dragpoints[DragPointStart + 1], dragpoints[DragPointStart + 2], dragpoints[DragPointStart + 3], element);
-  //   DrawSquare(curvePoint, POINTRADIUS, RED);
-  // });
-
-  // DrawCircle(dragpoints[DragPointStart + 4], BaseRadius, GRAY, 1);
 }
+
+var alpha = 0,   /// current alpha value
+    delta = 0.1; /// delta = speed
 
 function drawPartialBezier(points, color, t) {
   const xc = world.width / 2.0;
@@ -72,6 +41,7 @@ function drawPartialBezier(points, color, t) {
   context.strokeStyle = color;
   context.lineWidth = 2;
 	context.beginPath();
+  context.setLineDash([]);
   context.moveTo(initPos.x, initPos.y);
 	const gap = stepSize;
 	for( let step = 0; step <= t; step += gap ) {
@@ -81,29 +51,35 @@ function drawPartialBezier(points, color, t) {
 	context.stroke();
   fillCircle( point, POINTRADIUS, BLUE );
 
+  // control line (spline)
   for(let i = 0; i + 1 < points.length; i++){
     const x1 = points[DragPointStart + i].x;
     const y1 = points[DragPointStart + i].y;
     const x2 = points[DragPointStart + i + 1].x;
     const y2 = points[DragPointStart + i + 1].y;
     const ControlLine1 = new Line( x1,y1,x2,y2);
-    ControlLine1.draw(BLUE, 2);
+    ControlLine1.draw(
+      utils.makeRGB(
+        Math.floor( customColor.x * 255 ),
+        Math.floor( customColor.y * 255 ),
+        Math.floor( customColor.z * 255 )
+      ), 2, dashedLineStyle1);
 
-    // prevent trigger on first & last line.
-    if(isFirstLine(i) || isLastLine(i, points)) continue;
+    // prevent unneccessary triggering on first & last line(spline).
+    // if(isFirstLine(i) || isLastLine(i, points)) continue;
 
     if (utils.linePointCollision(x1,y1,x2,y2,point.x,point.y) ) {
       utils.throttle(trigger, 60);
-      ControlLine1.draw(BLACK, 2);
+      ControlLine1.draw(BLUE, 6);
     }
   }
 }
 
+// TODO: elaborate this.
 function trigger(){
   let output = WebMidi.outputs[0];
   let channel = output.channels[1];
   channel.playNote("C3");
-  console.log("triggerr")
 }
 
 // function drawControlLine() {
@@ -166,9 +142,9 @@ function getBezier(points, t){
 }
 
 function drawBezierControlLine(points, t){
-  if(points.length == 2){
-    var constructionLine = new Line( points[0].x,  points[0].y, points[1].x, points[1].y );
-    constructionLine.draw( BLUE, 2 );
+  if(points.length == 1){
+    // var constructionLine = new Line( points[0].x,  points[0].y, points[1].x, points[1].y );
+    // constructionLine.draw( GOLD, 2 );
 		return;
 	} else{
 		let newpoints = [];
@@ -183,7 +159,12 @@ function drawBezierControlLine(points, t){
 
     for(let i = 0; i < newpoints.length - 1; i++){
       constructionLine = new Line( newpoints[i].x,  newpoints[i].y, newpoints[i + 1].x, newpoints[i + 1].y );
-      constructionLine.draw( LIGHTGRAY, 1 );
+      constructionLine.draw(
+        utils.makeRGB(
+          Math.floor( customRecursiveBezierColor.x * 255 ),
+          Math.floor( customRecursiveBezierColor.y * 255 ),
+          Math.floor( customRecursiveBezierColor.z * 255 )
+        ), 0.5, dashedLineStyle3);
     }
     
 		return drawBezierControlLine(newpoints, t);
@@ -194,8 +175,10 @@ function drawBezier(points, color){
 	let progress = 0;
   const xc = world.width / 2.0;
   const yc = world.height / 2.0;
+  context.setLineDash(dashedLineStyle3);
   context.strokeStyle = color;
-  context.lineWidth = 1;
+  // context.setLineDash([]);
+  context.lineWidth = 2;
 	context.beginPath();
   context.moveTo(xc + points[0].x, yc + points[0].y);
 	while(progress < 1){

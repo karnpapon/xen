@@ -6,6 +6,17 @@
     <script src="https://cdn.jsdelivr.net/npm/webmidi@3.0.14/dist/iife/webmidi.iife.js"></script>
     <script src="https://flyover.github.io/imgui-js/dist/imgui.umd.js"></script>
     <script src="https://flyover.github.io/imgui-js/dist/imgui_impl.umd.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+      crossorigin=""
+    ></script>
     <style type="text/css">
       html,
       body {
@@ -25,6 +36,8 @@
         margin: 0;
         padding: 0;
         display: block;
+        position: absolute;
+        z-index: 99;
       }
 
       #drawing {
@@ -116,13 +129,22 @@
         height: 100%;
         z-index: 99;
       }
+
+      .map { 
+        opacity: 0.4; 
+        top: 0;
+        position: absolute; 
+        z-index: 0;
+        user-select: none;
+       }
     </style>
   </head>
 
   <body id="game">
     <div id="drawing">
-      <!-- <div id="midi-device"></div> -->
+      <!-- <div id="map"></div> -->
       <canvas id="canvas" tabindex="1"> </canvas>
+      <img id="mapId" class="map" src="./src/imgs/map.png"/>
     </div>
   </body>
   <script type="text/javascript" src="./src/scripts/utils.js"></script>

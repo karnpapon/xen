@@ -100,6 +100,7 @@ function handleAddPoint(e) {
   DragPointCount = dragpoints.length;
 }
 
+// TODO: fix this
 function rightMouseClick(event) {
   event.preventDefault()
   Position = canvas.relMouseCoords(event);
@@ -181,10 +182,10 @@ function buttonUp(event) {
   Pause = false;
   if (!MouseDrag) return;
 
-  DragEnd(event);
+  dragEnd(event);
 }
 
-function DragEnd(event) {
+function dragEnd(event) {
   DragPoint = -1;
 }
 
