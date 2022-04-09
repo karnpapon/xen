@@ -15,15 +15,15 @@ function DrawCircle(point, radius, Color, LineWidth) {
 }
 
 function drawBezierSpline() {
-  // drawRecursiveLine(dragpoints, ProportionalDistance);
-  drawBezierGuidePath(dragpoints, GRAY);
-  drawControlSplineAndBezierPoint(dragpoints, BLACK, ProportionalDistance);
+  // drawRecursiveLine(dragpoints.bezierPoints[0], proportionalDistance);
+  drawBezierGuidePath(dragpoints.bezierPoints[0], GRAY);
+  drawControlSplineAndBezierPoint(dragpoints.bezierPoints[0], BLACK, proportionalDistance);
 
   // play animated spline.
-  if (!Pause) {
-    ProportionalDistance += distSpeed;
-    if (ProportionalDistance > 1.0) {
-      ProportionalDistance = 0.0;
+  if (!pause) {
+    proportionalDistance += distSpeed;
+    if (proportionalDistance > 1.0) {
+      proportionalDistance = 0.0;
     }
   }
 }
@@ -32,6 +32,7 @@ function drawBezierSpline() {
   // delta = 0.1; /// delta = speed
 
 function drawControlSplineAndBezierPoint(points, color, t) {
+  
   const xc = world.width / 2.0;
   const yc = world.height / 2.0;
   const initPos = { x: xc + points[0].x, y: yc + points[0].y };
@@ -48,15 +49,19 @@ function drawControlSplineAndBezierPoint(points, color, t) {
     context.lineTo(xc + point.x, yc + point.y);
   }
   context.stroke();
+
+  fillCircle(point, POINTRADIUS, BLACK);
+
+  if (!showControlLine) return
+
   drawRecursiveLine(points, t, point);
-  fillCircle(point, POINTRADIUS, BLUE);
 
   // control line (spline)
   for (let i = 0; i + 1 < points.length; i++) {
-    const x1 = points[DragPointStart + i].x;
-    const y1 = points[DragPointStart + i].y;
-    const x2 = points[DragPointStart + i + 1].x;
-    const y2 = points[DragPointStart + i + 1].y;
+    const x1 = points[dragPointStart + i].x;
+    const y1 = points[dragPointStart + i].y;
+    const x2 = points[dragPointStart + i + 1].x;
+    const y2 = points[dragPointStart + i + 1].y;
     const ControlLine1 = new Line(x1, y1, x2, y2);
     ControlLine1.draw(
       utils.makeRGB(
@@ -65,7 +70,7 @@ function drawControlSplineAndBezierPoint(points, color, t) {
         Math.floor(customColor.z * 255)
       ),
       2,
-      dashedLineStyle1
+      DASHLINESTYLE1
     );
 
     // prevent unneccessary triggering on first & last line(spline).
@@ -86,11 +91,11 @@ function trigger() {
 }
 
 // function drawControlLine() {
-//   for(let i = 0; i + 1 < dragpoints.length; i++){
-//     const x1 = dragpoints[DragPointStart + i].x;
-//     const y1 = dragpoints[DragPointStart + i].y;
-//     const x2 = dragpoints[DragPointStart + i + 1].x;
-//     const y2 = dragpoints[DragPointStart + i + 1].y;
+//   for(let i = 0; i + 1 < dragpoints.bezierPoints[0].length; i++){
+//     const x1 = dragpoints.bezierPoints[0][dragPointStart + i].x;
+//     const y1 = dragpoints.bezierPoints[0][dragPointStart + i].y;
+//     const x2 = dragpoints.bezierPoints[0][dragPointStart + i + 1].x;
+//     const y2 = dragpoints.bezierPoints[0][dragPointStart + i + 1].y;
 //     const ControlLine1 = new Line( x1,y1,x2,y2);
 //     ControlLine1.draw(BLUE);
 
@@ -173,24 +178,24 @@ function drawRecursiveLine(points, t, movingPoint) {
           Math.floor(customRecursiveBezierColor.z * 255)
         ),
         0.5,
-        dashedLineStyle3
+        DASHLINESTYLE4
       );
 
       // points along odd spline (left)
-      if(ShowLPoints){
+      if(showLPoints){
         fillCircle({ x: x1, y: y1 }, POINTRADIUS, GRAY);
         if (utils.circleCircleCollision(x1,y1,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
           utils.throttle(trigger, 120);
-          fillCircle({ x: x1, y: y1 }, POINTRADIUS * 2, BLACKTRANSPARENT);
+          fillCircle({ x: x1, y: y1 }, POINTRADIUS * 4, REDTRANSPARENT);
         }
       }
 
       // points along even spline (right)
-      if(ShowRPoints){
+      if(showRPoints){
         fillCircle({ x: x2, y: y2 }, POINTRADIUS, GRAY);
         if (utils.circleCircleCollision(x2,y2,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
           utils.throttle(trigger, 120);
-          fillCircle({ x: x2, y: y2 }, POINTRADIUS * 2, BLACKTRANSPARENT);
+          fillCircle({ x: x2, y: y2 }, POINTRADIUS * 4, ORANGETRANSPARENT);
         }
       }
     }
@@ -202,7 +207,7 @@ function drawBezierGuidePath(points, color) {
   let progress = 0;
   const xc = world.width / 2.0;
   const yc = world.height / 2.0;
-  context.setLineDash(dashedLineStyle3);
+  context.setLineDash(DASHLINESTYLE4);
   context.strokeStyle = color;
   // context.setLineDash([]);
   context.lineWidth = 2;

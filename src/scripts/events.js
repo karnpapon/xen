@@ -50,20 +50,20 @@ function checkMouseOver(e, points) {
 }
 
 function mouseMove(event) {
-  if (!MouseDrag) return 
-  Position = canvas.relMouseCoords(event);
+  if (!mouseDrag) return 
+  position = canvas.relMouseCoords(event);
   dragMove(event);
 }
 
 function dragMove(event) {
-  if (DragPoint >= 0) {
+  if (dragPoint >= 0) {
     var xc = world.width / 2;
     var yc = world.height / 2;
 
     var p = new Point(
-      Position.x - xc,
-      Position.y - yc,
-      dragpoints[DragPoint].color
+      position.x - xc,
+      position.y - yc,
+      dragpoints.bezierPoints[0][dragPoint].color
     );
 
     xOffset = p.x - xOld;
@@ -71,13 +71,13 @@ function dragMove(event) {
     xOld = p.x;
     yOld = p.y;
 
-    xDrag = p.x - dragpoints[DragPoint].x;
-    yDrag = p.y - dragpoints[DragPoint].y;
+    xDrag = p.x - dragpoints.bezierPoints[0][dragPoint].x;
+    yDrag = p.y - dragpoints.bezierPoints[0][dragPoint].y;
 
-    dragpoints[DragPoint].x = p.x;
-    dragpoints[DragPoint].y = p.y;
+    dragpoints.bezierPoints[0][dragPoint].x = p.x;
+    dragpoints.bezierPoints[0][dragPoint].y = p.y;
 
-    //ProportionalDistance = 0.0
+    //proportionalDistance = 0.0
 
     // animate();
   }
@@ -96,49 +96,49 @@ function handleAddPoint(e) {
 
   const newPoint = { x: event.offsetX - xc, y: event.offsetY - yc };
 
-  dragpoints.push(new Point(newPoint.x, newPoint.y, BLACK));
-  DragPointCount = dragpoints.length;
+  dragpoints.bezierPoints[0].push(new Point(newPoint.x, newPoint.y, BLACK));
+  dragPointCount = dragpoints.bezierPoints[0].length;
 }
 
 // TODO: fix this
 function rightMouseClick(event) {
   event.preventDefault()
-  Position = canvas.relMouseCoords(event);
+  position = canvas.relMouseCoords(event);
 
-  if (Position == null) return;
+  if (position == null) return;
   const xc = world.width / 2;
   const yc = world.height / 2;
 
   const SearchRadius = POINTRADIUS;
 
-  const p = new Point(Position.x - xc, Position.y - yc);
+  const p = new Point(position.x - xc, position.y - yc);
   xOffset = 0;
   yOffset = 0;
 
-  for (let idx = DragPointStart; idx < DragPointStart + DragPointCount; ++idx) {
-    if (utils.distance(dragpoints[idx], p) < SearchRadius + 3) {
-      // DragPoint = idx;
-      // xOffset = p.x - dragpoints[idx].x;
-      // yOffset = p.y - dragpoints[idx].y;
+  for (let idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
+    if (utils.distance(dragpoints.bezierPoints[0][idx], p) < SearchRadius + 3) {
+      // dragPoint = idx;
+      // xOffset = p.x - dragpoints.bezierPoints[0][idx].x;
+      // yOffset = p.y - dragpoints.bezierPoints[0][idx].y;
       removePoint(idx)
       // animate();
       return;
     }
   }
 
-  // DragPoint = -1;
+  // dragPoint = -1;
 
 }
 
 function buttonDown(event) {
-  Position = canvas.relMouseCoords(event);
-  MouseDrag = true;
-  // Pause = true;
+  position = canvas.relMouseCoords(event);
+  mouseDrag = true;
+  // pause = true;
   dragStart(event, false);
 }
 
 function dragStart(event, Fingers) {
-  if (Position == null) return;
+  if (position == null) return;
 
   const xc = world.width / 2;
   const yc = world.height / 2;
@@ -146,47 +146,47 @@ function dragStart(event, Fingers) {
   const SearchRadius = POINTRADIUS;
   if (Fingers) SearchRadius *= 4;
 
-  const p = new Point(Position.x - xc, Position.y - yc);
+  const p = new Point(position.x - xc, position.y - yc);
   xOld = p.x;
   yOld = p.y;
   xOffset = 0;
   yOffset = 0;
-  // for ( let idx = DragPointStart; idx < DragPointStart + DragPointCount; ++idx) {
+  // for ( let idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
   //   // The first time through, look only for black points. This
   //   // is based on the assumption that black points are control
   //   // points and that they need to be checked first!
-  //   if (dragpoints[idx].color == BLACK) continue;
-  //   if (utils.distance(dragpoints[idx], p) < SearchRadius + 3) {
-  //     DragPoint = idx;
-  //     xOffset = p.x - dragpoints[DragPoint].x;
-  //     yOffset = p.y - dragpoints[DragPoint].y;
+  //   if (dragpoints.bezierPoints[0][idx].color == BLACK) continue;
+  //   if (utils.distance(dragpoints.bezierPoints[0][idx], p) < SearchRadius + 3) {
+  //     dragPoint = idx;
+  //     xOffset = p.x - dragpoints.bezierPoints[0][dragPoint].x;
+  //     yOffset = p.y - dragpoints.bezierPoints[0][dragPoint].y;
   //     animate();
   //     return;
   //   }
   // }
 
-  for (let idx = DragPointStart; idx < DragPointStart + DragPointCount; ++idx) {
-    if (utils.distance(dragpoints[idx], p) < SearchRadius + 3) {
-      DragPoint = idx;
-      xOffset = p.x - dragpoints[DragPoint].x;
-      yOffset = p.y - dragpoints[DragPoint].y;
+  for (let idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
+    if (utils.distance(dragpoints.bezierPoints[0][idx], p) < SearchRadius + 3) {
+      dragPoint = idx;
+      xOffset = p.x - dragpoints.bezierPoints[0][dragPoint].x;
+      yOffset = p.y - dragpoints.bezierPoints[0][dragPoint].y;
       // animate();
       return;
     }
   }
 
-  DragPoint = -1;
+  dragPoint = -1;
 }
 
 function buttonUp(event) {
-  Pause = false;
-  if (!MouseDrag) return;
+  pause = false;
+  if (!mouseDrag) return;
 
   dragEnd(event);
 }
 
 function dragEnd(event) {
-  DragPoint = -1;
+  dragPoint = -1;
 }
 
 function windowResizeHandler() {
@@ -206,5 +206,5 @@ function windowResizeHandler() {
 
 
 function playBtnClick(){
-  Pause = !Pause
+  pause = !pause
 }

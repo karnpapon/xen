@@ -15,7 +15,7 @@ function midPoint(line) {
 }
 
 function removePoint(index) {
-  dragpoints.splice(index, 1)
+  dragpoints.bezierPoints[0].splice(index, 1)
 }
 
 function getBezierPoint( point0, point1, point2, point3, position ) {
@@ -34,7 +34,7 @@ function getBezierPoint( point0, point1, point2, point3, position ) {
 }
 
 function isFirstLine(i){
-  return i === 0 || i === 1
+  return i === 0
 }
 
 function isLastLine(i, points){

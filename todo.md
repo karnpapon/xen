@@ -1,1 +1,2 @@
 - handle trigger
+- handle multiple line add.

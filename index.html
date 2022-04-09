@@ -3,6 +3,11 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <script type="text/javascript">
+      function require(name) {
+        console.warn("Failed to require " + name);
+      }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/webmidi@3.0.14/dist/iife/webmidi.iife.js"></script>
     <script src="https://flyover.github.io/imgui-js/dist/imgui.umd.js"></script>
     <script src="https://flyover.github.io/imgui-js/dist/imgui_impl.umd.js"></script>
@@ -17,6 +22,20 @@
       integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
       crossorigin=""
     ></script>
+
+    <script type="text/javascript" src="./src/scripts/utils.js"></script>
+    <script type="text/javascript" src="./src/scripts/bezierpoint.js"></script>
+    <script type="text/javascript" src="./src/scripts/gui.js"></script>
+    <script type="text/javascript" src="./src/scripts/midi.js"></script>
+    <script type="text/javascript" src="./src/scripts/animate.js"></script>
+    <script type="text/javascript" src="./src/scripts/drawer.js"></script>
+    <script type="text/javascript" src="./src/scripts/arc.js"></script>
+    <script type="text/javascript" src="./src/scripts/circle.js"></script>
+    <script type="text/javascript" src="./src/scripts/events.js"></script>
+    <script type="text/javascript" src="./src/scripts/line.js"></script>
+    <script type="text/javascript" src="./src/scripts/point.js"></script>
+    <script type="text/javascript" src="./src/scripts/vars.js"></script>
+    <script type="text/javascript" src="./src/scripts/client.js"></script>
     <style type="text/css">
       html,
       body {
@@ -130,33 +149,32 @@
         z-index: 99;
       }
 
-      .map { 
-        opacity: 0.4; 
+      .map {
+        opacity: 0.4;
         top: 0;
-        position: absolute; 
+        position: absolute;
         z-index: 0;
+        display: none;
         user-select: none;
-       }
+      }
     </style>
   </head>
 
   <body id="game">
     <div id="drawing">
-      <!-- <div id="map"></div> -->
       <canvas id="canvas" tabindex="1"> </canvas>
-      <img id="mapId" class="map" src="./src/imgs/map.png"/>
+      <img id="mapId" class="map" src="./src/imgs/map.png" />
     </div>
+    <script>
+      'use strict'
+
+      const client = new Client()
+
+      // client.install(document.body)
+
+      // window.addEventListener('load', () => { 
+      //   client.start()
+      // })
+    </script>
   </body>
-  <script type="text/javascript" src="./src/scripts/utils.js"></script>
-  <script type="text/javascript" src="./src/scripts/gui.js"></script>
-  <script type="text/javascript" src="./src/scripts/midi.js"></script>
-  <script type="text/javascript" src="./src/scripts/animate.js"></script>
-  <script type="text/javascript" src="./src/scripts/drawer.js"></script>
-  <script type="text/javascript" src="./src/scripts/arc.js"></script>
-  <script type="text/javascript" src="./src/scripts/circle.js"></script>
-  <script type="text/javascript" src="./src/scripts/events.js"></script>
-  <script type="text/javascript" src="./src/scripts/line.js"></script>
-  <script type="text/javascript" src="./src/scripts/point.js"></script>
-  <script type="text/javascript" src="./src/scripts/vars.js"></script>
-  <script type="text/javascript" src="./src/scripts/index.js"></script>
 </html>

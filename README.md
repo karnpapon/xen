@@ -2,7 +2,7 @@
 
 an implementation on [ De Casteljau's ](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm) algorithm, capable of sending MIDI out, intentionally used for live performance.
 
-<img src="./src/imgs/ss2.png">
+<img src="./src/imgs/ss3.gif">
 
 
 

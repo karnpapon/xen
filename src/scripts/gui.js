@@ -18,7 +18,6 @@ async function initGUI() {
   const col1 = new ImGui.ImVec4(customColor.x,customColor.y,customColor.z,customColor.w);
   const col2 = new ImGui.ImVec4(customRecursiveBezierColor.x,customRecursiveBezierColor.y,customRecursiveBezierColor.z,customRecursiveBezierColor.w);
   
-  let hideMap = false;
   distSpeed = 0.004
   let done = false;
   window.requestAnimationFrame(_loop);
@@ -31,8 +30,8 @@ async function initGUI() {
     ImGui.SetNextWindowSize(new ImGui.ImVec2(294, 140), ImGui.Cond.FirstUseEver);
     ImGui.Begin("Controller");
 
-    ImGui.Text(midi)
-    let play = Pause ? "Pause" : "Play"
+    ImGui.Text(MIDI)
+    let play = pause ? "pause" : "Play"
     let mapShow = !hideMap ? "hide map" : "show map"
 
     if(ImGui.Button(play)){ playBtnClick() }
@@ -44,9 +43,10 @@ async function initGUI() {
       hideMap = !hideMap
       canvas.dispatchEvent(new CustomEvent('toggleMap', {detail: { hideMap: hideMap }}))
     } 
-    ImGui.Checkbox("Show L points",(value = ShowLPoints) => ShowLPoints = value)
-    ImGui.Checkbox("Show R points",(value = ShowRPoints) => ShowRPoints = value)
-    ImGui.SliderFloat("speed", (_ = distSpeed) => distSpeed = _ ,0.0,0.05)
+    ImGui.Checkbox("Show Control line",(value = showControlLine) => showControlLine = value)
+    ImGui.Checkbox("Show L points",(value = showLPoints) => showLPoints = value)
+    ImGui.Checkbox("Show R points",(value = showRPoints) => showRPoints = value)
+    ImGui.SliderFloat("speed", (_ = distSpeed) => distSpeed = _ ,0.0,0.04)
     ImGui.SliderFloat("step", (_ = stepSize) => stepSize = _ ,0.001,1)
     ImGui.ColorEdit4("control spline", customColor = col1)
     ImGui.ColorEdit4("casteljau spline", customRecursiveBezierColor = col2)

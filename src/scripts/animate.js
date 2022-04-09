@@ -18,26 +18,26 @@ function animate() {
 
   // draw colored points on top of black points.
   for (
-    var idx = DragPointStart;
-    idx < DragPointStart + DragPointCount;
+    var idx = dragPointStart;
+    idx < dragPointStart + dragPointCount;
     ++idx
   ) {
-    if (dragpoints[idx].color != BLACK) continue;
-    fillCircle(dragpoints[idx], POINTRADIUS, dragpoints[idx].color);
-    const text = `P${idx} (${dragpoints[idx].x},${dragpoints[idx].y})`
+    if (dragpoints.bezierPoints[0][idx].color != BLACK) continue;
+    fillCircle(dragpoints.bezierPoints[0][idx], POINTRADIUS, dragpoints.bezierPoints[0][idx].color);
+    const text = `P${idx} (${dragpoints.bezierPoints[0][idx].x},${dragpoints.bezierPoints[0][idx].y})`
     DrawText(
       text,
-      dragpoints[idx].x + POINTRADIUS,
-      dragpoints[idx].y,
-      dragpoints[idx].color
+      dragpoints.bezierPoints[0][idx].x + POINTRADIUS,
+      dragpoints.bezierPoints[0][idx].y,
+      dragpoints.bezierPoints[0][idx].color
     );
   }
-  if (hover) {dragpoints[id].color = BLUE }
-  // for (var idx = DragPointStart; idx < DragPointStart + DragPointCount; ++idx) {
-  //   if (dragpoints[idx].color == BLACK)
+  if (hover) {dragpoints.bezierPoints[0][id].color = BLUE }
+  // for (var idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
+  //   if (dragpoints.bezierPoints[0][idx].color == BLACK)
   //     continue;
-  //   fillCircle(dragpoints[idx], POINTRADIUS, dragpoints[idx].color);
-  //   DrawText( "P" + idx, dragpoints[idx].x + POINTRADIUS, dragpoints[idx].y, dragpoints[idx].color );
+  //   fillCircle(dragpoints.bezierPoints[0][idx], POINTRADIUS, dragpoints.bezierPoints[0][idx].color);
+  //   DrawText( "P" + idx, dragpoints.bezierPoints[0][idx].x + POINTRADIUS, dragpoints.bezierPoints[0][idx].y, dragpoints.bezierPoints[0][idx].color );
   // }
 
   xOffset = 0;
@@ -46,14 +46,12 @@ function animate() {
 }
 
 function animationLoop() {
-  if (ConstantAnimation) animate();
+  if (constantAnimation) animate();
   requestAnimFrame(animationLoop);
 }
 
 function animBezier() {
-  ConstantAnimation = true;
-  RotationAngle = 0;
-  MaxConstructionDescriptions = 0; // gets set later.
+  constantAnimation = true;
   ConstructionIndex = 0;
 
   animate();
