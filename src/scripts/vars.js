@@ -77,6 +77,7 @@ var showRPoints = false;
 var showControlLine = true;
 
 var dragPointStart = 0;
+var dragPointGroup = 0;
 var dragPointCount = 0;
 var dragPoint = -1;
 var xDrag = 0;

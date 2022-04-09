@@ -14,22 +14,11 @@ function DrawCircle(point, radius, Color, LineWidth) {
   circle.draw(Color, LineWidth);
 }
 
-function drawBezierSpline() {
+function drawBezierSpline(points) {
   // drawRecursiveLine(dragpoints.bezierPoints[0], proportionalDistance);
-  drawBezierGuidePath(dragpoints.bezierPoints[0], GRAY);
-  drawControlSplineAndBezierPoint(dragpoints.bezierPoints[0], BLACK, proportionalDistance);
-
-  // play animated spline.
-  if (!pause) {
-    proportionalDistance += distSpeed;
-    if (proportionalDistance > 1.0) {
-      proportionalDistance = 0.0;
-    }
-  }
+  drawBezierGuidePath(points, GRAY);
+  drawControlSplineAndBezierPoint(points, BLACK, proportionalDistance);
 }
-
-// var alpha = 0, /// current alpha value
-  // delta = 0.1; /// delta = speed
 
 function drawControlSplineAndBezierPoint(points, color, t) {
   

@@ -43,6 +43,8 @@ async function initGUI() {
       hideMap = !hideMap
       canvas.dispatchEvent(new CustomEvent('toggleMap', {detail: { hideMap: hideMap }}))
     } 
+
+    ImGui.SliderInt("selected group",(value = dragPointGroup) => dragPointGroup = value, 0, 1)
     ImGui.Checkbox("Show Control line",(value = showControlLine) => showControlLine = value)
     ImGui.Checkbox("Show L points",(value = showLPoints) => showLPoints = value)
     ImGui.Checkbox("Show R points",(value = showRPoints) => showRPoints = value)

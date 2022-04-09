@@ -71,11 +71,11 @@ function dragMove(event) {
     xOld = p.x;
     yOld = p.y;
 
-    xDrag = p.x - dragpoints.bezierPoints[0][dragPoint].x;
-    yDrag = p.y - dragpoints.bezierPoints[0][dragPoint].y;
+    xDrag = p.x - dragpoints.bezierPoints[dragPointGroup][dragPoint].x;
+    yDrag = p.y - dragpoints.bezierPoints[dragPointGroup][dragPoint].y;
 
-    dragpoints.bezierPoints[0][dragPoint].x = p.x;
-    dragpoints.bezierPoints[0][dragPoint].y = p.y;
+    dragpoints.bezierPoints[dragPointGroup][dragPoint].x = p.x;
+    dragpoints.bezierPoints[dragPointGroup][dragPoint].y = p.y;
 
     //proportionalDistance = 0.0
 
@@ -90,13 +90,15 @@ function mouseClick(e) {
   }
 }
 
-function handleAddPoint(e) {
+function handleAddPoint(event) {
   const xc = world.width / 2;
   const yc = world.height / 2;
 
   const newPoint = { x: event.offsetX - xc, y: event.offsetY - yc };
 
-  dragpoints.bezierPoints[0].push(new Point(newPoint.x, newPoint.y, BLACK));
+  dragpoints.bezierPoints[dragPointGroup].push(new Point(newPoint.x, newPoint.y, BLACK));
+
+  // TODO: handle separated dragPointCount
   dragPointCount = dragpoints.bezierPoints[0].length;
 }
 
@@ -115,14 +117,16 @@ function rightMouseClick(event) {
   xOffset = 0;
   yOffset = 0;
 
-  for (let idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
-    if (utils.distance(dragpoints.bezierPoints[0][idx], p) < SearchRadius + 3) {
-      // dragPoint = idx;
-      // xOffset = p.x - dragpoints.bezierPoints[0][idx].x;
-      // yOffset = p.y - dragpoints.bezierPoints[0][idx].y;
-      removePoint(idx)
-      // animate();
-      return;
+  for( let pIdx = 0; pIdx < dragpoints.bezierPoints.length; pIdx++ ){
+    for (let idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
+      if (utils.distance(dragpoints.bezierPoints[pIdx][idx], p) < SearchRadius + 3) {
+        // dragPoint = idx;
+        // xOffset = p.x - dragpoints.bezierPoints[0][idx].x;
+        // yOffset = p.y - dragpoints.bezierPoints[0][idx].y;
+        removePoint(idx)
+        // animate();
+        return;
+      }
     }
   }
 
@@ -130,55 +134,43 @@ function rightMouseClick(event) {
 
 }
 
-function buttonDown(event) {
+function mouseDown(event) {
   position = canvas.relMouseCoords(event);
   mouseDrag = true;
   // pause = true;
-  dragStart(event, false);
+  dragStart(event);
 }
 
-function dragStart(event, Fingers) {
+function dragStart(event) {
   if (position == null) return;
 
   const xc = world.width / 2;
   const yc = world.height / 2;
 
   const SearchRadius = POINTRADIUS;
-  if (Fingers) SearchRadius *= 4;
 
   const p = new Point(position.x - xc, position.y - yc);
   xOld = p.x;
   yOld = p.y;
   xOffset = 0;
   yOffset = 0;
-  // for ( let idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
-  //   // The first time through, look only for black points. This
-  //   // is based on the assumption that black points are control
-  //   // points and that they need to be checked first!
-  //   if (dragpoints.bezierPoints[0][idx].color == BLACK) continue;
-  //   if (utils.distance(dragpoints.bezierPoints[0][idx], p) < SearchRadius + 3) {
-  //     dragPoint = idx;
-  //     xOffset = p.x - dragpoints.bezierPoints[0][dragPoint].x;
-  //     yOffset = p.y - dragpoints.bezierPoints[0][dragPoint].y;
-  //     animate();
-  //     return;
-  //   }
-  // }
 
-  for (let idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
-    if (utils.distance(dragpoints.bezierPoints[0][idx], p) < SearchRadius + 3) {
-      dragPoint = idx;
-      xOffset = p.x - dragpoints.bezierPoints[0][dragPoint].x;
-      yOffset = p.y - dragpoints.bezierPoints[0][dragPoint].y;
-      // animate();
-      return;
+  
+  for( let pIdx = 0; pIdx < dragpoints.bezierPoints.length; pIdx++ ){
+    for (let idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
+      if (utils.distance(dragpoints.bezierPoints[dragPointGroup][idx], p) < SearchRadius + 3) {
+        dragPoint = idx;
+        xOffset = p.x - dragpoints.bezierPoints[dragPointGroup][dragPoint].x;
+        yOffset = p.y - dragpoints.bezierPoints[dragPointGroup][dragPoint].y;
+        return;
+      }
     }
   }
 
   dragPoint = -1;
 }
 
-function buttonUp(event) {
+function mouseUp(event) {
   pause = false;
   if (!mouseDrag) return;
 

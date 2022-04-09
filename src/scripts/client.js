@@ -10,8 +10,8 @@ function Client() {
   enableMidi()
 
   canvas.onclick = mouseClick;
-  canvas.onmousedown = buttonDown;
-  canvas.onmouseup = buttonUp;
+  canvas.onmousedown = mouseDown;
+  canvas.onmouseup = mouseUp;
   canvas.onmousemove = mouseMove;
   canvas.oncontextmenu = rightMouseClick;
   canvas.addEventListener('toggleMap', function (e) {
