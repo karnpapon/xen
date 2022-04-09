@@ -4,7 +4,8 @@ function Client() {
   drawing = document.getElementById("drawing");
   
   dragpoints = new BezierPoint()
-  dragPointCount = dragpoints.bezierPoints[0].length // TODO: hardcoded
+  dragPointCount = dragpoints.bezierPoints.length 
+  proportionalDistance = new Array(1).fill(0.0);
 
   initGUI()
   enableMidi()
@@ -14,6 +15,7 @@ function Client() {
   canvas.onmouseup = mouseUp;
   canvas.onmousemove = mouseMove;
   canvas.oncontextmenu = rightMouseClick;
+  canvas.onkeydown = onKeyPressed;
   canvas.addEventListener('toggleMap', function (e) {
     mapSrc.style.display = e.detail.hideMap ? "none" : "block"
   });

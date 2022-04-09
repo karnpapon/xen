@@ -28,7 +28,6 @@ async function initGUI() {
     customRecursiveBezierColor.w
   );
 
-  distSpeed = 0.004;
   let done = false;
   window.requestAnimationFrame(_loop);
 
@@ -48,23 +47,14 @@ async function initGUI() {
     let mapShow = !hideMap ? "hide map" : "show map";
 
     if (ImGui.Button("+", new ImGui.ImVec2(20, 20))) { dragpoints.spawnNewGroup() }
+    ImGui.SameLine();
     if (ImGui.Button(play)) { playBtnClick(); }
 
-    // semantically we need to use ImGui.Checkbox
-    // but we can't. Since we wanted to communicate between canvas (60fps) and div,
-    // otherwise the msg will be sent 60times/sec.
-    if (ImGui.Button(mapShow)) {
-      hideMap = !hideMap;
-      canvas.dispatchEvent(
-        new CustomEvent("toggleMap", { detail: { hideMap: hideMap } })
-      );
-    }
-
-    ImGui.SliderInt( "selected group", (value = dragPointGroup) => (dragPointGroup = value), 0, dragpoints.bezierPoints.length - 1);
+    ImGui.SliderInt( "group", (value = dragPointGroup) => (dragPointGroup = value), 0, dragpoints.bezierPoints.length - 1);
     ImGui.Checkbox( "control line", (value = showControlLine) => (showControlLine = value));
     ImGui.Checkbox( "L points", (value = showLPoints) => (showLPoints = value));
     ImGui.Checkbox( "R points", (value = showRPoints) => (showRPoints = value));
-    ImGui.SliderFloat("speed", (_ = distSpeed) => (distSpeed = _), 0.0, 0.04);
+    ImGui.SliderFloat("speed", (value = dragpoints.bezierPoints[dragPointGroup]["speed"]) => (dragpoints.bezierPoints[dragPointGroup]["speed"] = value), 0.0, 0.04);
     ImGui.SliderFloat("step", (_ = stepSize) => (stepSize = _), 0.001, 1);
     ImGui.ColorEdit4("control spline", (customColor = col1));
     ImGui.ColorEdit4("casteljau spline", (customRecursiveBezierColor = col2));
@@ -77,13 +67,16 @@ async function initGUI() {
         "Sandbox Window",
         (value = show_sandbox_window) => (show_sandbox_window = value)
       );
+    ImGui.SameLine();
 
-    try {
-      // eval(editor.getValue());
-    } catch (e) {
-      ImGui.TextColored(new ImGui.ImVec4(1.0, 0.0, 0.0, 1.0), "error: ");
-      ImGui.SameLine();
-      ImGui.Text(e.message);
+    // semantically we need to use ImGui.Checkbox
+    // but we can't. Since we wanted to communicate between canvas (60fps) and div,
+    // otherwise the msg will be sent 60times/sec.
+    if (ImGui.Button(mapShow)) {
+      hideMap = !hideMap;
+      canvas.dispatchEvent(
+        new CustomEvent("toggleMap", { detail: { hideMap: hideMap } })
+      );
     }
 
     ImGui.End();

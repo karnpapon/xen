@@ -1,22 +1,52 @@
-function DrawText(text, x, y, color) {
-  var xc = world.width / 2;
-  var yc = world.height / 2;
+function drawBezier(){
+  // draw colored points on top of black points.
+  for( let p = 0; p < dragpoints.bezierPoints.length; p++ ){
 
-  context.font = "normal 9pt Arial";
+    drawBezierSpline(dragpoints.bezierPoints[p]["points"], p);
+
+    for ( let idx = dragPointStart; idx - 1 < dragPointStart + dragPointCount; ++idx) {
+      if (!dragpoints.bezierPoints[p]["points"][idx]) continue;
+
+      fillCircle(
+        dragpoints.bezierPoints[p]["points"][idx], 
+        POINTRADIUS, 
+        dragpoints.bezierPoints[p]["points"][idx].color
+      );
+
+      const text = `G${p}-P${idx} (${dragpoints.bezierPoints[p]["points"][idx].x},${dragpoints.bezierPoints[p]["points"][idx].y})`
+
+      drawText(
+        text,
+        dragpoints.bezierPoints[p]["points"][idx].x + POINTRADIUS,
+        dragpoints.bezierPoints[p]["points"][idx].y,
+        p === dragPointGroup ? BLUE : dragpoints.bezierPoints[p]["points"][idx].color
+      );
+    }
+    // if (hover) {dragpoints.bezierPoints[0][id].color = BLUE }
+
+    if (!pause) {
+      proportionalDistance[p] += dragpoints.bezierPoints[p]["speed"];
+      if (proportionalDistance[p] > 1.0) {
+        proportionalDistance[p] = 0.0;
+      }
+    }
+  }
+}
+
+function drawText(text, x, y, color) {
+  const xc = world.width / 2;
+  const yc = world.height / 2;
+
+  context.font = "normal 8pt Arial";
   context.lineWidth = 1;
   context.fillStyle = color;
   context.strokeStyle = color;
   context.fillText(text, xc + x + 5, yc + y);
 }
 
-function DrawCircle(point, radius, Color, LineWidth) {
-  circle = new Circle(point.x, point.y, radius);
-  circle.draw(Color, LineWidth);
-}
-
-function drawBezierSpline(points) {
+function drawBezierSpline(points, groupIdx) {
   drawBezierGuidePath(points, GRAY);
-  drawControlSplineAndBezierPoint(points, BLACK, proportionalDistance);
+  drawControlSplineAndBezierPoint(points, BLACK, proportionalDistance[groupIdx]);
 }
 
 function drawControlSplineAndBezierPoint(points, color, t) {

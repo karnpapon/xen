@@ -2,20 +2,13 @@
 //                TBD
 //--------------------------------------
 
-var stepSize = 0.001;
-var proportionalDistance = 0.0;
-var distSpeed = 0.0;
-var constantAnimation = false;
-var pause = false;
+let stepSize = 0.001;
+let proportionalDistance = [];
+let distanceSpeed = 0.004;
+let constantAnimation = false;
+let pause = false;
 
-var dragpoints = {};
-
-// var dragpoints2 = new Array(
-//   // new Point(-100, 0, BLACK),
-//   // new Point(-220, -100, BLACK),
-//   new Point(50, -165, BLACK),
-//   new Point(50, 0, BLACK)
-// );
+let dragpoints = {};
 
 world = { width: 0, height: 0 };
 
@@ -23,80 +16,80 @@ world = { width: 0, height: 0 };
 //                GLOBAL
 //--------------------------------------
 
-var canvas;
-var drawing;
-var context;
+let canvas;
+let drawing;
+let context;
 
-var floor = Math.floor;
-var random = Math.random;
-var sin = Math.sin;
-var asin = Math.asin;
-var cos = Math.cos;
-var atan2 = Math.atan2;
-var PI = Math.PI;
-var PI2 = PI * 2;
-var sqrt = Math.sqrt;
-var min = Math.min;
-var max = Math.max;
-var abs = Math.abs;
+const floor = Math.floor;
+const random = Math.random;
+const sin = Math.sin;
+const asin = Math.asin;
+const cos = Math.cos;
+const atan2 = Math.atan2;
+const PI = Math.PI;
+const PI2 = PI * 2;
+const sqrt = Math.sqrt;
+const min = Math.min;
+const max = Math.max;
+const abs = Math.abs;
 
-var BLUE = utils.makeRGB(0, 0, 255);
-var GREEN = utils.makeRGB(120, 255, 120);
-var RED = utils.makeRGB(255, 0, 0);
-var GOLD = utils.makeRGB(255,215,0);
-var BOLDRED = utils.makeRGB(255, 64, 64);
-var ORANGE = utils.makeRGB(255,140,0);
-var YELLOW =utils.makeRGB(232, 215, 100);
-var WHITE = utils.makeRGB(255, 255, 255);
-var BLACK = utils.makeRGB(0.0, 0.0, 0.0);
-var BLACKTRANSPARENT = utils.makeRGBA(0.0, 0.0, 0.0, 0.25)
-var REDTRANSPARENT = utils.makeRGBA(255, 0.0, 0.0, 0.5)
-var ORANGETRANSPARENT = utils.makeRGBA(0,0,255, 0.5)
-var GRAY = utils.makeRGB(192,192,192);
-var LIGHTGRAY = utils.makeRGB(220, 220, 220);
-var COLORS = [RED, GREEN]
+const BLUE = utils.makeRGB(0, 0, 255);
+const GREEN = utils.makeRGB(120, 255, 120);
+const RED = utils.makeRGB(255, 0, 0);
+const GOLD = utils.makeRGB(255,215,0);
+const BOLDRED = utils.makeRGB(255, 64, 64);
+const ORANGE = utils.makeRGB(255,140,0);
+const YELLOW =utils.makeRGB(232, 215, 100);
+const WHITE = utils.makeRGB(255, 255, 255);
+const BLACK = utils.makeRGB(0.0, 0.0, 0.0);
+const BLACKTRANSPARENT = utils.makeRGBA(0.0, 0.0, 0.0, 0.25)
+const REDTRANSPARENT = utils.makeRGBA(255, 0.0, 0.0, 0.5)
+const ORANGETRANSPARENT = utils.makeRGBA(0,0,255, 0.5)
+const GRAY = utils.makeRGB(192,192,192);
+const LIGHTGRAY = utils.makeRGB(220, 220, 220);
+const COLORS = [RED, GREEN]
 
-var POINTRADIUS = 4;
+const POINTRADIUS = 4;
 
-var DASHLINESTYLE1 = [2, 2]
-var DASHLINESTYLE2 = [10, 10]
-var DASHLINESTYLE3 = [15, 3, 3, 3]
-var DASHLINESTYLE4 = [4, 4]
+const DASHLINESTYLE1 = [2, 2]
+const DASHLINESTYLE2 = [10, 10]
+const DASHLINESTYLE3 = [15, 3, 3, 3]
+const DASHLINESTYLE4 = [4, 4]
 
-var MIDI = ""
-var show_sandbox_window = false
-var addNewPointGroup = false;
+let MIDI = ""
+let show_sandbox_window = false
+let addNewPointGroup = false;
 
 //--------------------------------------
 //                LOCAL
 //--------------------------------------
 
-var position = null;
-var mouseDrag = false;
+let position = null;
+let mouseDrag = false;
 
-var showLPoints = false;
-var showRPoints = false;
-var showControlLine = true;
+let showLPoints = false;
+let showRPoints = false;
+let showControlLine = true;
 
-var dragPointStart = 0;
-var dragPointGroup = 0;
-var dragPointCount = 0;
-var dragPoint = -1;
-var xDrag = 0;
-var yDrag = 0;
-var xOld = 0;
-var yOld = 0;
-var xOffset = 0;
-var yOffset = 0;
-var hover = false, id;
+let dragPointStart = 0;
+let dragPointGroup = 0;
+let dragPointCount = 0;
+let dragPoint = -1;
+let xDrag = 0;
+let yDrag = 0;
+let xOld = 0;
+let yOld = 0;
+let xOffset = 0;
+let yOffset = 0;
+let hover = false, id;
 
-var mapSrc;
-var hideMap = true;
-var dispatchToggleMap = false;
+let mapSrc;
+let hideMap = true;
+let dispatchToggleMap = false;
 
 // ImGui
-var customColor = {x:0.45, y:0.55, z:0.60, w:1.00};
-var customRecursiveBezierColor = {x:0.77, y:0.67, z:1.00, w:1.00};
+let customColor = {x:0.45, y:0.55, z:0.60, w:1.00};
+let customRecursiveBezierColor = {x:0.77, y:0.67, z:1.00, w:1.00};
 
-// var enableHandler = true;
+// let enableHandler = true;
 

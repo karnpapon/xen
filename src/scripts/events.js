@@ -1,18 +1,11 @@
 function relativeCoordinates(X, Y) {
-  var totalOffsetX = 0;
-  var totalOffsetY = 0;
-  var canvasX = 0;
-  var canvasY = 0;
-  // var currentElement = canvas;
-
-  // do {
-  //   totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
-  //   totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
-  // }
-  // while (currentElement = currentElement.offsetParent)
-
-  canvasX = X - totalOffsetX;
-  canvasY = Y - totalOffsetY;
+  // let totalOffsetX = 0;
+  // let totalOffsetY = 0;
+  // let canvasX = 0;
+  // let canvasY = 0;
+ 
+  // canvasX = X - totalOffsetX;
+  // canvasY = Y - totalOffsetY;
 
   return { x: X, y: Y };
 }
@@ -63,7 +56,7 @@ function dragMove(event) {
     var p = new Point(
       position.x - xc,
       position.y - yc,
-      dragpoints.bezierPoints[dragPointGroup][dragPoint].color
+      dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].color
     );
 
     xOffset = p.x - xOld;
@@ -71,15 +64,12 @@ function dragMove(event) {
     xOld = p.x;
     yOld = p.y;
 
-    xDrag = p.x - dragpoints.bezierPoints[dragPointGroup][dragPoint].x;
-    yDrag = p.y - dragpoints.bezierPoints[dragPointGroup][dragPoint].y;
+    xDrag = p.x - dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].x;
+    yDrag = p.y - dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].y;
 
-    dragpoints.bezierPoints[dragPointGroup][dragPoint].x = p.x;
-    dragpoints.bezierPoints[dragPointGroup][dragPoint].y = p.y;
+    dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].x = p.x;
+    dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].y = p.y;
 
-    //proportionalDistance = 0.0
-
-    // animate();
   }
 }
 
@@ -94,12 +84,15 @@ function handleAddPoint(event) {
   const xc = world.width / 2;
   const yc = world.height / 2;
   const newPoint = { x: event.offsetX - xc, y: event.offsetY - yc };
-  dragpoints.bezierPoints[dragPointGroup].push(new Point(newPoint.x, newPoint.y, BLACK));
-  dragPointCount = dragpoints.bezierPoints[dragPointGroup].length;
+  dragpoints.bezierPoints[dragPointGroup]["points"].push(new Point(newPoint.x, newPoint.y, BLACK));
+  dragPointCount = dragpoints.bezierPoints[dragPointGroup]["points"].length; 
 }
 
 function rightMouseClick(event) {
   event.preventDefault()
+
+  if(dragpoints.bezierPoints[dragPointGroup]["points"].length<= 2) return
+
   position = canvas.relMouseCoords(event);
 
   if (position == null) return;
@@ -121,7 +114,7 @@ function rightMouseClick(event) {
     }
   }
 
-  // dragPoint = -1;
+  dragPoint = -1;
 
 }
 
@@ -134,25 +127,24 @@ function mouseDown(event) {
 
 function dragStart(event) {
   if (position == null) return;
-
+  
   const xc = world.width / 2;
   const yc = world.height / 2;
-
+  
   const SearchRadius = POINTRADIUS;
-
+  
   const p = new Point(position.x - xc, position.y - yc);
   xOld = p.x;
   yOld = p.y;
   xOffset = 0;
   yOffset = 0;
-
   
   for( let pIdx = 0; pIdx < dragpoints.bezierPoints.length; pIdx++ ){
-    for (let idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
-      if (utils.distance(dragpoints.bezierPoints[dragPointGroup][idx], p) < SearchRadius + 3) {
+    for (let idx = dragPointStart; idx - 1 < dragPointStart + dragPointCount; ++idx) {
+      if (utils.distance(dragpoints.bezierPoints[dragPointGroup]["points"][idx], p) < SearchRadius + 3) {
         dragPoint = idx;
-        xOffset = p.x - dragpoints.bezierPoints[dragPointGroup][dragPoint].x;
-        yOffset = p.y - dragpoints.bezierPoints[dragPointGroup][dragPoint].y;
+        xOffset = p.x - dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].x;
+        yOffset = p.y - dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].y;
         return;
       }
     }
@@ -173,8 +165,6 @@ function dragEnd(event) {
 }
 
 function windowResizeHandler() {
-  // legend.style.height = window.innerHeight - 12 + "px";
-
   world.width = window.innerWidth - 258;
   world.height = window.innerHeight - 40;
 
@@ -191,3 +181,15 @@ function windowResizeHandler() {
 function playBtnClick(){
   pause = !pause
 }
+
+function onKeyPressed(event) {
+  const e = event
+  const charCode = e.which || e.keyCode;
+
+  // TAB
+  if (charCode === 9 ) { dragPointGroup = (dragPointGroup + 1) % dragpoints.bezierPoints.length }
+
+  // SPACEBAR
+  if (charCode == 32) { pause = !pause }
+
+};

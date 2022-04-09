@@ -15,7 +15,7 @@ function midPoint(line) {
 }
 
 function removePoint(index) {
-  dragpoints.bezierPoints[0].splice(index, 1)
+  dragpoints.bezierPoints[dragPointGroup].splice(index, 1)
 }
 
 function getBezierPoint( point0, point1, point2, point3, position ) {
