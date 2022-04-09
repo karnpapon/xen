@@ -22,6 +22,7 @@ function animate() {
     idx < dragPointStart + dragPointCount;
     ++idx
   ) {
+    if (!dragpoints.bezierPoints[0][idx]) continue;
     if (dragpoints.bezierPoints[0][idx].color != BLACK) continue;
     fillCircle(dragpoints.bezierPoints[0][idx], POINTRADIUS, dragpoints.bezierPoints[0][idx].color);
     const text = `P${idx} (${dragpoints.bezierPoints[0][idx].x},${dragpoints.bezierPoints[0][idx].y})`
@@ -33,13 +34,7 @@ function animate() {
     );
   }
   if (hover) {dragpoints.bezierPoints[0][id].color = BLUE }
-  // for (var idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
-  //   if (dragpoints.bezierPoints[0][idx].color == BLACK)
-  //     continue;
-  //   fillCircle(dragpoints.bezierPoints[0][idx], POINTRADIUS, dragpoints.bezierPoints[0][idx].color);
-  //   DrawText( "P" + idx, dragpoints.bezierPoints[0][idx].x + POINTRADIUS, dragpoints.bezierPoints[0][idx].y, dragpoints.bezierPoints[0][idx].color );
-  // }
-
+  
   xOffset = 0;
   yOffset = 0;
   

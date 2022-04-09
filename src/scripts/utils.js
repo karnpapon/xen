@@ -134,6 +134,7 @@ var utils = {
   },
 
   distance: function (point1, point2) {
+    if(!point1 || !point2) return 
     const dx = abs(point1.x - point2.x);
     const dy = abs(point1.y - point2.y);
     return sqrt(dx * dx + dy * dy);

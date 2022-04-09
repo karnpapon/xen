@@ -3,7 +3,6 @@ function Client() {
   canvas = document.getElementById("canvas");
   drawing = document.getElementById("drawing");
   
-
   dragpoints = new BezierPoint()
   dragPointCount = dragpoints.bezierPoints[0].length
 
