@@ -64,6 +64,8 @@ var DASHLINESTYLE3 = [15, 3, 3, 3]
 var DASHLINESTYLE4 = [4, 4]
 
 var MIDI = ""
+var show_sandbox_window = false
+var addNewPointGroup = false;
 
 //--------------------------------------
 //                LOCAL

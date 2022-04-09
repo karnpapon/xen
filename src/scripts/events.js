@@ -63,7 +63,7 @@ function dragMove(event) {
     var p = new Point(
       position.x - xc,
       position.y - yc,
-      dragpoints.bezierPoints[0][dragPoint].color
+      dragpoints.bezierPoints[dragPointGroup][dragPoint].color
     );
 
     xOffset = p.x - xOld;
@@ -93,16 +93,11 @@ function mouseClick(e) {
 function handleAddPoint(event) {
   const xc = world.width / 2;
   const yc = world.height / 2;
-
   const newPoint = { x: event.offsetX - xc, y: event.offsetY - yc };
-
   dragpoints.bezierPoints[dragPointGroup].push(new Point(newPoint.x, newPoint.y, BLACK));
-
-  // TODO: handle separated dragPointCount
-  dragPointCount = dragpoints.bezierPoints[0].length;
+  dragPointCount = dragpoints.bezierPoints[dragPointGroup].length;
 }
 
-// TODO: fix this
 function rightMouseClick(event) {
   event.preventDefault()
   position = canvas.relMouseCoords(event);
@@ -120,11 +115,7 @@ function rightMouseClick(event) {
   for( let pIdx = 0; pIdx < dragpoints.bezierPoints.length; pIdx++ ){
     for (let idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
       if (utils.distance(dragpoints.bezierPoints[pIdx][idx], p) < SearchRadius + 3) {
-        // dragPoint = idx;
-        // xOffset = p.x - dragpoints.bezierPoints[0][idx].x;
-        // yOffset = p.y - dragpoints.bezierPoints[0][idx].y;
         removePoint(idx)
-        // animate();
         return;
       }
     }

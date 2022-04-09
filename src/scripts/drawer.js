@@ -15,7 +15,6 @@ function DrawCircle(point, radius, Color, LineWidth) {
 }
 
 function drawBezierSpline(points) {
-  // drawRecursiveLine(dragpoints.bezierPoints[0], proportionalDistance);
   drawBezierGuidePath(points, GRAY);
   drawControlSplineAndBezierPoint(points, BLACK, proportionalDistance);
 }

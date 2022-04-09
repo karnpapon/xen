@@ -4,7 +4,7 @@ function Client() {
   drawing = document.getElementById("drawing");
   
   dragpoints = new BezierPoint()
-  dragPointCount = dragpoints.bezierPoints[0].length
+  dragPointCount = dragpoints.bezierPoints[0].length // TODO: hardcoded
 
   initGUI()
   enableMidi()

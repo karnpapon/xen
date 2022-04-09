@@ -24,12 +24,13 @@ function animate() {
       if (!dragpoints.bezierPoints[p][idx]) continue;
       if (dragpoints.bezierPoints[p][idx].color != BLACK) continue;  
       fillCircle(dragpoints.bezierPoints[p][idx], POINTRADIUS, dragpoints.bezierPoints[p][idx].color);
-      const text = `P${idx} (${dragpoints.bezierPoints[p][idx].x},${dragpoints.bezierPoints[p][idx].y})`
+      const text = `G${p}-P${idx} (${dragpoints.bezierPoints[p][idx].x},${dragpoints.bezierPoints[p][idx].y})`
+
       DrawText(
         text,
         dragpoints.bezierPoints[p][idx].x + POINTRADIUS,
         dragpoints.bezierPoints[p][idx].y,
-        dragpoints.bezierPoints[p][idx].color
+        p === dragPointGroup ? BLUE : dragpoints.bezierPoints[p][idx].color
       );
     }
     if (hover) {dragpoints.bezierPoints[0][id].color = BLUE }
