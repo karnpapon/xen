@@ -1,37 +1,25 @@
 function Circle(x, y, r) {
+
   if (typeof x == "object") {
-    if (
-      x != undefined &&
-      x != null &&
-      x.x != undefined &&
-      x.x != null &&
-      x.y != undefined &&
-      x.y != null &&
-      x.r != undefined &&
-      x.r != null
-    ) {
-      this.x = x.x;
-      this.y = x.y;
-      this.r = x.r;
+    if (!x && !x.x && !x.y && !x.r) {
+      return
     }
-  } else {
-    if (
-      x != undefined &&
-      x != null &&
-      y != undefined &&
-      y != null &&
-      r != undefined &&
-      r != null
-    ) {
-      this.x = x;
-      this.y = y;
-      this.r = r;
-    } else {
-      this.x = 0;
-      this.y = 0;
-      this.r = 0;
-    }
+    this.x = x.x;
+    this.y = x.y;
+    this.r = x.r;
+    return
   }
+
+  if (!x && !y && !r) {
+    this.x = 0
+    this.y = 0
+    this.r = 0
+    return
+  }
+
+  this.x = x
+  this.y = y
+  this.r = r
 }
 
 Circle.prototype.draw = function (Color, LineWidth) {
