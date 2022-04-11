@@ -3,23 +3,23 @@ function drawBezier(){
   for( let p = 0; p < dragpoints.bezierPoints.length; p++ ){
 
     drawBezierSpline(dragpoints.bezierPoints[p]["points"], p);
-
+    
     for ( let idx = dragPointStart; idx - 1 < dragPointStart + dragPointCount; ++idx) {
       if (!dragpoints.bezierPoints[p]["points"][idx]) continue;
-
+      const color = getColor(p,idx) 
+      const text = `G${p}-P${idx} (${dragpoints.bezierPoints[p]["points"][idx].x},${dragpoints.bezierPoints[p]["points"][idx].y})`
+      
       fillCircle(
         dragpoints.bezierPoints[p]["points"][idx], 
         POINTRADIUS, 
-        dragpoints.bezierPoints[p]["points"][idx].color
+        color
       );
-
-      const text = `G${p}-P${idx} (${dragpoints.bezierPoints[p]["points"][idx].x},${dragpoints.bezierPoints[p]["points"][idx].y})`
 
       drawText(
         text,
         dragpoints.bezierPoints[p]["points"][idx].x + POINTRADIUS,
         dragpoints.bezierPoints[p]["points"][idx].y,
-        p === dragPointGroup ? BLUE : dragpoints.bezierPoints[p]["points"][idx].color
+        color
       );
     }
     // if (hover) {dragpoints.bezierPoints[0][id].color = BLUE }
@@ -31,6 +31,12 @@ function drawBezier(){
       }
     }
   }
+}
+
+function getColor(p,idx){
+  if (dragpoints.bezierPoints[p]["muted"]) return GRAY
+  if (p === dragPointGroup) return BLUE 
+  else return dragpoints.bezierPoints[p]["points"][idx].color
 }
 
 function drawText(text, x, y, color) {
@@ -45,12 +51,14 @@ function drawText(text, x, y, color) {
 }
 
 function drawBezierSpline(points, groupIdx) {
+  const triggerable = !dragpoints.bezierPoints[groupIdx]["muted"]
+  const color = !triggerable ? LIGHTGRAY : BLACK
   drawBezierGuidePath(points, GRAY);
-  drawControlSplineAndBezierPoint(points, BLACK, proportionalDistance[groupIdx]);
+  drawControlSplineAndBezierPoint(points, color, proportionalDistance[groupIdx], triggerable);
 }
 
-function drawControlSplineAndBezierPoint(points, color, t) {
-  
+function drawControlSplineAndBezierPoint(points, color, t, triggerable) {
+
   const xc = world.width / 2.0;
   const yc = world.height / 2.0;
   const initPos = { x: xc + points[0].x, y: yc + points[0].y };
@@ -68,11 +76,13 @@ function drawControlSplineAndBezierPoint(points, color, t) {
   }
   context.stroke();
 
-  fillCircle(point, POINTRADIUS, BLACK);
+  fillCircle(point, POINTRADIUS, color);
+
+  if (triggerable) {  drawRecursiveLine(points, t, point); }
 
   if (!showControlLine) return
 
-  drawRecursiveLine(points, t, point);
+  if (!triggerable) return
 
   // control line (spline)
   for (let i = 0; i + 1 < points.length; i++) {
@@ -94,7 +104,7 @@ function drawControlSplineAndBezierPoint(points, color, t) {
     // prevent unneccessary triggering on first & last line(spline).
     if(isFirstLine(i) || isLastLine(i, points)) continue;
 
-    if (utils.linePointCollision(x1, y1, x2, y2, point.x, point.y)) {
+    if ( utils.linePointCollision(x1, y1, x2, y2, point.x, point.y)) {
       utils.throttle(trigger, 60);
       ControlLine1.draw(BLUE, 6);
     }

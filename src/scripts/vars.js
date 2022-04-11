@@ -57,7 +57,7 @@ const DASHLINESTYLE3 = [15, 3, 3, 3]
 const DASHLINESTYLE4 = [4, 4]
 
 let MIDI = ""
-let show_sandbox_window = false
+let showSandboxWindow = false
 let addNewPointGroup = false;
 
 //--------------------------------------

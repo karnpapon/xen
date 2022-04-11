@@ -45,10 +45,13 @@ async function initGUI() {
     ImGui.Text(MIDI);
     let play = pause ? "pause" : "Play";
     let mapShow = !hideMap ? "hide map" : "show map";
+    let mute = dragpoints.bezierPoints[dragPointGroup]["muted"] ? "unmute" : "mute"
 
     if (ImGui.Button("+", new ImGui.ImVec2(20, 20))) { dragpoints.spawnNewGroup() }
     ImGui.SameLine();
     if (ImGui.Button(play)) { playBtnClick(); }
+    ImGui.SameLine();
+    if (ImGui.Button(mute)) { dragpoints.bezierPoints[dragPointGroup]["muted"] = !dragpoints.bezierPoints[dragPointGroup]["muted"] }
 
     ImGui.SliderInt( "group", (value = dragPointGroup) => (dragPointGroup = value), 0, dragpoints.bezierPoints.length - 1);
     ImGui.Checkbox( "control line", (value = showControlLine) => (showControlLine = value));
@@ -60,12 +63,12 @@ async function initGUI() {
     ImGui.ColorEdit4("casteljau spline", (customRecursiveBezierColor = col2));
 
     if (ImGui.Button("Sandbox Window")) {
-      show_sandbox_window = true;
+      showSandboxWindow = true;
     }
-    if (show_sandbox_window)
+    if (showSandboxWindow)
       ShowSandboxWindow(
         "Sandbox Window",
-        (value = show_sandbox_window) => (show_sandbox_window = value)
+        (value = showSandboxWindow) => (showSandboxWindow = value)
       );
     ImGui.SameLine();
 
