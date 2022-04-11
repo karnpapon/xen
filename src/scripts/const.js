@@ -2,23 +2,11 @@
 //                TBD
 //--------------------------------------
 
-let stepSize = 0.001;
-let proportionalDistance = [];
-let distanceSpeed = 0.004;
-let constantAnimation = false;
-let pause = false;
-
-let dragpoints = {};
-
 world = { width: 0, height: 0 };
 
 //--------------------------------------
 //                GLOBAL
 //--------------------------------------
-
-let canvas;
-let drawing;
-let context;
 
 const floor = Math.floor;
 const random = Math.random;
@@ -56,40 +44,4 @@ const DASHLINESTYLE2 = [10, 10]
 const DASHLINESTYLE3 = [15, 3, 3, 3]
 const DASHLINESTYLE4 = [4, 4]
 
-let MIDI = ""
-let showSandboxWindow = false
-let addNewPointGroup = false;
-
-//--------------------------------------
-//                LOCAL
-//--------------------------------------
-
-let position = null;
-let mouseDrag = false;
-
-let showLPoints = false;
-let showRPoints = false;
-let showControlLine = true;
-
-let dragPointStart = 0;
-let dragPointGroup = 0;
-let dragPointCount = 0;
-let dragPoint = -1;
-let xDrag = 0;
-let yDrag = 0;
-let xOld = 0;
-let yOld = 0;
-let xOffset = 0;
-let yOffset = 0;
-let hover = false, id;
-
-let mapSrc;
-let hideMap = true;
-let dispatchToggleMap = false;
-
-// ImGui
-let customColor = {x:0.45, y:0.55, z:0.60, w:1.00};
-let customRecursiveBezierColor = {x:0.77, y:0.67, z:1.00, w:1.00};
-
-// let enableHandler = true;
 

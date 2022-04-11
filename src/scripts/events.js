@@ -1,195 +1,207 @@
-function relativeCoordinates(X, Y) {
-  // let totalOffsetX = 0;
-  // let totalOffsetY = 0;
-  // let canvasX = 0;
-  // let canvasY = 0;
- 
-  // canvasX = X - totalOffsetX;
-  // canvasY = Y - totalOffsetY;
+function Events(client) {
+  
 
-  return { x: X, y: Y };
-}
-
-function relMouseCoords(event) {
-  if (event.offsetX !== undefined && event.offsetY !== undefined) {
-    return { x: event.offsetX, y: event.offsetY };
+  this.start = () => {
+    document.onclick = this.mouseClick;
+    document.onmousedown = this.mouseDown;
+    document.onmouseup = this.mouseUp;
+    document.onmousemove = this.mouseMove;
+    document.oncontextmenu = this.rightMouseClick;
+    document.onkeydown = this.onKeyPressed;
+    document.addEventListener('toggleMap', function (e) {
+    client.mapSrc.style.display = e.detail.hideMap ? "none" : "block"
+  });
   }
 
-  return relativeCoordinates(event.pageX, event.pageY);
-}
+  // this.run = () => {
+  //   client.update()
+  // }
+  
+  this.relMouseCoords = (event) => {
+    if (event.offsetX !== undefined && event.offsetY !== undefined) {
+      return { x: event.offsetX, y: event.offsetY };
+    }
+  
+    return this.relativeCoordinates(event.pageX, event.pageY);
+  }
 
-HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords;
-
-function checkMouseOver(e, points) {
-  // Get the current mouse position
-  const xc = world.width / 2;
-  const yc = world.height / 2;
-  const newPoint = { x: e.offsetX - xc, y: e.offsetY - yc };
-  let  x = newPoint.x;
-  let  y = newPoint.y;
-  hover = false;
-
-  // context.clearRect(0, 0, canvas.width, canvas.height);
-
-  for (let i = points.length - 1, b; (b = points[i]); i--) {
-    if (x >= b.x && x <= b.x + 8 && y >= b.y && y <= b.y + 8) {
-      hover = true;
-      id = i;
-      break;
+  this.relativeCoordinates = (X, Y) => {
+    return { x: X, y: Y };
+  }
+  
+  // this.checkMouseOver = (e, points) => {
+  //   // Get the current mouse position
+  //   const xc = world.width / 2;
+  //   const yc = world.height / 2;
+  //   const newPoint = { x: e.offsetX - xc, y: e.offsetY - yc };
+  //   let  x = newPoint.x;
+  //   let  y = newPoint.y;
+  //   hover = false;
+  
+  //   // context.clearRect(0, 0, canvas.width, canvas.height);
+  
+  //   for (let i = points.length - 1, b; (b = points[i]); i--) {
+  //     if (x >= b.x && x <= b.x + 8 && y >= b.y && y <= b.y + 8) {
+  //       hover = true;
+  //       id = i;
+  //       break;
+  //     }
+  //   }
+  //   // Draw the rectangles by Z (ASC)
+  //   // animate();
+  // }
+  
+  this.mouseMove = (event) => {
+    if (!client.mouseDrag) return 
+    client.position = this.relMouseCoords(event);
+    this.dragMove(event);
+  }
+  
+  this.dragMove = (event) => {
+    if (client.dragPoint >= 0) {
+      var xc = world.width / 2;
+      var yc = world.height / 2;
+  
+      var p = new Point(
+        client.position.x - xc,
+        client.position.y - yc,
+        client.dragpoints.bezierPoints[client.dragPointGroup]["points"][client.dragPoint].color
+      );
+  
+      client.xOffset = p.x - client.xOld;
+      client.yOffset = p.y - client.yOld;
+      client.xOld = p.x;
+      client.yOld = p.y;
+  
+      client.xDrag = p.x - client.dragpoints.bezierPoints[client.dragPointGroup]["points"][client.dragPoint].x;
+      client.yDrag = p.y - client.dragpoints.bezierPoints[client.dragPointGroup]["points"][client.dragPoint].y;
+  
+      client.dragpoints.bezierPoints[client.dragPointGroup]["points"][client.dragPoint].x = p.x;
+      client.dragpoints.bezierPoints[client.dragPointGroup]["points"][client.dragPoint].y = p.y;
+  
     }
   }
-  // Draw the rectangles by Z (ASC)
-  // animate();
-}
-
-function mouseMove(event) {
-  if (!mouseDrag) return 
-  position = canvas.relMouseCoords(event);
-  dragMove(event);
-}
-
-function dragMove(event) {
-  if (dragPoint >= 0) {
-    var xc = world.width / 2;
-    var yc = world.height / 2;
-
-    var p = new Point(
-      position.x - xc,
-      position.y - yc,
-      dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].color
-    );
-
-    xOffset = p.x - xOld;
-    yOffset = p.y - yOld;
-    xOld = p.x;
-    yOld = p.y;
-
-    xDrag = p.x - dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].x;
-    yDrag = p.y - dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].y;
-
-    dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].x = p.x;
-    dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].y = p.y;
-
+  
+  this.mouseClick = (e) => {
+    if (e.ctrlKey || e.metaKey) {
+      this.handleAddPoint(e);
+      console.log("client.dragpoints", client.dragpoints)
+      return;
+    }
   }
-}
-
-function mouseClick(e) {
-  if (e.ctrlKey || e.metaKey) {
-    handleAddPoint(e);
-    return;
+  
+  this.handleAddPoint = (event) => {
+    const xc = world.width / 2;
+    const yc = world.height / 2;
+    const newPoint = { x: event.offsetX - xc, y: event.offsetY - yc };
+    client.dragpoints.bezierPoints[client.dragPointGroup]["points"].push(new Point(newPoint.x, newPoint.y, BLACK));
+    client.dragPointCount = client.dragpoints.bezierPoints[client.dragPointGroup]["points"].length; 
   }
-}
-
-function handleAddPoint(event) {
-  const xc = world.width / 2;
-  const yc = world.height / 2;
-  const newPoint = { x: event.offsetX - xc, y: event.offsetY - yc };
-  dragpoints.bezierPoints[dragPointGroup]["points"].push(new Point(newPoint.x, newPoint.y, BLACK));
-  dragPointCount = dragpoints.bezierPoints[dragPointGroup]["points"].length; 
-}
-
-function rightMouseClick(event) {
-  event.preventDefault()
-
-  if(dragpoints.bezierPoints[dragPointGroup]["points"].length<= 2) return
-
-  position = canvas.relMouseCoords(event);
-
-  if (position == null) return;
-  const xc = world.width / 2;
-  const yc = world.height / 2;
-
-  const SearchRadius = POINTRADIUS;
-
-  const p = new Point(position.x - xc, position.y - yc);
-  xOffset = 0;
-  yOffset = 0;
-
-  for( let pIdx = 0; pIdx < dragpoints.bezierPoints.length; pIdx++ ){
-    for (let idx = dragPointStart; idx < dragPointStart + dragPointCount; ++idx) {
-      if (utils.distance(dragpoints.bezierPoints[pIdx][idx], p) < SearchRadius + 3) {
-        removePoint(idx)
-        return;
+  
+  this.rightMouseClick = (event) => {
+    event.preventDefault()
+  
+    if(client.dragpoints.bezierPoints[client.dragPointGroup]["points"].length<= 2) return
+  
+    client.position = this.relMouseCoords(event);
+  
+    if (client.position == null) return;
+    const xc = world.width / 2;
+    const yc = world.height / 2;
+  
+    const SearchRadius = POINTRADIUS;
+  
+    const p = new Point(client.position.x - xc, client.position.y - yc);
+    client.xOffset = 0;
+    client.yOffset = 0;
+  
+    for( let pIdx = 0; pIdx < client.dragpoints.bezierPoints.length; pIdx++ ){
+      for (let idx = client.dragPointStart; idx < client.dragPointStart + client.dragPointCount; ++idx) {
+        if (utils.distance(client.dragpoints.bezierPoints[pIdx][idx], p) < SearchRadius + 3) {
+          this.removePoint(idx)
+          return;
+        }
       }
     }
+  
+    client.dragPoint = -1;
+  
   }
-
-  dragPoint = -1;
-
-}
-
-function mouseDown(event) {
-  position = canvas.relMouseCoords(event);
-  mouseDrag = true;
-  // pause = true;
-  dragStart(event);
-}
-
-function dragStart(event) {
-  if (position == null) return;
   
-  const xc = world.width / 2;
-  const yc = world.height / 2;
+  this.mouseDown = (event) => {
+    client.position = this.relMouseCoords(event);
+    client.mouseDrag = true;
+    // pause = true;
+    this.dragStart(event);
+  }
   
-  const SearchRadius = POINTRADIUS;
-  
-  const p = new Point(position.x - xc, position.y - yc);
-  xOld = p.x;
-  yOld = p.y;
-  xOffset = 0;
-  yOffset = 0;
-  
-  for( let pIdx = 0; pIdx < dragpoints.bezierPoints.length; pIdx++ ){
-    for (let idx = dragPointStart; idx - 1 < dragPointStart + dragPointCount; ++idx) {
-      if (utils.distance(dragpoints.bezierPoints[dragPointGroup]["points"][idx], p) < SearchRadius + 3) {
-        dragPoint = idx;
-        xOffset = p.x - dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].x;
-        yOffset = p.y - dragpoints.bezierPoints[dragPointGroup]["points"][dragPoint].y;
-        return;
+  this.dragStart = (event) => {
+    if (client.position == null) return;
+    
+    const xc = world.width / 2;
+    const yc = world.height / 2;
+    
+    const SearchRadius = POINTRADIUS;
+    
+    const p = new Point(client.position.x - xc, client.position.y - yc);
+    client.xOld = p.x;
+    client.yOld = p.y;
+    client.xOffset = 0;
+    client.yOffset = 0;
+    
+    for( let pIdx = 0; pIdx < client.dragpoints.bezierPoints.length; pIdx++ ){
+      for (let idx = client.dragPointStart; idx - 1 < client.dragPointStart + client.dragPointCount; ++idx) {
+        if (utils.distance(client.dragpoints.bezierPoints[client.dragPointGroup]["points"][idx], p) < SearchRadius + 3) {
+          client.dragPoint = idx;
+          client.xOffset = p.x - client.dragpoints.bezierPoints[client.dragPointGroup]["points"][client.dragPoint].x;
+          client.yOffset = p.y - client.dragpoints.bezierPoints[client.dragPointGroup]["points"][client.dragPoint].y;
+          return;
+        }
       }
     }
+  
+    client.dragPoint = -1;
   }
-
-  dragPoint = -1;
+  
+  this.mouseUp = (event) => {
+    // client.pause = false;
+    if (!client.mouseDrag) return;
+  
+    this.dragEnd(event);
+  }
+  
+  this.dragEnd = (event) => {
+    client.dragPoint = -1;
+    client.mouseDrag = false
+  }
+  
+  this.windowResizeHandler = () => {
+    world.width = window.innerWidth - 258;
+    world.height = window.innerHeight - 40;
+  
+    client.drawing.style.width = world.width + "px";
+    client.drawing.style.height = world.height + "px";
+  
+    client.canvas.width = world.width;
+    client.canvas.height = world.height;
+  
+    this.animate();
+  }
+  
+  
+  this.playBtnClick = () => {
+    client.pause = !client.pause
+  }
+  
+  this.onKeyPressed = (event) => {
+    const e = event
+    const charCode = e.which || e.keyCode;
+  
+    // TAB
+    if (charCode === 9 ) { client.dragPointGroup = (client.dragPointGroup + 1) % client.dragpoints.bezierPoints.length }
+  
+    // SPACEBAR
+    if (charCode == 32) { client.pause = !client.pause }
+  
+  };
 }
-
-function mouseUp(event) {
-  pause = false;
-  if (!mouseDrag) return;
-
-  dragEnd(event);
-}
-
-function dragEnd(event) {
-  dragPoint = -1;
-}
-
-function windowResizeHandler() {
-  world.width = window.innerWidth - 258;
-  world.height = window.innerHeight - 40;
-
-  drawing.style.width = world.width + "px";
-  drawing.style.height = world.height + "px";
-
-  canvas.width = world.width;
-  canvas.height = world.height;
-
-  animate();
-}
-
-
-function playBtnClick(){
-  pause = !pause
-}
-
-function onKeyPressed(event) {
-  const e = event
-  const charCode = e.which || e.keyCode;
-
-  // TAB
-  if (charCode === 9 ) { dragPointGroup = (dragPointGroup + 1) % dragpoints.bezierPoints.length }
-
-  // SPACEBAR
-  if (charCode == 32) { pause = !pause }
-
-};
