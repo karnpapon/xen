@@ -94,9 +94,9 @@ function Drawer(client) {
       const ControlLine1 = new Line(x1, y1, x2, y2);
       ControlLine1.draw(
         utils.makeRGB(
-          floor(client.customColor.x * 255),
-          floor(client.customColor.y * 255),
-          floor(client.customColor.z * 255)
+          FLOOR(client.customColor.x * 255),
+          FLOOR(client.customColor.y * 255),
+          FLOOR(client.customColor.z * 255)
         ),
         2,
         DASHLINESTYLE1
@@ -168,9 +168,9 @@ function Drawer(client) {
         constructionLine = new Line(x1, y1, x2, y2);
         constructionLine.draw(
           utils.makeRGB(
-            Math.floor(client.customRecursiveBezierColor.x * 255),
-            Math.floor(client.customRecursiveBezierColor.y * 255),
-            Math.floor(client.customRecursiveBezierColor.z * 255)
+            FLOOR(client.customRecursiveBezierColor.x * 255),
+            FLOOR(client.customRecursiveBezierColor.y * 255),
+            FLOOR(client.customRecursiveBezierColor.z * 255)
           ),
           0.5,
           DASHLINESTYLE4

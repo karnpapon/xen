@@ -49,7 +49,7 @@ Line.prototype.end = function () {
 Line.prototype.SetLength = function (NewLength) {
   var dx = this.x2 - this.x1;
   var dy = this.y2 - this.y1;
-  var length = sqrt(dx * dx + dy * dy);
+  var length = SQRT(dx * dx + dy * dy);
   var Ratio = NewLength / length;
   dx *= Ratio;
   dy *= Ratio;
@@ -60,7 +60,7 @@ Line.prototype.SetLength = function (NewLength) {
 Line.prototype.extend = function (Add) {
   var dx = this.x2 - this.x1;
   var dy = this.y2 - this.y1;
-  var length = sqrt(dx * dx + dy * dy);
+  var length = SQRT(dx * dx + dy * dy);
   var Ratio = (length + Add) / length;
   dx *= Ratio;
   dy *= Ratio;
@@ -80,9 +80,9 @@ Line.prototype.move = function (point) {
 
 
 Line.prototype.length = function () {
-  var dx = abs(this.x1 - this.x2);
-  var dy = abs(this.y1 - this.y2);
-  return sqrt(dx * dx + dy * dy);
+  var dx = ABS(this.x1 - this.x2);
+  var dy = ABS(this.y1 - this.y2);
+  return SQRT(dx * dx + dy * dy);
 };
 
 Line.prototype.reverse = function () {

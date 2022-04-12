@@ -222,7 +222,7 @@ function Midi (client) {
 
   this.convert = function (id) {
     const note = ['C', 'c', 'D', 'd', 'E', 'F', 'f', 'G', 'g', 'A', 'a', 'B'][id % 12]
-    const octave = Math.floor(id / 12) - 5
+    const octave = FLOOR(id / 12) - 5
     const name = `${note}${octave}`
     const key = Object.values(transposeTable).indexOf(name)
     return Object.keys(transposeTable)[key]

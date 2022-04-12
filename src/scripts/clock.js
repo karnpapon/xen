@@ -160,7 +160,7 @@ function Clock (client) {
 
   this.toString = function () {
     const diff = this.speed.target - this.speed.value
-    const _offset = Math.abs(diff) > 5 ? (diff > 0 ? `+${diff}` : diff) : ''
+    const _offset = ABS(diff) > 5 ? (diff > 0 ? `+${diff}` : diff) : ''
     const _message = this.isPuppet === true ? 'midi' : `${this.speed.value}${_offset}`
     const _beat = diff === 0 && client.frames.f % 4 === 0 ? '*' : ''
     return `${_message}${_beat}`

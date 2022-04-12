@@ -8,18 +8,18 @@ world = { width: 0, height: 0 };
 //                GLOBAL
 //--------------------------------------
 
-const floor = Math.floor;
-const random = Math.random;
-const sin = Math.sin;
-const asin = Math.asin;
-const cos = Math.cos;
-const atan2 = Math.atan2;
+const FLOOR = Math.floor;
+const RANDOM = Math.random;
+const SIN = Math.sin;
+const ASIN = Math.asin;
+const COS = Math.cos;
+const ATAN2 = Math.atan2;
 const PI = Math.PI;
 const PI2 = PI * 2;
-const sqrt = Math.sqrt;
-const min = Math.min;
-const max = Math.max;
-const abs = Math.abs;
+const SQRT = Math.sqrt;
+const MIN = Math.min;
+const MAX = Math.max;
+const ABS = Math.abs;
 
 const BLUE = utils.makeRGB(0, 0, 255);
 const GREEN = utils.makeRGB(120, 255, 120);
