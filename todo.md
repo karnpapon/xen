@@ -3,15 +3,15 @@
 - handle multiple line add.
 - individual speed.
 - individual mute.
+- handle window resize.
+- individual point / spline MIDI channel.
 
 # todo
-- individual point / spline MIDI channel.
-- speed sync
-- handle window resize.
 - OSC
-- point hovering.
 - IO configurable.
 
 # tbd
+- speed sync
+- point hovering.
 - UDP
 - drag selection.

@@ -97,10 +97,11 @@ function GUI() {
       (value = client.showRPoints) => (client.showRPoints = value)
     );
 
+    ImGui.Text("MIDI CHANNEL: [0-16]");
+
     ImGui.AlignTextToFramePadding();
-    ImGui.Text("MIDI CHANNEL:");
+    ImGui.Text("LINE:");
     ImGui.SameLine();
-    ImGui.PushButtonRepeat(true);
     ImGui.SameLine();
     if (ImGui.ArrowButton("##left", this.dir.Left)) {  
       client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"] = (((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"] - 1) % 16) + 16 ) % 16
@@ -110,9 +111,22 @@ function GUI() {
     if (ImGui.ArrowButton("##right", this.dir.Right)) { 
       client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"] = (client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"]  + 1) % 16 
     }
-    ImGui.PopButtonRepeat();
     ImGui.SameLine();
     ImGui.Text((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"]).toString() || "0");
+
+    ImGui.AlignTextToFramePadding();
+    ImGui.Text("POINT:");
+    ImGui.SameLine();
+    if (ImGui.ArrowButton("#left", 0)) {  
+      client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"] = (((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"] - 1) % 16) + 16 ) % 16
+    }
+    ImGui.PopButtonRepeat();
+    ImGui.SameLine();
+    if (ImGui.ArrowButton("#right", 1)) { 
+      client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"] = (client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"]  + 1) % 16 
+    }
+    ImGui.SameLine();
+    ImGui.Text((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"]).toString() || "0");
 
     ImGui.SliderFloat( "speed",
       (

@@ -15,10 +15,6 @@ Point.prototype.midPoint = (line) => {
   return this.new((line.x1 + line.x2) / 2, (line.y1 + line.y2) / 2);
 }
 
-// Point.prototype.removePoint = (index) => {
-//   this.app.dragpoints.bezierPoints[dragPointGroup].splice(index, 1)
-// }
-
 Point.prototype.getBezierPoint = ( point0, point1, point2, point3, position ) => {
   let point = this.new( 0, 0 );
   const t = position;

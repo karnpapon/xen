@@ -106,18 +106,18 @@ function Drawer(client) {
       if(client.line.isFirstLine(i) || client.line.isLastLine(i, points)) continue;
   
       if ( utils.linePointCollision(x1, y1, x2, y2, point.x, point.y)) {
-        utils.throttle(() => this.trigger(groupIdx), 60);
+        utils.throttle(() => this.trigger("chan", groupIdx), 60);
         ControlLine1.draw(BLUE, 6);
       }
     }
   }
   
   // TODO: elaborate this.
-  this.trigger = (groupIdx) => {
+  this.trigger = (midiType, groupIdx) => {
     const midiOutMsg = { 
       note: "C", 
       octave: 4, 
-      channel: client.dragpoints.bezierPoints[groupIdx]["midi"]["chan"], 
+      channel: client.dragpoints.bezierPoints[groupIdx]["midi"][midiType], 
       velocity: 16, 
       length: 16
     }
@@ -187,7 +187,7 @@ function Drawer(client) {
         if(client.showLPoints){
           client.circle.fillCircle({ x: x1, y: y1 }, POINTRADIUS, GRAY);
           if (utils.circleCircleCollision(x1,y1,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
-            utils.throttle(() => this.trigger(groupIdx), 120);
+            utils.throttle(() => this.trigger("chanPoints", groupIdx), 120);
             client.circle.fillCircle({ x: x1, y: y1 }, POINTRADIUS * 4, REDTRANSPARENT);
           }
         }
@@ -196,7 +196,7 @@ function Drawer(client) {
         if(client.showRPoints){
           client.circle.fillCircle({ x: x2, y: y2 }, POINTRADIUS, GRAY);
           if (utils.circleCircleCollision(x2,y2,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
-            utils.throttle(() => this.trigger(groupIdx), 120);
+            utils.throttle(() => this.trigger("chanPoints", groupIdx), 120);
             client.circle.fillCircle({ x: x2, y: y2 }, POINTRADIUS * 4, ORANGETRANSPARENT);
           }
         }
