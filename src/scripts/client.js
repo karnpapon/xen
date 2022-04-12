@@ -9,6 +9,7 @@
 /* global Drawer */
 /* global Frame */
 /* global world */
+/* global Docs */
 
 function Client() {
   this.stepSize = 0.001;
@@ -62,6 +63,7 @@ function Client() {
   this.arc = new Arc(this)
   this.dragpoints = new BezierPoint(this)
   this.clock = new Clock(this)
+  this.docs = new Docs(this)
   this.gui = new GUI()
   this.drawer = new Drawer(this)
   this.frames = new Frame(this)
@@ -88,11 +90,17 @@ function Client() {
   }
 
   this.init = () => {
+    this.docs.set('File', 'New', 'CmdOrCtrl+N', () => {  })
+    this.docs.set('Edit', 'Undo', 'CmdOrCtrl+Z', () => {  })
+    this.docs.set('Edit', 'Redo', 'CmdOrCtrl+Shift+Z', () => { })
+    this.docs.set('Midi', 'Play/Pause Midi', 'CmdOrCtrl+Space', () => {  })
+    
     this.gui.init()
   }
 
   this.start = () => {
     console.info('Client', 'Starting..')
+    console.info(`${this.docs.toString()}`)
     this.io.start()
     this.events.start()
     this.clock.start()

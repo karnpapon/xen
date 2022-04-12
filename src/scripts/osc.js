@@ -2,6 +2,7 @@
 
 function Osc (client) {
   const osc = require('node-osc')
+  console.log("osc", osc)
 
   this.stack = []
   this.socket = null

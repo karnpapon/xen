@@ -10,17 +10,6 @@
     </script>
     <script src="https://flyover.github.io/imgui-js/dist/imgui.umd.js"></script>
     <script src="https://flyover.github.io/imgui-js/dist/imgui_impl.umd.js"></script>
-    <!-- <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-      crossorigin=""
-    />
-    <script
-      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-      integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-      crossorigin=""
-    ></script> -->
 
     <script type="text/javascript" src="./src/scripts/utils.js"></script>
     <script type="text/javascript" src="./src/scripts/const.js"></script>
@@ -28,6 +17,7 @@
     <script type="text/javascript" src="./src/scripts/transpose.js"></script>
     <script type="text/javascript" src="./src/scripts/bezierpoint.js"></script>
     <script type="text/javascript" src="./src/scripts/gui.js"></script>
+    <script type="text/javascript" src="./src/scripts/docs.js"></script>
     <script type="text/javascript" src="./src/scripts/io.js"></script>
     <script type="text/javascript" src="./src/scripts/midi.js"></script>
     <script type="text/javascript" src="./src/scripts/osc.js"></script>
@@ -163,6 +153,7 @@
         user-select: none;
       }
     </style>
+    <title>xen | De Casteljau's curve drawer with MIDI / OSC implemented.</title>
   </head>
 
   <body id="game">
@@ -170,16 +161,7 @@
       <canvas id="canvas" tabindex="1"> </canvas>
       <img id="mapId" class="map" src="./src/imgs/map.png" />
     </div>
-    <script>
-      'use strict'
-
-      const client = new Client()
-      client.init()
-
-      window.addEventListener('load', () => { 
-        client.start()
-        client.run()
-      })
-    </script>
+    <script type="text/javascript" src="/src/main.js"></script>
+    <noscript>Your browser must have Javascript enabled to use xen. </noscript>
   </body>
 </html>
