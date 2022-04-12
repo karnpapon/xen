@@ -1,4 +1,14 @@
 function GUI() {
+
+  this.dir = {
+    None:-1,
+    Left:0,
+    Right:1,
+    Up:2,
+    Down:3,
+    COUNT:4
+  };
+
   this.init = async () => {
     await ImGui.default();
 
@@ -34,7 +44,6 @@ function GUI() {
   };
 
   this.update = () => {
-    // window.requestAnimationFrame(this._loop);
     this._loop(client.frames.f)
   };
 
@@ -50,8 +59,8 @@ function GUI() {
     ImGui.Begin("Controller");
 
     ImGui.Text(client.io.midi.outputDevice()?.name || "no MIDI OUT selected");
-    let play = client.clock.isPaused ? "pause" : "Play";
-    let mapShow = !client.hideMap ? "hide map" : "show map";
+    let play = client.clock?.isPaused ? "pause" : "Play";
+    let mapShow = !client?.hideMap ? "hide map" : "show map";
     let mute = client.dragpoints.bezierPoints[client.dragPointGroup]["muted"]
       ? "unmute"
       : "mute";
@@ -87,8 +96,25 @@ function GUI() {
       "R points",
       (value = client.showRPoints) => (client.showRPoints = value)
     );
-    ImGui.SliderFloat(
-      "speed",
+
+    ImGui.AlignTextToFramePadding();
+    ImGui.Text("MIDI CHANNEL:");
+    ImGui.SameLine();
+    ImGui.PushButtonRepeat(true);
+    ImGui.SameLine();
+    if (ImGui.ArrowButton("##left", this.dir.Left)) {  
+      client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"] = (((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"] - 1) % 16) + 16 ) % 16
+    }
+    ImGui.PopButtonRepeat();
+    ImGui.SameLine();
+    if (ImGui.ArrowButton("##right", this.dir.Right)) { 
+      client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"] = (client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"]  + 1) % 16 
+    }
+    ImGui.PopButtonRepeat();
+    ImGui.SameLine();
+    ImGui.Text((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"]).toString() || "0");
+
+    ImGui.SliderFloat( "speed",
       (
         value = client.dragpoints.bezierPoints[client.dragPointGroup]["speed"]
       ) =>

@@ -55,10 +55,10 @@ function Drawer(client) {
     const triggerable = !client.dragpoints.bezierPoints[groupIdx]["muted"]
     const color = !triggerable ? LIGHTGRAY : BLACK
     this.drawBezierGuidePath(points, GRAY);
-    this.drawControlSplineAndBezierPoint(points, color, client.proportionalDistance[groupIdx], triggerable);
+    this.drawControlSplineAndBezierPoint(points, color, client.proportionalDistance[groupIdx], triggerable, groupIdx);
   }
   
-  this.drawControlSplineAndBezierPoint = (points, color, t, triggerable) => {
+  this.drawControlSplineAndBezierPoint = (points, color, t, triggerable, groupIdx) => {
   
     const xc = world.width / 2.0;
     const yc = world.height / 2.0;
@@ -79,7 +79,7 @@ function Drawer(client) {
    
     client.circle.fillCircle(point, POINTRADIUS, color);
   
-    if (triggerable) { this.drawRecursiveLine(points, t, point); }
+    if (triggerable) { this.drawRecursiveLine(points, t, point, groupIdx); }
   
     if (!client.showControlLine) return
   
@@ -106,15 +106,22 @@ function Drawer(client) {
       if(client.line.isFirstLine(i) || client.line.isLastLine(i, points)) continue;
   
       if ( utils.linePointCollision(x1, y1, x2, y2, point.x, point.y)) {
-        this.trigger();
+        utils.throttle(() => this.trigger(groupIdx), 60);
         ControlLine1.draw(BLUE, 6);
       }
     }
   }
   
   // TODO: elaborate this.
-  this.trigger = () => {
-    const midiOutMsg = { note: "C", octave: 4, channel: 0, velocity: 16, length: 16}
+  this.trigger = (groupIdx) => {
+    const midiOutMsg = { 
+      note: "C", 
+      octave: 4, 
+      channel: client.dragpoints.bezierPoints[groupIdx]["midi"]["chan"], 
+      velocity: 16, 
+      length: 16
+    }
+
     client.io.midi.push(
       midiOutMsg.channel, 
       midiOutMsg.octave, 
@@ -143,7 +150,7 @@ function Drawer(client) {
     }
   }
   
-  this.drawRecursiveLine = (points, t, movingPoint) => {
+  this.drawRecursiveLine = (points, t, movingPoint, groupIdx) => {
     if (points.length == 1) {
       // var constructionLine = new Line( points[0].x,  points[0].y, points[1].x, points[1].y );
       // constructionLine.draw( GOLD, 2 );
@@ -180,7 +187,7 @@ function Drawer(client) {
         if(client.showLPoints){
           client.circle.fillCircle({ x: x1, y: y1 }, POINTRADIUS, GRAY);
           if (utils.circleCircleCollision(x1,y1,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
-            utils.throttle(this.trigger, 120);
+            utils.throttle(() => this.trigger(groupIdx), 120);
             client.circle.fillCircle({ x: x1, y: y1 }, POINTRADIUS * 4, REDTRANSPARENT);
           }
         }
@@ -189,12 +196,12 @@ function Drawer(client) {
         if(client.showRPoints){
           client.circle.fillCircle({ x: x2, y: y2 }, POINTRADIUS, GRAY);
           if (utils.circleCircleCollision(x2,y2,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
-            utils.throttle(this.trigger, 120);
+            utils.throttle(() => this.trigger(groupIdx), 120);
             client.circle.fillCircle({ x: x2, y: y2 }, POINTRADIUS * 4, ORANGETRANSPARENT);
           }
         }
       }
-      return this.drawRecursiveLine(newpoints, t, movingPoint);
+      return this.drawRecursiveLine(newpoints, t, movingPoint, groupIdx);
     }
   }
   

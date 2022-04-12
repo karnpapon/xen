@@ -39,10 +39,10 @@ Env.adsr(0.01, 0.1, 0.3,1).test(1);
 
 (
 //First we create a synth definition for this example:
-SynthDef(\midisynth1, {arg freq=440, amp=0.1, dec=1, rel=0.8;
+SynthDef(\midisynth1, {arg freq=440, amp=0.1, dec=1, rel=0.8, gate=1;
     var signal, env;
     signal = VarSaw.ar([freq, freq+2], 0, XLine.ar(0.7, 0.9, 0.13));
-    env = EnvGen.ar(Env.linen(0.01, 0.2, dec,rel), doneAction:2);
+    env = EnvGen.ar(Env.adsr(0.01, 0.2, dec,rel),gate);
     Out.ar(0, signal*env*amp);
 }).add;
 

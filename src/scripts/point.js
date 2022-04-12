@@ -1,20 +1,3 @@
-// function Point(client) {
-//   // this.app = client
-
-//   this.new = (x, y, color) => {
-//     if (x != undefined && x != null && y != undefined && y != null) {
-//       this.x = x;
-//       this.y = y;
-//     } else {
-//       this.x = 0.0;
-//       this.y = 0.0;
-//     }
-//     if (color != undefined && color != null) this.color = color;
-//     else this.color = BLACK;
-//     return this
-//   } 
-// }
-
 function Point(x, y, color) {
   if (x != undefined && x != null && y != undefined && y != null) {
     this.x = x;
