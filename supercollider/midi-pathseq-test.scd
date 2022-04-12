@@ -72,15 +72,15 @@ CmdPeriod.run
 (
 // and now we can play the synth
 MIDIdef.noteOn(\mydef, {arg vel, key, channel, device;
-	// Synth(\midisynth1, [
- //    \freq, Scale.major.degreeToFreq([ 0, 2, 4, 5, 7, 9, 11 ].choose, 20.midicps, 1), 
- //    \amp, vel/127,
- //    \rel, 0.2,
- //    \dec, 0.2
- //  ]);
+	 Synth(\midisynth1, [
+    \freq, Scale.major.degreeToFreq([ 0, 2, 4, 5, 7, 9, 11 ].choose, 20.midicps, 1),
+     \amp, vel/127,
+     \rel, 0.2,
+     \dec, 0.2
+   ]);
 
-  Synth(\gabber)
-    // [key, vel].postln;
+	// Synth(\gabber);
+	[key, vel].postln;
 });
 )
 

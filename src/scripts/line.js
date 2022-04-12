@@ -24,17 +24,17 @@ function Line(x1, y1, x2, y2) {
 Line.prototype.draw = function (color, width, dashed = []) {
   var xc = world.width / 2;
   var yc = world.height / 2;
-  context.strokeStyle = color;
-  context.setLineDash(dashed);
+  client.context.strokeStyle = color;
+  client.context.setLineDash(dashed);
   if (width == undefined || width == null) {
     width = 0.8;
     if (color == BLACK) width = 1.5;
   }
-  context.lineWidth = width;
-  context.beginPath();
-  context.moveTo(xc + this.x1, yc + this.y1);
-  context.lineTo(xc + this.x2, yc + this.y2);
-  context.stroke();
+  client.context.lineWidth = width;
+  client.context.beginPath();
+  client.context.moveTo(xc + this.x1, yc + this.y1);
+  client.context.lineTo(xc + this.x2, yc + this.y2);
+  client.context.stroke();
 };
 
 
@@ -49,7 +49,7 @@ Line.prototype.end = function () {
 Line.prototype.SetLength = function (NewLength) {
   var dx = this.x2 - this.x1;
   var dy = this.y2 - this.y1;
-  var length = sqrt(dx * dx + dy * dy);
+  var length = SQRT(dx * dx + dy * dy);
   var Ratio = NewLength / length;
   dx *= Ratio;
   dy *= Ratio;
@@ -60,7 +60,7 @@ Line.prototype.SetLength = function (NewLength) {
 Line.prototype.extend = function (Add) {
   var dx = this.x2 - this.x1;
   var dy = this.y2 - this.y1;
-  var length = sqrt(dx * dx + dy * dy);
+  var length = SQRT(dx * dx + dy * dy);
   var Ratio = (length + Add) / length;
   dx *= Ratio;
   dy *= Ratio;
@@ -80,9 +80,9 @@ Line.prototype.move = function (point) {
 
 
 Line.prototype.length = function () {
-  var dx = abs(this.x1 - this.x2);
-  var dy = abs(this.y1 - this.y2);
-  return sqrt(dx * dx + dy * dy);
+  var dx = ABS(this.x1 - this.x2);
+  var dy = ABS(this.y1 - this.y2);
+  return SQRT(dx * dx + dy * dy);
 };
 
 Line.prototype.reverse = function () {
@@ -102,4 +102,22 @@ function moveLine(line, point) {
   newline.x1 = point.x;
   newline.y1 = point.y;
   return newline;
+}
+
+
+// Line.prototype.moveLine = function(line, point) {
+//   let newline = this.new();
+//   newline.x2 = line.x2 - line.x1 + point.x;
+//   newline.y2 = line.y2 - line.y1 + point.y;
+//   newline.x1 = point.x;
+//   newline.y1 = point.y;
+//   return newline;
+// }
+
+Line.prototype.isFirstLine = function(i) {
+  return i === 0
+}
+
+Line.prototype.isLastLine = function(i, points) {
+  return i === points.length - 1 || i === points.length - 2
 }

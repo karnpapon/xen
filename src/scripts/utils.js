@@ -17,13 +17,13 @@ var utils = {
   },
 
   clamp: function (value, min, max) {
-    return Math.min(Math.max(value, Math.min(min, max)), Math.max(min, max));
+    return MIN(MAX(value, MIN(min, max)), MAX(min, max));
   },
 
   dist: function (x0, y0, x1, y1) {
     var dx = x1 - x0,
       dy = y1 - y0;
-    return Math.sqrt(dx * dx + dy * dy);
+    return SQRT(dx * dx + dy * dy);
   },
 
   circleCollision: function (c0, c1) {
@@ -42,13 +42,13 @@ var utils = {
   },
 
   inRange: function (value, min, max) {
-    return value >= Math.min(min, max) && value <= Math.max(min, max);
+    return value >= MIN(min, max) && value <= MAX(min, max);
   },
 
   rangeIntersect: function (min0, max0, min1, max1) {
     return (
-      Math.max(min0, max0) >= Math.min(min1, max1) &&
-      Math.min(min0, max0) <= Math.max(min1, max1)
+      MAX(min0, max0) >= MIN(min1, max1) &&
+      MIN(min0, max0) <= MAX(min1, max1)
     );
   },
 
@@ -68,11 +68,11 @@ var utils = {
   },
 
   randomRange: function (min, max) {
-    return min + Math.random() * (max - min);
+    return min + RANDOM() * (max - min);
   },
 
   randomInt: function (min, max) {
-    return Math.floor(min + Math.random() * (max - min + 1));
+    return FLOOR(min + RANDOM() * (max - min + 1));
   },
 
   roundToPlaces: function (value, places) {
@@ -112,17 +112,17 @@ var utils = {
     if (minimum == undefined || maximum == undefined) return 0;
     var temp = maximum - minimum;
     temp += 0.9999999;
-    return minimum + floor(random() * temp);
+    return minimum + FLOOR(RANDOM() * temp);
   },
 
   makeRGBA: function (r, g, b, a) {
     return (
       "rgba( " +
-      floor(r) +
+      FLOOR(r) +
       "," +
-      floor(g) +
+      FLOOR(g) +
       "," +
-      floor(b) +
+      FLOOR(b) +
       "," +
       a.toFixed(8) +
       " )"
@@ -130,14 +130,14 @@ var utils = {
   },
 
   makeRGB: function (r, g, b) {
-    return "rgb( " + floor(r) + "," + floor(g) + "," + floor(b) + " )";
+    return "rgb( " + FLOOR(r) + "," + FLOOR(g) + "," + FLOOR(b) + " )";
   },
 
   distance: function (point1, point2) {
     if(!point1 || !point2) return 
-    const dx = abs(point1.x - point2.x);
-    const dy = abs(point1.y - point2.y);
-    return sqrt(dx * dx + dy * dy);
+    const dx = ABS(point1.x - point2.x);
+    const dy = ABS(point1.y - point2.y);
+    return SQRT(dx * dx + dy * dy);
   },
 
   linePointCollision: function (x1, y1, x2, y2, px, py) {
@@ -172,7 +172,7 @@ var utils = {
     // use the Pythagorean Theorem to compute the distance
     distX = c1x - c2x;
     distY = c1y - c2y;
-    distance = sqrt(distX * distX + distY * distY);
+    distance = SQRT(distX * distX + distY * distY);
 
     // if the distance is less than the sum of the circle's
     // radii, the circles are touching!

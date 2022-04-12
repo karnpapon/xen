@@ -1,22 +1,25 @@
-function BezierPoint() {
-  this.bezierPoints = new Array( { 
-    speed: distanceSpeed, 
-    muted: false,
-    points: new Array(
-      new Point(100, 0, BLACK), 
-      new Point(266, -135, BLACK)
-    )
-  })
-}
+function BezierPoint(client) {
+  
+  this.init = () => {
+    this.bezierPoints = new Array( { 
+      speed: client.distanceSpeed, 
+      muted: false,
+      points: new Array(
+        new Point(-152, 29.5, BLACK), 
+        new Point(81, -123, BLACK)
+      )
+    })
+  }
 
-BezierPoint.prototype.spawnNewGroup = function (x, y) {
-  this.bezierPoints.push({
-    speed: distanceSpeed, 
-    muted: false,
-    points: new Array ( 
-      new Point(150, -100, BLACK), 
-      new Point(250, 0, BLACK) 
-    )
-  })
-  proportionalDistance.push(distanceSpeed)
-};
+  this.spawnNewGroup = (x, y) => {
+    this.bezierPoints.push({
+      speed: client.distanceSpeed, 
+      muted: false,
+      points: new Array ( 
+        new Point(150, -100, BLACK), 
+        new Point(250, 0, BLACK) 
+      )
+    })
+    client.proportionalDistance.push(client.distanceSpeed)
+  };
+}

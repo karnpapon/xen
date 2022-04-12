@@ -24,11 +24,14 @@
     ></script>
 
     <script type="text/javascript" src="./src/scripts/utils.js"></script>
-    <script type="text/javascript" src="./src/scripts/vars.js"></script>
+    <script type="text/javascript" src="./src/scripts/const.js"></script>
+    <script type="text/javascript" src="./src/scripts/clock.js"></script>
+    <script type="text/javascript" src="./src/scripts/transpose.js"></script>
     <script type="text/javascript" src="./src/scripts/bezierpoint.js"></script>
     <script type="text/javascript" src="./src/scripts/gui.js"></script>
+    <script type="text/javascript" src="./src/scripts/io.js"></script>
     <script type="text/javascript" src="./src/scripts/midi.js"></script>
-    <script type="text/javascript" src="./src/scripts/animate.js"></script>
+    <script type="text/javascript" src="./src/scripts/frame.js"></script>
     <script type="text/javascript" src="./src/scripts/drawer.js"></script>
     <script type="text/javascript" src="./src/scripts/arc.js"></script>
     <script type="text/javascript" src="./src/scripts/circle.js"></script>
@@ -171,12 +174,12 @@
       'use strict'
 
       const client = new Client()
+      client.init()
 
-      // client.install(document.body)
-
-      // window.addEventListener('load', () => { 
-      //   client.start()
-      // })
+      window.addEventListener('load', () => { 
+        client.start()
+        client.run()
+      })
     </script>
   </body>
 </html>
