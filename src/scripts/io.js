@@ -6,8 +6,8 @@
 function IO (client) {
   this.ip = '127.0.0.1'
   
-  this.osc = new Osc(client)
   this.midi = new Midi(client)
+  this.osc = new Osc(client)
 
   this.start = function () {
     this.midi.start()

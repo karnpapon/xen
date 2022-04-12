@@ -45,6 +45,12 @@ function Client() {
   this.hideMap = true;
   this.dispatchToggleMap = false;
 
+  this.midiActived = false;
+  this.oscActived = false;
+
+  this.oscMsgLine = "" 
+  this.oscMsgPoint = ""
+
   // ImGui
   this.customColor = {x:0.45, y:0.55, z:0.60, w:1.00};
   this.customRecursiveBezierColor = {x:0.77, y:0.67, z:1.00, w:1.00};
@@ -53,11 +59,8 @@ function Client() {
   this.canvas = document.getElementById("canvas");
   this.drawing = document.getElementById("drawing");
 
-  console.log("window.devicePixelRatio", window.devicePixelRatio)
-  
   this.io = new IO(this)
   this.events = new Events(this)
-  // this.point = new Point(this)
   this.circle = new Circle(this)
   this.line = new Line(this)
   this.arc = new Arc(this)
@@ -131,8 +134,8 @@ function Client() {
   }
 
   this.drawProgram = () => {
-    this.gui.update()
     this.frames.update()
+    this.gui.update()
   }
 }
 

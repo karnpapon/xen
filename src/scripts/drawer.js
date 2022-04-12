@@ -120,22 +120,29 @@ function Drawer(client) {
   
   // TODO: elaborate this.
   this.trigger = (midiType, groupIdx) => {
-    const midiOutMsg = { 
-      note: "C", 
-      octave: 4, 
-      channel: client.dragpoints.bezierPoints[groupIdx]["midi"][midiType], 
-      velocity: 16, 
-      length: 16
+    if(client.midiActived){
+      const midiOutMsg = { 
+        note: "C", 
+        octave: 4, 
+        channel: client.dragpoints.bezierPoints[groupIdx]["midi"][midiType], 
+        velocity: 16, 
+        length: 16
+      }
+  
+      client.io.midi.push(
+        midiOutMsg.channel, 
+        midiOutMsg.octave, 
+        midiOutMsg.note, 
+        midiOutMsg.velocity, 
+        midiOutMsg.length, 
+        false 
+      )
     }
 
-    client.io.midi.push(
-      midiOutMsg.channel, 
-      midiOutMsg.octave, 
-      midiOutMsg.note, 
-      midiOutMsg.velocity, 
-      midiOutMsg.length, 
-      false 
-    )
+    if(client.oscActived){
+      client.io.osc.push("/path1", "/test1")
+      client.io.osc.push("/path2", "/test2")
+    }
   }
   
   // casteljau's algorithm (cursived lerp)

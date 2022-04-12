@@ -12,6 +12,25 @@ function GUI() {
     COUNT:4
   };
 
+  this.TabBarFlags =
+{
+    None: 0,
+    Reorderable: 1 << 0,
+        // Allow manually dragging tabs to re-order them + New tabs are
+        // appended at the end of list
+    AutoSelectNewTabs: 1 << 1,   // Automatically select new tabs when they appear
+    TabListPopupButton: 1 << 2,
+    NoCloseWithMiddleMouseButton: 1 << 3,
+        // Disable behavior of closing tabs (that are submitted with
+        // p_open != NULL) with middle mouse button. You can still
+        // repro this behavior on user's side with if
+        // (IsItemHovered() && IsMouseClicked(2)) *p_open = false.
+    NoTabListScrollingButtons: 1 << 4,
+    NoTooltip: 1 << 5,   // Disable tooltips when hovering a tab
+    FittingPolicyResizeDown: 1 << 6,   // Resize tabs when they don't fit
+    FittingPolicyScroll: 1 << 7,   // Add scroll buttons when tabs don't fit
+};
+
   this.init = async () => {
     await ImGui.default();
 
@@ -35,6 +54,8 @@ function GUI() {
       client.customRecursiveBezierColor.z,
       client.customRecursiveBezierColor.w
     );
+
+    this.msgProtocol = "MIDI"
 
     this.done = false;
     this.source = [
@@ -100,37 +121,54 @@ function GUI() {
       (value = client.showRPoints) => (client.showRPoints = value)
     );
 
-    ImGui.Text("MIDI CHANNEL: [0-16]");
+    if (ImGui.BeginTabBar("##tabs", this.TabBarFlags.None)) {
+      if (ImGui.BeginTabItem("MIDI")) { 
+        ImGui.Checkbox("active", (value = client.midiActived) => (client.midiActived = value) )
+        ImGui.Text("MIDI CHANNEL: [0-16]");
+        ImGui.AlignTextToFramePadding();
+        ImGui.Text("LINE:");
+        ImGui.SameLine();
+        ImGui.SameLine();
+        if (ImGui.ArrowButton("##left", this.dir.Left)) {  
+          client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"] = (((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"] - 1) % 16) + 16 ) % 16
+        }
+        ImGui.PopButtonRepeat();
+        ImGui.SameLine();
+        if (ImGui.ArrowButton("##right", this.dir.Right)) { 
+          client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"] = (client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"]  + 1) % 16 
+        }
+        ImGui.SameLine();
+        ImGui.Text((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"]).toString() || "0");
 
-    ImGui.AlignTextToFramePadding();
-    ImGui.Text("LINE:");
-    ImGui.SameLine();
-    ImGui.SameLine();
-    if (ImGui.ArrowButton("##left", this.dir.Left)) {  
-      client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"] = (((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"] - 1) % 16) + 16 ) % 16
+        ImGui.AlignTextToFramePadding();
+        ImGui.Text("POINT:");
+        ImGui.SameLine();
+        if (ImGui.ArrowButton("#left", 0)) {  
+          client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"] = (((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"] - 1) % 16) + 16 ) % 16
+        }
+        ImGui.PopButtonRepeat();
+        ImGui.SameLine();
+        if (ImGui.ArrowButton("#right", 1)) { 
+          client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"] = (client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"]  + 1) % 16 
+        }
+        ImGui.SameLine();
+        ImGui.Text((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"]).toString() || "0");
+        ImGui.EndTabItem();
+      }
+      if (ImGui.BeginTabItem("OSC")) { 
+        ImGui.Checkbox("active", (value = client.oscActived) => (client.oscActived = value) )
+        ImGui.InputText("##osc-line", (_ = client.oscMsgLine) => (client.oscMsgLine = _));
+        ImGui.SameLine();
+        ImGui.Text("LINE:");
+        ImGui.InputText("##osc-point", (_ = client.oscMsgPoint) => (client.oscMsgPoint = _));
+        ImGui.SameLine();
+        ImGui.Text("POINT:");
+        ImGui.EndTabItem();
+      }
+      
+      ImGui.EndTabBar();
     }
-    ImGui.PopButtonRepeat();
-    ImGui.SameLine();
-    if (ImGui.ArrowButton("##right", this.dir.Right)) { 
-      client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"] = (client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"]  + 1) % 16 
-    }
-    ImGui.SameLine();
-    ImGui.Text((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chan"]).toString() || "0");
-
-    ImGui.AlignTextToFramePadding();
-    ImGui.Text("POINT:");
-    ImGui.SameLine();
-    if (ImGui.ArrowButton("#left", 0)) {  
-      client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"] = (((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"] - 1) % 16) + 16 ) % 16
-    }
-    ImGui.PopButtonRepeat();
-    ImGui.SameLine();
-    if (ImGui.ArrowButton("#right", 1)) { 
-      client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"] = (client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"]  + 1) % 16 
-    }
-    ImGui.SameLine();
-    ImGui.Text((client.dragpoints.bezierPoints[client.dragPointGroup]["midi"]["chanPoints"]).toString() || "0");
-
+    ImGui.Separator();
     ImGui.SliderFloat( "speed",
       (
         value = client.dragpoints.bezierPoints[client.dragPointGroup]["speed"]
