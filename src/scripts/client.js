@@ -69,6 +69,7 @@ function Client() {
 
   if (this.canvas && this.canvas.getContext) {
     this.context = this.canvas.getContext("2d");
+    window.addEventListener("resize", this.windowResizeHandler, false)
     this.windowResizeHandler()
   }
 
