@@ -1,3 +1,7 @@
+/* global world */
+/* global client */
+/* global BLACK */
+
 function Circle(client) {
 
   this.new = (x, y, r) => {

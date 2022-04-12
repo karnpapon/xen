@@ -1,3 +1,9 @@
+/* global world */
+/* global client */
+/* global Point */
+/* global BLACK */
+/* global ABS, SQRT */
+
 function Line(x1, y1, x2, y2) {
   if (
     x1 != undefined &&

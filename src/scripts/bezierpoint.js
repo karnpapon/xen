@@ -1,3 +1,6 @@
+/* global Point */
+/* global BLACK */
+
 function BezierPoint(client) {
   
   this.init = () => {

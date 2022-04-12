@@ -1,3 +1,5 @@
+/* global BLACK */
+
 function Point(x, y, color) {
   if (x != undefined && x != null && y != undefined && y != null) {
     this.x = x;

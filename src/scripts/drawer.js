@@ -1,3 +1,11 @@
+/* global world */
+/* global Line, Point */
+/* global utils */
+/* global FLOOR */
+/* global POINTRADIUS */
+/* global DASHLINESTYLE1, DASHLINESTYLE4 */
+/* global BLUE, BLACK, LIGHTGRAY, GRAY, REDTRANSPARENT, ORANGETRANSPARENT */
+
 function Drawer(client) {
   this.drawBezier = () => {
     // draw colored points on top of black points.
@@ -76,13 +84,11 @@ function Drawer(client) {
       client.context.lineTo(xc + point.x, yc + point.y);
     }
     client.context.stroke();
-   
     client.circle.fillCircle(point, POINTRADIUS, color);
   
+    if (!client.showControlLine && !client.showLPoints && !client.showRPoints) return
     if (triggerable) { this.drawRecursiveLine(points, t, point, groupIdx); }
-  
     if (!client.showControlLine) return
-  
     if (!triggerable) return
   
     // control line (spline)

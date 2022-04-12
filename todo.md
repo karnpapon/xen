@@ -9,6 +9,7 @@
 # todo
 - OSC
 - IO configurable.
+- tutorial mode.
 
 # tbd
 - speed sync

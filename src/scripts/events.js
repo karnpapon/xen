@@ -1,3 +1,9 @@
+/* global world */
+/* global Point */
+/* global utils */
+/* global POINTRADIUS */
+/* global BLACK */
+
 function Events(client) {
   
 

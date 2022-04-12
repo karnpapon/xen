@@ -1,3 +1,5 @@
+/* global MIN, MAX, SQRT, RANDOM, FLOOR, ABS */
+
 var throttleTimer;
 var utils = {
   norm: function (value, min, max) {
@@ -73,10 +75,6 @@ var utils = {
 
   randomRange: function (min, max) {
     return min + RANDOM() * (max - min);
-  },
-
-  randomInt: function (min, max) {
-    return FLOOR(min + RANDOM() * (max - min + 1));
   },
 
   roundToPlaces: function (value, places) {
@@ -174,9 +172,9 @@ var utils = {
   circleCircleCollision(c1x, c1y, c1r, c2x, c2y, c2r) {
     // get distance between the circle's centers
     // use the Pythagorean Theorem to compute the distance
-    distX = c1x - c2x;
-    distY = c1y - c2y;
-    distance = SQRT(distX * distX + distY * distY);
+    let distX = c1x - c2x;
+    let distY = c1y - c2y;
+    let distance = SQRT(distX * distX + distY * distY);
 
     // if the distance is less than the sum of the circle's
     // radii, the circles are touching!

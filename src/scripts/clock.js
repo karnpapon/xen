@@ -1,6 +1,6 @@
 'use strict'
 
-/* global Blob */
+/* global ABS */
 
 function Clock (client) {
   const workerScript = 'onmessage = (e) => { setInterval(() => { postMessage(true) }, e.data)}'
@@ -57,7 +57,7 @@ function Clock (client) {
   }
 
   this.play = function (msg = false, midiStart = false) {
-    console.log('Clock', 'Play', msg, midiStart)
+    // console.log('Clock', 'Play', msg, midiStart)
     if (this.isPaused === false && !midiStart) { return }
     this.isPaused = false
     if (this.isPuppet === true) {

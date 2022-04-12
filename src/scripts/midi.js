@@ -1,6 +1,7 @@
 'use strict'
 
 /* global transposeTable */
+/* global FLOOR */
 
 function Midi (client) {
   this.mode = 0

@@ -1,3 +1,6 @@
+/* global ImGui, ImGui_Impl */
+/* global client */
+
 function GUI() {
 
   this.dir = {
@@ -153,7 +156,7 @@ function GUI() {
       client.showSandboxWindow = true;
     }
     if (client.showSandboxWindow)
-      ShowSandboxWindow(
+      this.ShowSandboxWindow(
         "Sandbox Window",
         (value = client.showSandboxWindow) => (client.showSandboxWindow = value)
       );

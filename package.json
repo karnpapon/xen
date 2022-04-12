@@ -1,0 +1,26 @@
+{
+  "name": "pathseq",
+  "version": "1.0.0",
+  "description": "an implementation on [ De Casteljau's ](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm) algorithm, capable of sending MIDI out, intentionally used for live performance.",
+  "main": "listener.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karnpapon/pathseq.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karnpapon/pathseq/issues"
+  },
+  "homepage": "https://github.com/karnpapon/pathseq#readme",
+  "dependencies": {
+    "node-osc": "^6.1.16"
+  },
+  "devDependencies": {
+    "eslint": "^8.13.0"
+  }
+}

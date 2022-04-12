@@ -1,3 +1,15 @@
+/* global IO */
+/* global Events */
+/* global Circle */
+/* global Line */
+/* global Arc */
+/* global BezierPoint */
+/* global Clock */
+/* global GUI */
+/* global Drawer */
+/* global Frame */
+/* global world */
+
 function Client() {
   this.stepSize = 0.001;
   this.proportionalDistance = [];
@@ -39,6 +51,8 @@ function Client() {
   this.mapSrc = document.getElementById("mapId");
   this.canvas = document.getElementById("canvas");
   this.drawing = document.getElementById("drawing");
+
+  console.log("window.devicePixelRatio", window.devicePixelRatio)
   
   this.io = new IO(this)
   this.events = new Events(this)
