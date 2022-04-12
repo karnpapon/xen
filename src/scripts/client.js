@@ -6,7 +6,6 @@ function Client() {
 
   this.dragpoints = {};
 
-  this.MIDI = ""
   this.showSandboxWindow = false
   this.addNewPointGroup = false;
 

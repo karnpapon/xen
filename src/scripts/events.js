@@ -101,23 +101,23 @@ function Events(client) {
     event.preventDefault()
   
     if(client.dragpoints.bezierPoints[client.dragPointGroup]["points"].length<= 2) return
-  
+    
     client.position = this.relMouseCoords(event);
-  
+    
     if (client.position == null) return;
     const xc = world.width / 2;
     const yc = world.height / 2;
-  
+    
     const SearchRadius = POINTRADIUS;
-  
+    
     const p = new Point(client.position.x - xc, client.position.y - yc);
     client.xOffset = 0;
     client.yOffset = 0;
   
     for( let pIdx = 0; pIdx < client.dragpoints.bezierPoints.length; pIdx++ ){
-      for (let idx = client.dragPointStart; idx < client.dragPointStart + client.dragPointCount; ++idx) {
-        if (utils.distance(client.dragpoints.bezierPoints[pIdx][idx], p) < SearchRadius + 3) {
-          this.removePoint(idx)
+      for (let idx = client.dragPointStart; idx - 1 < client.dragPointStart + client.dragPointCount; ++idx) {
+        if (utils.distance(client.dragpoints.bezierPoints[client.dragPointGroup]["points"][idx], p) < SearchRadius + 3) {
+          client.dragpoints.bezierPoints[client.dragPointGroup]["points"].splice(idx, 1)
           return;
         }
       }
@@ -163,7 +163,6 @@ function Events(client) {
   }
   
   this.mouseUp = (event) => {
-    // client.clock.isPaused = false;
     if (!client.mouseDrag) return;
   
     this.dragEnd(event);

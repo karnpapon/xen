@@ -21,6 +21,58 @@ SynthDef(\midisynth1, {arg freq=440, amp=0.1, dec=1, rel=0.8, gate=0;
 }).add;
 )
 
+(    // string_and_reverb
+{
+    var input = PinkNoise.ar(0.2);
+    var trig = Dust.kr(0.7);
+    var struct = LFNoise1.kr(0.4).range(0,1);
+    var pos = LFNoise2.kr(0.1).range(0,1);
+    // note: force 'internal exciter'
+    MiRings.ar(input, trig, 60, struct, 0.5, 0.7, pos, intern_exciter: 1, model:5, poly: 4)
+}.play
+)
+
+(    // drone
+     // set damp to 1.0 to get a sustaining sound that doesn't need to be triggered
+{
+    var struct = LFNoise2.kr(0.2).range(0,1);
+    var brightness = LFNoise1.kr(0.5).range(0,1);
+
+    MiRings.ar(pit: 40, struct: struct, bright: brightness, pos: 0.9, damp: 1.0, poly: 2, model: 2, easteregg: 1)
+}.play
+)
+
+(   // scanning
+{
+    var timb = LFNoise1.kr(0.3,0.5,0.5);
+    var color = LFNoise1.kr(0.3,0.5,0.5);
+    var pit = MouseY.kr(33,72);
+    var model = MouseX.kr(0, 47);
+    MiBraids.ar(pit, timb, color, model, mul: 0.2) ! 2;
+}.play
+)
+
+(   // kick it
+{
+    var trig =  Impulse.kr(4);
+    var pit = Latch.kr(PinkNoise.kr(), trig).range(30, 50).round;
+    var timb = LFNoise1.kr(0.4,0.5,0.5);
+    var color = LFNoise1.kr(0.3,0.5,0.5);
+
+    MiBraids.ar(pit, timb, color, 34, trig, mul: 0.5) ! 2;
+}.play
+)
+
+(   // sample rate, bit reduction and distortion
+{
+    var trig =  CoinGate.kr(0.3, Impulse.kr(4));
+    var decim = TRand.kr(1,32,trig);
+    var dist = LFTri.kr(0.2).range(0,1);
+
+    MiBraids.ar(40, 0.7, 0.7, 34, trig, resamp: 2, decim: decim, bits: 3, ws: dist, mul: 0.5) ! 2;
+}.play
+)
+
 
 x = Synth("mi-plaits");
 g = Synth("midisynth1");
