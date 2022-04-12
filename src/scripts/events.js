@@ -163,7 +163,7 @@ function Events(client) {
   }
   
   this.mouseUp = (event) => {
-    // client.pause = false;
+    // client.clock.isPaused = false;
     if (!client.mouseDrag) return;
   
     this.dragEnd(event);
@@ -175,7 +175,7 @@ function Events(client) {
   }
   
   this.playBtnClick = () => {
-    client.pause = !client.pause
+    client.clock.togglePlay()
   }
   
   this.onKeyPressed = (event) => {
@@ -186,7 +186,7 @@ function Events(client) {
     if (charCode === 9 ) { client.dragPointGroup = (client.dragPointGroup + 1) % client.dragpoints.bezierPoints.length }
   
     // SPACEBAR
-    if (charCode == 32) { client.pause = !client.pause }
+    if (charCode == 32) { client.clock.togglePlay() }
   
   };
 }

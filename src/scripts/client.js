@@ -74,8 +74,6 @@ function Client() {
   }
 
   this.init = () => {
-    // this.events.init()
-    // initGUI()
     this.gui.init()
   }
 

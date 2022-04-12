@@ -114,10 +114,15 @@ function Drawer(client) {
   
   // TODO: elaborate this.
   this.trigger = () => {
-    // let output = WebMidi.outputs[0];
-    // let channel = output.channels[1];
-    // channel.playNote("C3");
-    console.log("triggered!!")
+    const midiOutMsg = { note: "C", octave: 4, channel: 0, velocity: 16, length: 16}
+    client.io.midi.push(
+      midiOutMsg.channel, 
+      midiOutMsg.octave, 
+      midiOutMsg.note, 
+      midiOutMsg.velocity, 
+      midiOutMsg.length, 
+      false 
+    )
   }
   
   // casteljau's algorithm (cursived lerp)

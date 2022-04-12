@@ -40,7 +40,9 @@ function Midi (client) {
     if (!this.outputDevice()) { console.warn('MIDI', 'No midi output!'); return }
 
     const transposed = this.transpose(item.note, item.octave)
-    const channel = 0
+
+    // TODO: gracefully handle this
+    const channel = parseInt(item.channel)
     // const channel = !isNaN(item.channel) ? parseInt(item.channel) : client.frames.valueOf(item.channel)
 
     if (!transposed) { return }
@@ -122,26 +124,26 @@ function Midi (client) {
     }
   }
 
-  // this.receive = function (msg) {
-  //   switch (msg.data[0]) {
-  //     // Clock
-  //     case 0xF8:
-  //       client.clock.tap()
-  //       break
-  //     case 0xFA:
-  //       console.log('MIDI', 'Start Received')
-  //       client.clock.play(false, true)
-  //       break
-  //     case 0xFB:
-  //       console.log('MIDI', 'Continue Received')
-  //       client.clock.play()
-  //       break
-  //     case 0xFC:
-  //       console.log('MIDI', 'Stop Received')
-  //       client.clock.stop()
-  //       break
-  //   }
-  // }
+  this.receive = function (msg) {
+    switch (msg.data[0]) {
+      // Clock
+      case 0xF8:
+        client.clock.tap()
+        break
+      case 0xFA:
+        console.log('MIDI', 'Start Received')
+        client.clock.play(false, true)
+        break
+      case 0xFB:
+        console.log('MIDI', 'Continue Received')
+        client.clock.play()
+        break
+      case 0xFC:
+        console.log('MIDI', 'Stop Received')
+        client.clock.stop()
+        break
+    }
+  }
 
   // Tools
 
