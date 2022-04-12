@@ -1,7 +1,7 @@
 function Client() {
   this.stepSize = 0.001;
   this.proportionalDistance = [];
-  this.distanceSpeed = 0.02;
+  this.distanceSpeed = 0.01;
   this.pause = false;
 
   this.dragpoints = {};
@@ -49,7 +49,7 @@ function Client() {
   this.arc = new Arc(this)
   this.dragpoints = new BezierPoint(this)
   this.clock = new Clock(this)
-  // this.gui = new GUI(this)
+  this.gui = new GUI()
   this.drawer = new Drawer(this)
   this.frames = new Frame(this)
 
@@ -57,15 +57,26 @@ function Client() {
   this.dragPointCount = this.dragpoints.bezierPoints.length 
   this.proportionalDistance = new Array(1).fill(0.0);
 
+  this.windowResizeHandler = function(){
+    world.width = window.innerWidth;
+    world.height = window.innerHeight;
+  
+    this.drawing.style.width = world.width + "px";
+    this.drawing.style.height = world.height + "px";
+  
+    this.canvas.width = world.width;
+    this.canvas.height = world.height;
+  }
+
   if (this.canvas && this.canvas.getContext) {
     this.context = this.canvas.getContext("2d");
-    // window.addEventListener("resize", windowResizeHandler, false);
-    // windowResizeHandler();
+    this.windowResizeHandler()
   }
 
   this.init = () => {
     // this.events.init()
-    // this.gui.init()
+    // initGUI()
+    this.gui.init()
   }
 
   this.start = () => {
@@ -100,8 +111,8 @@ function Client() {
   }
 
   this.drawProgram = () => {
+    this.gui.update()
     this.frames.update()
-    // this.gui.update()
   }
 }
 

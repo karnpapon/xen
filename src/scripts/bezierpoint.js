@@ -5,8 +5,8 @@ function BezierPoint(client) {
       speed: client.distanceSpeed, 
       muted: false,
       points: new Array(
-        new Point(100, 0, BLACK), 
-        new Point(266, -135, BLACK)
+        new Point(-152, 29.5, BLACK), 
+        new Point(81, -123, BLACK)
       )
     })
   }

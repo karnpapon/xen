@@ -91,7 +91,7 @@ function Drawer(client) {
       const y1 = points[client.dragPointStart + i].y;
       const x2 = points[client.dragPointStart + i + 1].x;
       const y2 = points[client.dragPointStart + i + 1].y;
-      const ControlLine1 = client.line.new(x1, y1, x2, y2);
+      const ControlLine1 = new Line(x1, y1, x2, y2);
       ControlLine1.draw(
         utils.makeRGB(
           floor(client.customColor.x * 255),
@@ -117,6 +117,7 @@ function Drawer(client) {
     // let output = WebMidi.outputs[0];
     // let channel = output.channels[1];
     // channel.playNote("C3");
+    console.log("triggered!!")
   }
   
   // casteljau's algorithm (cursived lerp)
@@ -159,7 +160,7 @@ function Drawer(client) {
         const x2 = newpoints[i + 1].x;
         const y2 = newpoints[i + 1].y;
   
-        constructionLine = client.line.new(x1, y1, x2, y2);
+        constructionLine = new Line(x1, y1, x2, y2);
         constructionLine.draw(
           utils.makeRGB(
             Math.floor(client.customRecursiveBezierColor.x * 255),
@@ -172,19 +173,19 @@ function Drawer(client) {
   
         // points along odd spline (left)
         if(client.showLPoints){
-          fillCircle({ x: x1, y: y1 }, POINTRADIUS, GRAY);
+          client.circle.fillCircle({ x: x1, y: y1 }, POINTRADIUS, GRAY);
           if (utils.circleCircleCollision(x1,y1,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
-            utils.throttle(trigger, 120);
-            fillCircle({ x: x1, y: y1 }, POINTRADIUS * 4, REDTRANSPARENT);
+            utils.throttle(this.trigger, 120);
+            client.circle.fillCircle({ x: x1, y: y1 }, POINTRADIUS * 4, REDTRANSPARENT);
           }
         }
   
         // points along even spline (right)
         if(client.showRPoints){
-          fillCircle({ x: x2, y: y2 }, POINTRADIUS, GRAY);
+          client.circle.fillCircle({ x: x2, y: y2 }, POINTRADIUS, GRAY);
           if (utils.circleCircleCollision(x2,y2,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
-            utils.throttle(trigger, 120);
-            fillCircle({ x: x2, y: y2 }, POINTRADIUS * 4, ORANGETRANSPARENT);
+            utils.throttle(this.trigger, 120);
+            client.circle.fillCircle({ x: x2, y: y2 }, POINTRADIUS * 4, ORANGETRANSPARENT);
           }
         }
       }

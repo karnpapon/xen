@@ -85,7 +85,6 @@ function Events(client) {
   this.mouseClick = (e) => {
     if (e.ctrlKey || e.metaKey) {
       this.handleAddPoint(e);
-      console.log("client.dragpoints", client.dragpoints)
       return;
     }
   }
@@ -174,20 +173,6 @@ function Events(client) {
     client.dragPoint = -1;
     client.mouseDrag = false
   }
-  
-  this.windowResizeHandler = () => {
-    world.width = window.innerWidth - 258;
-    world.height = window.innerHeight - 40;
-  
-    client.drawing.style.width = world.width + "px";
-    client.drawing.style.height = world.height + "px";
-  
-    client.canvas.width = world.width;
-    client.canvas.height = world.height;
-  
-    this.animate();
-  }
-  
   
   this.playBtnClick = () => {
     client.pause = !client.pause

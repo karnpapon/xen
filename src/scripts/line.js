@@ -1,31 +1,27 @@
-function Line(client) {
-
-  this.new = (x1, y1, x2, y2) => {
-    if (
-      x1 != undefined &&
-      x1 != null &&
-      y1 != undefined &&
-      y1 != null &&
-      x2 != undefined &&
-      x2 != null &&
-      y2 != undefined &&
-      y2 != null
-    ) {
-      this.x1 = x1;
-      this.y1 = y1;
-      this.x2 = x2;
-      this.y2 = y2;
-    } else {
-      this.x1 = 0;
-      this.y1 = 0;
-      this.x2 = 0;
-      this.y2 = 0;
-    }
-    return this
-  }  
+function Line(x1, y1, x2, y2) {
+  if (
+    x1 != undefined &&
+    x1 != null &&
+    y1 != undefined &&
+    y1 != null &&
+    x2 != undefined &&
+    x2 != null &&
+    y2 != undefined &&
+    y2 != null
+  ) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+  } else {
+    this.x1 = 0;
+    this.y1 = 0;
+    this.x2 = 0;
+    this.y2 = 0;
+  }
 }
 
-Line.prototype.draw = (color, width, dashed = []) => {
+Line.prototype.draw = function (color, width, dashed = []) {
   var xc = world.width / 2;
   var yc = world.height / 2;
   client.context.strokeStyle = color;
@@ -42,26 +38,26 @@ Line.prototype.draw = (color, width, dashed = []) => {
 };
 
 
-Line.prototype.start = function() {
-  return client.point.new(this.x1, this.y1);
+Line.prototype.start = function () {
+  return new Point(this.x1, this.y1);
 };
 
-Line.prototype.end = function() {
-  return client.point.new(this.x2, this.y2);
+Line.prototype.end = function () {
+  return new Point(this.x2, this.y2);
 };
 
-Line.prototype.SetLength = function(NewLength) {
-  let dx = this.x2 - this.x1;
-  let dy = this.y2 - this.y1;
-  let length = sqrt(dx * dx + dy * dy);
-  let Ratio = NewLength / length;
+Line.prototype.SetLength = function (NewLength) {
+  var dx = this.x2 - this.x1;
+  var dy = this.y2 - this.y1;
+  var length = sqrt(dx * dx + dy * dy);
+  var Ratio = NewLength / length;
   dx *= Ratio;
   dy *= Ratio;
   this.x2 = this.x1 + dx;
   this.y2 = this.y1 + dy;
 };
 
-Line.prototype.extend = function(Add) {
+Line.prototype.extend = function (Add) {
   var dx = this.x2 - this.x1;
   var dy = this.y2 - this.y1;
   var length = sqrt(dx * dx + dy * dy);
@@ -74,8 +70,8 @@ Line.prototype.extend = function(Add) {
   this.y1 = this.y2 - dy * 2;
 };
 
-Line.prototype.move = function(point) {
-  let Temp = this.moveLine(this, point);
+Line.prototype.move = function (point) {
+  var Temp = moveLine(this, point);
   this.x1 = Temp.x1;
   this.y1 = Temp.y1;
   this.x2 = Temp.x2;
@@ -83,13 +79,13 @@ Line.prototype.move = function(point) {
 };
 
 
-Line.prototype.length = function() {
+Line.prototype.length = function () {
   var dx = abs(this.x1 - this.x2);
   var dy = abs(this.y1 - this.y2);
   return sqrt(dx * dx + dy * dy);
 };
 
-Line.prototype.reverse = function() {
+Line.prototype.reverse = function () {
   var tx = this.x2;
   var ty = this.y2;
   this.x2 = this.x1;
@@ -99,14 +95,24 @@ Line.prototype.reverse = function() {
 };
 
 
-Line.prototype.moveLine = function(line, point) {
-  let newline = this.new();
+function moveLine(line, point) {
+  var newline = new Line();
   newline.x2 = line.x2 - line.x1 + point.x;
   newline.y2 = line.y2 - line.y1 + point.y;
   newline.x1 = point.x;
   newline.y1 = point.y;
   return newline;
 }
+
+
+// Line.prototype.moveLine = function(line, point) {
+//   let newline = this.new();
+//   newline.x2 = line.x2 - line.x1 + point.x;
+//   newline.y2 = line.y2 - line.y1 + point.y;
+//   newline.x1 = point.x;
+//   newline.y1 = point.y;
+//   return newline;
+// }
 
 Line.prototype.isFirstLine = function(i) {
   return i === 0
