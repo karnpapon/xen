@@ -137,7 +137,7 @@ function Clock (client) {
     this.clearTimer()
     window.localStorage.setItem('bpm', bpm)
     this.timer = new Worker(worker)
-    this.timer.postMessage((60000 / parseInt(bpm)) / 16) // default = divided by 4
+    this.timer.postMessage((60000 / parseInt(bpm)) / 32) // default = divided by 4
     this.timer.onmessage = (event) => {
       client.io.midi.sendClock()
       client.run()

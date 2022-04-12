@@ -106,7 +106,7 @@ function Drawer(client) {
       if(client.line.isFirstLine(i) || client.line.isLastLine(i, points)) continue;
   
       if ( utils.linePointCollision(x1, y1, x2, y2, point.x, point.y)) {
-        utils.throttle(this.trigger, 60);
+        this.trigger();
         ControlLine1.draw(BLUE, 6);
       }
     }

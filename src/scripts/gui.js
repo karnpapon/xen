@@ -49,7 +49,7 @@ function GUI() {
     );
     ImGui.Begin("Controller");
 
-    ImGui.Text(client.io.midi.outputDevice().name ?? "");
+    ImGui.Text(client.io.midi.outputDevice()?.name || "no MIDI OUT selected");
     let play = client.clock.isPaused ? "pause" : "Play";
     let mapShow = !client.hideMap ? "hide map" : "show map";
     let mute = client.dragpoints.bezierPoints[client.dragPointGroup]["muted"]
