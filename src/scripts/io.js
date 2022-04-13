@@ -17,12 +17,13 @@ function IO (client) {
 
   this.clear = function () {
     this.midi.clear()
-    this.osc.clear()
+    // this.osc.clear()
   }
 
   this.run = function () {
     this.midi.run()
     this.osc.run()
+    this.osc.clear()
   }
 
   this.silence = function () {
@@ -40,14 +41,5 @@ function IO (client) {
     return this.midi.length() + this.osc.stack.length
   }
 
-  this.inspect = function (limit = client.grid.w) {
-    let text = ''
-    for (let i = 0; i < this.length(); i++) {
-      text += '|'
-    }
-    return fill(text, limit, '.')
-  }
-
   function validateIP (addr) { return !!(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(addr)) }
-  function fill (str, len, chr) { while (str.length < len) { str += chr } return str }
 }

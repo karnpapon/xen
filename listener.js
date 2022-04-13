@@ -1,17 +1,16 @@
+const OSC = require('osc-js')
+
 const IP_ADDR = '127.0.0.1'
-const OSC_PORT = 49162
-const osc = require('node-osc')
-const oscserver = new osc.Server(OSC_PORT, IP_ADDR)
+const OSC_PORT = 8888
 
-console.log(`Started Listener\n\nOSC:${OSC_PORT}\n`)
+// receiving websocket from Browser to Node, then forward to 'OSC_PORT' 
+console.log(`********* Started OSC Bridge\n: on port ${OSC_PORT}\n ********* `)
 
-// Error
-oscserver.on('error', (err) => {
-  console.log(`OSC server:\n${err.stack}`)
-  oscserver.close()
-})
+const config = { udpClient: { host: IP_ADDR, port: OSC_PORT } }
+const osc = new OSC({ plugin: new OSC.BridgePlugin(config) })
 
-// Message
-oscserver.on('message', (msg, rinfo) => {
-  console.log(`OSC server: ${msg} from ${rinfo.address}:${rinfo.port} at ${msg[0]}`)
-})
+osc.open() // start a WebSocket server
+osc.on('/test', message => { })
+osc.on('/something', message => { })
+osc.on('close', () => { console.log("connection was closed") });
+osc.on('error', (err) => { console.log("OSC connection error: ", err) });

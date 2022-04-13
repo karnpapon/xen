@@ -140,8 +140,8 @@ function Drawer(client) {
     }
 
     if(client.oscActived){
-      client.io.osc.push("/path1", "/test1")
-      client.io.osc.push("/path2", "/test2")
+      // client.io.osc.test()
+      client.io.osc.push("/test", "/test1")
     }
   }
   

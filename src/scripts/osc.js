@@ -1,15 +1,15 @@
+/* eslint-disable no-undef */
 'use strict'
 
 function Osc (client) {
-  const osc = require('node-osc')
+  const osc = new OSC();
   
   this.stack = []
-  this.socket = null
-  this.options = { default: 49162, superCollider: 57120 }
+  // this.socket = null
+  this.options = { default: 8080, superCollider: 57120 }
   this.port = this.options.default
 
   this.start = () => {
-    console.log("oscoscoscosc", osc)
     if (!osc) { console.warn('OSC', 'Could not start.'); return }
     console.info('OSC', 'Starting..')
     this.setup()
@@ -31,14 +31,8 @@ function Osc (client) {
   }
   
   this.play = ({ path, msg }) => {
-    if (!this.socket) { console.warn('OSC', 'Unavailable socket'); return }
-    const oscMsg = new osc.Message(path)
-    for (let i = 0; i < msg.length; i++) {
-      oscMsg.append(msg)
-    }
-    this.socket.send(oscMsg, (err) => {
-      if (err) { console.warn(err) }
-    })
+    const oscMsg = new OSC.Message(path, msg);
+    osc.send(oscMsg)
   }
 
   this.select = (port = this.options.default) => {
@@ -51,8 +45,15 @@ function Osc (client) {
 
   this.setup = () => {
     if (!this.port) { return }
-    if (this.socket) { this.socket.close() }
-    this.socket = new osc.Client(client.io.ip, this.port)
+    // if (this.socket) { this.socket.close() }
+    osc.open({host: client.io.ip , port: this.port }) 
     console.info('OSC', `Started socket at ${client.io.ip}:${this.port}`)
   }
+
+  this.test = () => {
+    const message = new OSC.Message('/something/', Math.random());
+    osc.send(message)
+  }
+
+  // osc.close();
 }

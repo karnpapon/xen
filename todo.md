@@ -12,6 +12,7 @@
 - tutorial mode.
 
 # tbd
+- darkmode
 - speed sync
 - point hovering.
 - UDP

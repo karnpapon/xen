@@ -9,17 +9,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/karnpapon/pathseq.git"
+    "url": "git+https://github.com/karnpapon/xen.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/karnpapon/pathseq/issues"
+    "url": "https://github.com/karnpapon/xen.git/issues"
   },
-  "homepage": "https://github.com/karnpapon/pathseq#readme",
+  "homepage": "https://github.com/karnpapon/xen.git#readme",
   "dependencies": {
-    "node-osc": "^6.1.16",
+    "osc-js": "^2.3.1",
     "serve": "^13.0.2"
   },
   "devDependencies": {
