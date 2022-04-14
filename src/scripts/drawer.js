@@ -10,24 +10,26 @@ function Drawer(client) {
   this.drawBezier = () => {
     // draw colored points on top of black points.
     for( let p = 0; p < client.dragpoints.bezierPoints.length; p++ ){
+
+      let bezierPoints = client.dragpoints.bezierPoints[p]["points"];
   
-      this.drawBezierSpline(client.dragpoints.bezierPoints[p]["points"], p);
+      this.drawBezierSpline(bezierPoints, p);
       
       for ( let idx = client.dragPointStart; idx - 1 < client.dragPointStart + client.dragPointCount; ++idx) {
-        if (!client.dragpoints.bezierPoints[p]["points"][idx]) continue;
+        if (!bezierPoints[idx]) continue;
         const color = this.getColor(p,idx) 
-        const text = `G${p}-P${idx} (${client.dragpoints.bezierPoints[p]["points"][idx].x},${client.dragpoints.bezierPoints[p]["points"][idx].y})`
+        const text = `G${p}-P${idx} (${bezierPoints[idx].x},${bezierPoints[idx].y})`
         
         client.circle.fillCircle(
-          client.dragpoints.bezierPoints[p]["points"][idx], 
+          bezierPoints[idx], 
           POINTRADIUS, 
           color
         );
   
         this.drawText(
           text,
-          client.dragpoints.bezierPoints[p]["points"][idx].x + POINTRADIUS,
-          client.dragpoints.bezierPoints[p]["points"][idx].y,
+          bezierPoints[idx].x + POINTRADIUS,
+          bezierPoints[idx].y,
           color
         );
       }
@@ -67,6 +69,8 @@ function Drawer(client) {
   }
   
   this.drawControlSplineAndBezierPoint = (points, color, t, triggerable, groupIdx) => {
+
+    const toggleControl = client.dragpoints.bezierPoints[groupIdx]["toggle"];
   
     const xc = world.width / 2.0;
     const yc = world.height / 2.0;
@@ -86,9 +90,9 @@ function Drawer(client) {
     client.context.stroke();
     client.circle.fillCircle(point, POINTRADIUS, color);
   
-    if (!client.showControlLine && !client.showLPoints && !client.showRPoints) return
+    if (!toggleControl.showControlLine && !toggleControl.showLPoints && !toggleControl.showRPoints) return
     if (triggerable) { this.drawRecursiveLine(points, t, point, groupIdx); }
-    if (!client.showControlLine) return
+    if (!toggleControl.showControlLine) return
     if (!triggerable) return
   
     // control line (spline)
@@ -163,6 +167,8 @@ function Drawer(client) {
   }
   
   this.drawRecursiveLine = (points, t, movingPoint, groupIdx) => {
+    const toggleControl = client.dragpoints.bezierPoints[groupIdx]["toggle"];
+
     if (points.length == 1) {
       // var constructionLine = new Line( points[0].x,  points[0].y, points[1].x, points[1].y );
       // constructionLine.draw( GOLD, 2 );
@@ -196,7 +202,7 @@ function Drawer(client) {
         );
   
         // points along odd spline (left)
-        if(client.showLPoints){
+        if(toggleControl.showLPoints){
           client.circle.fillCircle({ x: x1, y: y1 }, POINTRADIUS, GRAY);
           if (utils.circleCircleCollision(x1,y1,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
             utils.throttle(() => this.trigger("chanPoints", groupIdx), 120);
@@ -205,7 +211,7 @@ function Drawer(client) {
         }
   
         // points along even spline (right)
-        if(client.showRPoints){
+        if(toggleControl.showRPoints){
           client.circle.fillCircle({ x: x2, y: y2 }, POINTRADIUS, GRAY);
           if (utils.circleCircleCollision(x2,y2,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
             utils.throttle(() => this.trigger("chanPoints", groupIdx), 120);

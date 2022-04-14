@@ -110,15 +110,15 @@ function GUI() {
     );
     ImGui.Checkbox(
       "control line",
-      (value = client.showControlLine) => (client.showControlLine = value)
+      (value = client.dragpoints.bezierPoints[client.dragPointGroup]["toggle"]["showControlLine"]) => (client.dragpoints.bezierPoints[client.dragPointGroup]["toggle"]["showControlLine"] = value)
     );
     ImGui.Checkbox(
       "L points",
-      (value = client.showLPoints) => (client.showLPoints = value)
+      (value = client.dragpoints.bezierPoints[client.dragPointGroup]["toggle"]["showLPoints"]) => (client.dragpoints.bezierPoints[client.dragPointGroup]["toggle"]["showLPoints"] = value)
     );
     ImGui.Checkbox(
       "R points",
-      (value = client.showRPoints) => (client.showRPoints = value)
+      (value = client.dragpoints.bezierPoints[client.dragPointGroup]["toggle"]["showRPoints"]) => (client.dragpoints.bezierPoints[client.dragPointGroup]["toggle"]["showRPoints"] = value)
     );
 
     if (ImGui.BeginTabBar("##tabs", this.TabBarFlags.None)) {

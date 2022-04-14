@@ -6,6 +6,11 @@ function BezierPoint(client) {
   this.init = () => {
     this.bezierPoints = new Array( { 
       speed: client.distanceSpeed, 
+      toggle: {
+        showLPoints: false,
+        showRPoints: false,
+        showControlLine: true,
+      },
       muted: false,
       midi: { 
         chan: 0,
@@ -22,6 +27,11 @@ function BezierPoint(client) {
     this.bezierPoints.push({
       speed: client.distanceSpeed, 
       muted: false,
+      toggle: {
+        showLPoints: false,
+        showRPoints: false,
+        showControlLine: true,
+      },
       midi: { 
         chan: ( this.bezierPoints.length ) % 16,
         chanPoints: ( this.bezierPoints.length ) % 16  

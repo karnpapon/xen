@@ -5,9 +5,10 @@
 - individual mute.
 - handle window resize.
 - individual point / spline MIDI channel.
+- OSC
+- individual toggle line/point
 
 # todo
-- OSC
 - IO configurable.
 - tutorial mode.
 
