@@ -19,7 +19,7 @@
       osc.open({ host, port }); // if no param, by default connect to ws://localhost:8080
 
       document.getElementById("send").addEventListener("click", () => {
-        var message = new OSC.Message("/test/random", Math.random());
+        var message = new OSC.Message("/test", Math.random());
         osc.send(message);
       });
     </script>
