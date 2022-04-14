@@ -14,6 +14,12 @@ node bridge.js  # in order to send OSC
 npm run start
 ```
 
+## Usage
+- **play/pause**: `spacebar`
+- **add new point**: `cmd` + `left click`
+- **remove point**: `right click` at target point.
+- **switch between point group**: `tab`, selected group will be highlighted in `BLUE` color `rgb(0,0,255)`
+
 ## File/Folder
 
 - **/src**: main xen's sourcecode.

@@ -1,7 +1,7 @@
 /* global world */
 /* global Line, Point */
 /* global utils */
-/* global FLOOR */
+/* global FLOOR, RANDOM */
 /* global POINTRADIUS */
 /* global DASHLINESTYLE1, DASHLINESTYLE4 */
 /* global BLUE, BLACK, LIGHTGRAY, GRAY, REDTRANSPARENT, ORANGETRANSPARENT */
@@ -144,7 +144,7 @@ function Drawer(client) {
     }
 
     if(client.oscActived){
-      client.io.osc.push("/test", Math.random())
+      client.io.osc.push("/test", RANDOM())
     }
   }
   

@@ -25,10 +25,6 @@ function Client() {
   this.position = null;
   this.mouseDrag = false;
 
-  this.showLPoints = false;
-  this.showRPoints = false;
-  this.showControlLine = true;
-
   this.dragPointStart = 0;
   this.dragPointGroup = 0;
   this.dragPointCount = 0;
@@ -92,6 +88,7 @@ function Client() {
     this.windowResizeHandler()
   }
 
+  // TODO: elaborate this
   this.init = () => {
     this.docs.set('File', 'New', 'CmdOrCtrl+N', () => {  })
     this.docs.set('Edit', 'Undo', 'CmdOrCtrl+Z', () => {  })
