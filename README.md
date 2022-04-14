@@ -10,14 +10,21 @@ an implementation on [ De Casteljau's ](https://en.wikipedia.org/wiki/De_Castelj
 git clone https://github.com/karnpapon/xen.git
 cd xen
 npm install
-node listener.js  # in order to send OSC
+node bridge.js  # in order to send OSC
 npm run start
 ```
+
+## File/Folder
+
+- **/src**: main xen's sourcecode.
+- **/tool**: for test sending msg(osc).
+- **bridge.js**: for receiving msg(osc) from browser and forward to target server.
+
 
 ### IO
 
 - **midi**.
-- **osc**: Sends OSC message, **NOTE** run `node listener.js` first. in order to send OSC out to host.
+- **osc**: Sends OSC message, **NOTE** run `node bridge.js` first. in order to send OSC out to host.
 
 # Resources
 - https://pomax.github.io/bezierinfo/#decasteljau

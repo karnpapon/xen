@@ -140,8 +140,7 @@ function Drawer(client) {
     }
 
     if(client.oscActived){
-      // client.io.osc.test()
-      client.io.osc.push("/test", "/test1")
+      client.io.osc.push("/test", Math.random())
     }
   }
   

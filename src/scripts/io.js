@@ -4,7 +4,7 @@
 /* global Osc */
 
 function IO (client) {
-  this.ip = '127.0.0.1'
+  this.ip = '192.168.1.113'
   
   this.midi = new Midi(client)
   this.osc = new Osc(client)

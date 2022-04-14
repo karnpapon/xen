@@ -3,7 +3,6 @@
 
 function Osc (client) {
   const osc = new OSC();
-  
   this.stack = []
   // this.socket = null
   this.options = { default: 8080, superCollider: 57120 }
@@ -45,15 +44,14 @@ function Osc (client) {
 
   this.setup = () => {
     if (!this.port) { return }
-    // if (this.socket) { this.socket.close() }
     osc.open({host: client.io.ip , port: this.port }) 
     console.info('OSC', `Started socket at ${client.io.ip}:${this.port}`)
   }
 
-  this.test = () => {
-    const message = new OSC.Message('/something/', Math.random());
-    osc.send(message)
-  }
+  // this.test = () => {
+  //   const message = new OSC.Message('/something/', Math.random());
+  //   osc.send(message)
+  // }
 
   // osc.close();
 }
