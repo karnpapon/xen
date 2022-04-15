@@ -14,14 +14,15 @@ node bridge.js  # in order to send OSC
 npm run start
 ```
 
-## Usage
+## Keybinding
 - **play/pause**: `spacebar`
 - **add new point**: `cmd` + `left click`
+- **add point group**: `Shift` + `n` = spawn new point group.
 - **remove point**: `right click` at target point.
 - **switch between point group**: `tab`, selected group will be highlighted in `BLUE` color `rgb(0,0,255)`
-- **toggle control-line**: `c`
-- **toggle L-Point**: `l`, toggle even recursived points (collision in `RED`).
-- **toggle R-point**: `r`, toggle odd recursive points (collision in `BLUE`).
+- **toggle control-line**: `c` = only current selected group, `Shift` + `C` = toggle all group.  
+- **toggle L-Point**: `l` = toggle even recursived points (collision in `RED`), `Shift` + `L` = toggle all points.
+- **toggle R-point**: `r` = toggle odd recursive points (collision in `BLUE`),  `Shift` + `R` = toggle all points.
 
 ## File/Folder
 
