@@ -178,11 +178,11 @@ function GUI() {
       0.0,
       0.04
     );
-    ImGui.SliderFloat(
+    ImGui.SliderInt(
       "step",
       (_ = client.stepSize) => (client.stepSize = _),
-      0.001,
-      1
+      1,
+      99
     );
     ImGui.ColorEdit4("control spline", (client.customColor = this.col1));
     ImGui.ColorEdit4(

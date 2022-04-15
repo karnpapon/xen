@@ -18,10 +18,6 @@ function Events(client) {
     client.mapSrc.style.display = e.detail.hideMap ? "none" : "block"
   });
   }
-
-  // this.run = () => {
-  //   client.update()
-  // }
   
   this.relMouseCoords = (event) => {
     if (event.offsetX !== undefined && event.offsetY !== undefined) {
@@ -63,6 +59,55 @@ function Events(client) {
     this.dragMove(event);
   }
   
+  this.handleAddPoint = (event) => {
+    const xc = world.width / 2;
+    const yc = world.height / 2;
+    const newPoint = { x: event.offsetX - xc, y: event.offsetY - yc };
+    client.dragpoints.bezierPoints[client.dragPointGroup]["points"].push(new Point(newPoint.x, newPoint.y, BLACK));
+    client.dragPointCount = client.dragpoints.bezierPoints[client.dragPointGroup]["points"].length; 
+  }
+  
+  this.mouseDown = (event) => {
+    client.position = this.relMouseCoords(event);
+    client.mouseDrag = true;
+    // pause = true;
+    this.dragStart(event);
+  }
+  
+  this.mouseUp = (event) => {
+    if (!client.mouseDrag) return;
+  
+    this.dragEnd(event);
+  }
+
+  this.dragStart = (event) => {
+    if (client.position == null) return;
+    
+    const xc = world.width / 2;
+    const yc = world.height / 2;
+    
+    const SearchRadius = POINTRADIUS;
+    
+    const p = new Point(client.position.x - xc, client.position.y - yc);
+    client.xOld = p.x;
+    client.yOld = p.y;
+    client.xOffset = 0;
+    client.yOffset = 0;
+    
+    for( let pIdx = 0; pIdx < client.dragpoints.bezierPoints.length; pIdx++ ){
+      for (let idx = client.dragPointStart; idx - 1 < client.dragPointStart + client.dragPointCount; ++idx) {
+        if (utils.distance(client.dragpoints.bezierPoints[client.dragPointGroup]["points"][idx], p) < SearchRadius + 3) {
+          client.dragPoint = idx;
+          client.xOffset = p.x - client.dragpoints.bezierPoints[client.dragPointGroup]["points"][client.dragPoint].x;
+          client.yOffset = p.y - client.dragpoints.bezierPoints[client.dragPointGroup]["points"][client.dragPoint].y;
+          return;
+        }
+      }
+    }
+  
+    client.dragPoint = -1;
+  }
+
   this.dragMove = (event) => {
     if (client.dragPoint >= 0) {
       var xc = world.width / 2;
@@ -87,6 +132,15 @@ function Events(client) {
   
     }
   }
+
+  this.dragEnd = (event) => {
+    client.dragPoint = -1;
+    client.mouseDrag = false
+  }
+  
+  this.playBtnClick = () => {
+    client.clock.togglePlay()
+  }
   
   this.mouseClick = (e) => {
     if (e.ctrlKey || e.metaKey) {
@@ -94,15 +148,7 @@ function Events(client) {
       return;
     }
   }
-  
-  this.handleAddPoint = (event) => {
-    const xc = world.width / 2;
-    const yc = world.height / 2;
-    const newPoint = { x: event.offsetX - xc, y: event.offsetY - yc };
-    client.dragpoints.bezierPoints[client.dragPointGroup]["points"].push(new Point(newPoint.x, newPoint.y, BLACK));
-    client.dragPointCount = client.dragpoints.bezierPoints[client.dragPointGroup]["points"].length; 
-  }
-  
+
   this.rightMouseClick = (event) => {
     event.preventDefault()
   
@@ -132,66 +178,54 @@ function Events(client) {
     client.dragPoint = -1;
   
   }
-  
-  this.mouseDown = (event) => {
-    client.position = this.relMouseCoords(event);
-    client.mouseDrag = true;
-    // pause = true;
-    this.dragStart(event);
-  }
-  
-  this.dragStart = (event) => {
-    if (client.position == null) return;
-    
-    const xc = world.width / 2;
-    const yc = world.height / 2;
-    
-    const SearchRadius = POINTRADIUS;
-    
-    const p = new Point(client.position.x - xc, client.position.y - yc);
-    client.xOld = p.x;
-    client.yOld = p.y;
-    client.xOffset = 0;
-    client.yOffset = 0;
-    
-    for( let pIdx = 0; pIdx < client.dragpoints.bezierPoints.length; pIdx++ ){
-      for (let idx = client.dragPointStart; idx - 1 < client.dragPointStart + client.dragPointCount; ++idx) {
-        if (utils.distance(client.dragpoints.bezierPoints[client.dragPointGroup]["points"][idx], p) < SearchRadius + 3) {
-          client.dragPoint = idx;
-          client.xOffset = p.x - client.dragpoints.bezierPoints[client.dragPointGroup]["points"][client.dragPoint].x;
-          client.yOffset = p.y - client.dragpoints.bezierPoints[client.dragPointGroup]["points"][client.dragPoint].y;
-          return;
-        }
-      }
-    }
-  
-    client.dragPoint = -1;
-  }
-  
-  this.mouseUp = (event) => {
-    if (!client.mouseDrag) return;
-  
-    this.dragEnd(event);
-  }
-  
-  this.dragEnd = (event) => {
-    client.dragPoint = -1;
-    client.mouseDrag = false
-  }
-  
-  this.playBtnClick = () => {
-    client.clock.togglePlay()
-  }
-  
+
   this.onKeyPressed = (event) => {
     const e = event
-    const charCode = e.which || e.keyCode;
+    const { clock,  dragpoints: { bezierPoints } } = client
+    let { dragPointGroup } = client
+
+    // TODO: handle modern browser
+    const charCode = e.which || e.key;
   
-    // TAB
-    if (charCode === 9 ) { client.dragPointGroup = (client.dragPointGroup + 1) % client.dragpoints.bezierPoints.length }
+    // TAB = switch between point group
+    if (charCode === 9 ) { client.dragPointGroup = (dragPointGroup + 1) % bezierPoints.length }
   
-    // SPACEBAR
-    if (charCode == 32) { client.clock.togglePlay() }
+    // SPACEBAR = play/pause
+    if (charCode == 32) { clock.togglePlay() }
+
+    // Shift + C = toggle all control line
+    if (e.shiftKey) {
+      if (charCode == 67) { bezierPoints.map(bp => toggleGroup(bp["toggle"], "showControlLine")) }
+    } 
+
+    // c = toggle c points
+    if (event.key === 'c') { toggleGroup(bezierPoints[dragPointGroup]["toggle"], "showControlLine") }
+
+    // l = toggle l points
+    if (event.key === 'l') { toggleGroup(bezierPoints[dragPointGroup]["toggle"], "showLPoints") }
+
+    // shift + L = toggle all L points
+    if (e.shiftKey) {
+      if (charCode == 76) { bezierPoints.map(bp => toggleGroup(bp["toggle"], "showLPoints")) }
+    } 
+
+    // r = toggle r points
+    if (event.key === 'r') { toggleGroup(bezierPoints[dragPointGroup]["toggle"], "showRPoints") }
+
+    // shift + R = toggle all R points
+    if (e.shiftKey) {
+      if (charCode == 82) { bezierPoints.map(bp => toggleGroup(bp["toggle"], "showRPoints")) }
+    } 
+
+    // Shift + L = new point group
+    if (e.shiftKey) {
+      if (charCode == 78) { client.dragpoints.spawnNewGroup() }
+    } 
   
   };
+}
+
+
+function toggleGroup(points, type){
+  points[type] = !points[type]
 }

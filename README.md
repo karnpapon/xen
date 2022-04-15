@@ -19,6 +19,9 @@ npm run start
 - **add new point**: `cmd` + `left click`
 - **remove point**: `right click` at target point.
 - **switch between point group**: `tab`, selected group will be highlighted in `BLUE` color `rgb(0,0,255)`
+- **toggle control-line**: `c`
+- **toggle L-Point**: `l`, toggle even recursived points (collision in `RED`).
+- **toggle R-point**: `r`, toggle odd recursive points (collision in `BLUE`).
 
 ## File/Folder
 

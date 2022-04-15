@@ -14,11 +14,14 @@
 - add more shortcut(speed, active midi/osc, add point, etc)
 - separate frame count for GUI (it should work even the clock is stopped.)
 - IO configurable.
+- handle full midi msg
 
 # tbd
+- midi CC
 - point quantization.
 - darkmode
 - speed sync
+- delta-time
 - point hovering.
 - UDP
 - drag selection.

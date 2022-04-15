@@ -12,9 +12,9 @@
 /* global Docs */
 
 function Client() {
-  this.stepSize = 0.001;
+  this.stepSize = 1;
   this.proportionalDistance = [];
-  this.distanceSpeed = 0.01;
+  this.distanceSpeed = 0.005;
   this.pause = false;
 
   this.dragpoints = {};

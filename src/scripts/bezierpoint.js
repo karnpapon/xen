@@ -43,4 +43,9 @@ function BezierPoint(client) {
     })
     client.proportionalDistance.push(client.distanceSpeed)
   };
+
+
+  this.setToggle = (idx, type) => {
+    this.bezierPoints[idx]["toggle"][type] = !this.bezierPoints[idx]["toggle"][type]
+  }
 }

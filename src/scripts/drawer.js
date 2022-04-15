@@ -82,7 +82,7 @@ function Drawer(client) {
     client.context.beginPath();
     client.context.setLineDash([]);
     client.context.moveTo(initPos.x, initPos.y);
-    const gap = client.stepSize;
+    const gap = client.stepSize / 100;
     for (let step = 0; step <= t; step += gap) {
       point = this.getBezier(points, step);
       client.context.lineTo(xc + point.x, yc + point.y);
@@ -132,7 +132,7 @@ function Drawer(client) {
         velocity: 16, 
         length: 16
       }
-  
+      
       client.io.midi.push(
         midiOutMsg.channel, 
         midiOutMsg.octave, 
@@ -167,60 +167,56 @@ function Drawer(client) {
   }
   
   this.drawRecursiveLine = (points, t, movingPoint, groupIdx) => {
+    if (points.length == 1) { return; } 
+    
     const toggleControl = client.dragpoints.bezierPoints[groupIdx]["toggle"];
+    let newpoints = [];
+    let constructionLine;
 
-    if (points.length == 1) {
-      // var constructionLine = new Line( points[0].x,  points[0].y, points[1].x, points[1].y );
-      // constructionLine.draw( GOLD, 2 );
-      return;
-    } else {
-      let newpoints = [];
-      let constructionLine;
-      for (let i = 0; i < points.length - 1; i++) {
-        let point = {
-          x: (1 - t) * points[i].x + t * points[i + 1].x,
-          y: (1 - t) * points[i].y + t * points[i + 1].y,
-        };
-        newpoints.push(point);
-      }
-  
-      for (let i = 0; i < newpoints.length - 1; i++) {
-        const x1 = newpoints[i].x;
-        const y1 = newpoints[i].y;
-        const x2 = newpoints[i + 1].x;
-        const y2 = newpoints[i + 1].y;
-  
-        constructionLine = new Line(x1, y1, x2, y2);
-        constructionLine.draw(
-          utils.makeRGB(
-            FLOOR(client.customRecursiveBezierColor.x * 255),
-            FLOOR(client.customRecursiveBezierColor.y * 255),
-            FLOOR(client.customRecursiveBezierColor.z * 255)
-          ),
-          0.5,
-          DASHLINESTYLE4
-        );
-  
-        // points along odd spline (left)
-        if(toggleControl.showLPoints){
-          client.circle.fillCircle({ x: x1, y: y1 }, POINTRADIUS, GRAY);
-          if (utils.circleCircleCollision(x1,y1,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
-            utils.throttle(() => this.trigger("chanPoints", groupIdx), 120);
-            client.circle.fillCircle({ x: x1, y: y1 }, POINTRADIUS * 4, REDTRANSPARENT);
-          }
-        }
-  
-        // points along even spline (right)
-        if(toggleControl.showRPoints){
-          client.circle.fillCircle({ x: x2, y: y2 }, POINTRADIUS, GRAY);
-          if (utils.circleCircleCollision(x2,y2,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
-            utils.throttle(() => this.trigger("chanPoints", groupIdx), 120);
-            client.circle.fillCircle({ x: x2, y: y2 }, POINTRADIUS * 4, ORANGETRANSPARENT);
-          }
-        }
-      }
-      return this.drawRecursiveLine(newpoints, t, movingPoint, groupIdx);
+    for (let i = 0; i < points.length - 1; i++) {
+      let point = {
+        x: (1 - t) * points[i].x + t * points[i + 1].x,
+        y: (1 - t) * points[i].y + t * points[i + 1].y,
+      };
+      newpoints.push(point);
     }
+
+    for (let i = 0; i < newpoints.length - 1; i++) {
+      const x1 = newpoints[i].x;
+      const y1 = newpoints[i].y;
+      const x2 = newpoints[i + 1].x;
+      const y2 = newpoints[i + 1].y;
+
+      constructionLine = new Line(x1, y1, x2, y2);
+      constructionLine.draw(
+        utils.makeRGB(
+          FLOOR(client.customRecursiveBezierColor.x * 255),
+          FLOOR(client.customRecursiveBezierColor.y * 255),
+          FLOOR(client.customRecursiveBezierColor.z * 255)
+        ),
+        0.5,
+        DASHLINESTYLE4
+      );
+
+      // points along odd spline (left)
+      if(toggleControl.showLPoints){
+        client.circle.fillCircle({ x: x1, y: y1 }, POINTRADIUS, GRAY);
+        if (utils.circleCircleCollision(x1,y1,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
+          utils.throttle(() => this.trigger("chanPoints", groupIdx), 120);
+          client.circle.fillCircle({ x: x1, y: y1 }, POINTRADIUS * 4, REDTRANSPARENT);
+        }
+      }
+
+      // points along even spline (right)
+      if(toggleControl.showRPoints){
+        client.circle.fillCircle({ x: x2, y: y2 }, POINTRADIUS, GRAY);
+        if (utils.circleCircleCollision(x2,y2,POINTRADIUS,movingPoint.x,movingPoint.y, POINTRADIUS)){
+          utils.throttle(() => this.trigger("chanPoints", groupIdx), 120);
+          client.circle.fillCircle({ x: x2, y: y2 }, POINTRADIUS * 4, ORANGETRANSPARENT);
+        }
+      }
+    }
+    return this.drawRecursiveLine(newpoints, t, movingPoint, groupIdx);
   }
   
   this.drawBezierGuidePath = (points, color) => {
@@ -236,7 +232,7 @@ function Drawer(client) {
     while (progress < 1) {
       let point = this.getBezier(points, progress);
       client.context.lineTo(xc + point.x, yc + point.y);
-      progress += client.stepSize;
+      progress += client.stepSize / 100;
     }
     client.context.stroke();
   }
