@@ -15,6 +15,7 @@
 - separate frame count for GUI (it should work even the clock is stopped.)
 - IO configurable.
 - handle full midi msg
+- framerate configurable.
 
 # tbd
 - midi CC

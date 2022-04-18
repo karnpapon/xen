@@ -76,7 +76,8 @@ function Midi (client) {
   }
 
   this.push = function (channel, octave, note, velocity, length, isPlayed = false) {
-    const item = { channel, octave, note, velocity, length, isPlayed }
+    // mult with 2, to compensate with framerates.
+    const item = { channel, octave, note, velocity, length: length * 2, isPlayed }
     // Retrigger duplicates
     for (const id in this.stack) {
       const dup = this.stack[id]

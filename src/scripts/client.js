@@ -14,7 +14,7 @@
 function Client() {
   this.stepSize = 1;
   this.proportionalDistance = [];
-  this.distanceSpeed = 0.005;
+  this.distanceSpeed = 0.01;
   this.pause = false;
 
   this.dragpoints = {};
@@ -88,13 +88,20 @@ function Client() {
     this.windowResizeHandler()
   }
 
-  // TODO: elaborate this
   this.init = () => {
-    this.docs.set('File', 'New', 'CmdOrCtrl+N', () => {  })
-    this.docs.set('Edit', 'Undo', 'CmdOrCtrl+Z', () => {  })
-    this.docs.set('Edit', 'Redo', 'CmdOrCtrl+Shift+Z', () => { })
-    this.docs.set('Midi', 'Play/Pause Midi', 'CmdOrCtrl+Space', () => {  })
-    
+    this.docs.set('Control', 'Play/Pause', 'Spacebar', () => {  })
+    this.docs.set('Control', 'Switch group', 'Tab', () => {  })
+    this.docs.set('Control', 'Toggle Control-line', 'c', () => {  })
+    this.docs.set('Control', 'Toggle All Control-line', 'C', () => {  })
+    this.docs.set('Control', 'Toggle L-Point', 'l', () => {  })
+    this.docs.set('Control', 'Toggle All L-Points', 'L', () => {  })
+    this.docs.set('Control', 'Toggle R-Points', 'r', () => {  })
+    this.docs.set('Control', 'Toggle All R-Points', 'R', () => {  })
+
+    this.docs.set('Edit', 'Add New Point', 'CmdOrCtrl+LeftClick', () => {  })
+    this.docs.set('Edit', 'Add Point Group', 'Shift+n', () => { })
+    this.docs.set('Edit', 'Remove Point', 'RightClick', () => { })
+
     this.gui.init()
   }
 

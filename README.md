@@ -1,6 +1,6 @@
 # xen
 
-an implementation on [ De Casteljau's ](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm) algorithm, capable of sending MIDI, [OSC](https://en.wikipedia.org/wiki/Open_Sound_Control) to target client/server, eg.[SuperCollider](https://supercollider.github.io/), Currently no built-in audio-engine since xen is intentionally used for live performance.
+an implementation on [ De Casteljau's ](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm) algorithm, capable of sending MIDI (trigger), [OSC](https://en.wikipedia.org/wiki/Open_Sound_Control) to target client/server, eg.[SuperCollider](https://supercollider.github.io/), NOTE: Currently since xen is intentionally used for live performance. thus, no built-in audio engine is implemented and can only send triggering msg.
 
 <img src="./src/imgs/ss3.gif">
 
@@ -10,8 +10,14 @@ an implementation on [ De Casteljau's ](https://en.wikipedia.org/wiki/De_Castelj
 git clone https://github.com/karnpapon/xen.git
 cd xen
 npm install
-node bridge.js  # in order to send OSC
 npm run start
+
+# in order to send OSC
+# open new terminal tab.
+cd bridge  
+npm install
+node index.js
+
 ```
 
 ## Keybinding
@@ -28,13 +34,13 @@ npm run start
 
 - **/src**: main xen's sourcecode.
 - **/tool**: for test sending msg(osc).
-- **bridge.js**: for receiving msg(osc) from browser and forward to target server.
+- **/bridge**: for receiving msg(osc) from browser and forward to target server.
 
 
 ### IO
 
 - **midi**.
-- **osc**: Sends OSC message, **NOTE** run `node bridge.js` first. in order to send OSC out to host.
+- **osc**: Sends OSC message, **NOTE** run `node bridge/index.js` first. in order to send OSC out to host.
 
 # Resources
 - https://pomax.github.io/bezierinfo/#decasteljau

@@ -144,7 +144,7 @@ function Drawer(client) {
     }
 
     if(client.oscActived){
-      client.io.osc.push("/oscMsg", RANDOM())
+      client.io.osc.push("/oscMsg", 112)
     }
   }
   
