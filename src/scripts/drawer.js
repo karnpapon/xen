@@ -71,25 +71,25 @@ function Drawer(client) {
   }
 
   // Arc length parameterization (even point along the line).
-  this.distToTable = (LUT, distance) => {
-    let arcLength = LUT[LUT.length - 1]; // total arc length.
-    let n = LUT.length // n = sample count
+  // this.distToTable = (LUT, distance) => {
+  //   let arcLength = LUT[LUT.length - 1]; // total arc length.
+  //   let n = LUT.length // n = sample count
 
-    if (distance.between(0, arcLength)) { // check if the value is within the length of the curve.
-      for(let i=0;i<n-1;i++){ // iterate through the list to find which segment our distance lies within.
-        if(distance.within(LUT[i], LUT[i+1])) { // check if out input distance lies between two distances.
-          return distance.remap(  // remap the distance range to the t-value range.
-            LUT[i],  // prev dist
-            LUT[i + 1], // next dist.
-            i / (n - 1f), // prev t-value
-            (i + 1) / (n - 1f) // next t-value.
-          )
-        }
-      }
-    }
+  //   if (distance.between(0, arcLength)) { // check if the value is within the length of the curve.
+  //     for(let i=0;i<n-1;i++){ // iterate through the list to find which segment our distance lies within.
+  //       if(distance.within(LUT[i], LUT[i+1])) { // check if out input distance lies between two distances.
+  //         return distance.remap(  // remap the distance range to the t-value range.
+  //           LUT[i],  // prev dist
+  //           LUT[i + 1], // next dist.
+  //           i / (n - 1f), // prev t-value
+  //           (i + 1) / (n - 1f) // next t-value.
+  //         )
+  //       }
+  //     }
+  //   }
 
-    return distance / arcLength // distance is outside the length of the curve - extrapolate value outside.
-  }
+  //   return distance / arcLength // distance is outside the length of the curve - extrapolate value outside.
+  // }
   
   this.drawControlSplineAndBezierPoint = (points, color, t, triggerable, groupIdx) => {
     const toggleControl = client.dragpoints.bezierPoints[groupIdx]["toggle"];
