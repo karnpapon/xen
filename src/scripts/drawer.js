@@ -14,26 +14,7 @@ function Drawer(client) {
       let bezierPoints = client.dragpoints.bezierPoints[p]["points"];
   
       this.drawBezierSpline(bezierPoints, p);
-      
-      for ( let idx = client.dragPointStart; idx - 1 < client.dragPointStart + client.dragPointCount; ++idx) {
-        if (!bezierPoints[idx]) continue;
-        const color = this.getColor(p,idx) 
-        const text = `G${p}-P${idx} (${bezierPoints[idx].x},${bezierPoints[idx].y})`
-        
-        client.circle.fillCircle(
-          bezierPoints[idx], 
-          POINTRADIUS, 
-          color
-        );
-  
-        this.drawText(
-          text,
-          bezierPoints[idx].x + POINTRADIUS,
-          bezierPoints[idx].y,
-          color
-        );
-      }
-      // if (hover) {dragpoints.bezierPoints[0][id].color = BLUE }
+      this.drawDragPoints(bezierPoints, p);
   
       if (!client.pause) {
         client.proportionalDistance[p] += client.dragpoints.bezierPoints[p]["speed"];
@@ -41,6 +22,27 @@ function Drawer(client) {
           client.proportionalDistance[p] = 0.0;
         }
       }
+    }
+  }
+
+  this.drawDragPoints = (bezierPoints, p) => {
+    for ( let idx = client.dragPointStart; idx < bezierPoints.length; ++idx) {
+      if (!bezierPoints[idx]) continue;
+      const color = this.getColor(p,idx) 
+      const text = `G${p}-P${idx} (${bezierPoints[idx].x},${bezierPoints[idx].y})`
+      
+      client.circle.fillCircle(
+        bezierPoints[idx], 
+        POINTRADIUS, 
+        color
+      );
+
+      this.drawText(
+        text,
+        bezierPoints[idx].x + POINTRADIUS,
+        bezierPoints[idx].y,
+        color
+      );
     }
   }
   
@@ -67,11 +69,31 @@ function Drawer(client) {
     this.drawBezierGuidePath(points, GRAY);
     this.drawControlSplineAndBezierPoint(points, color, client.proportionalDistance[groupIdx], triggerable, groupIdx);
   }
+
+  // Arc length parameterization (even point along the line).
+  this.distToTable = (LUT, distance) => {
+    let arcLength = LUT[LUT.length - 1]; // total arc length.
+    let n = LUT.length // n = sample count
+
+    if (distance.between(0, arcLength)) { // check if the value is within the length of the curve.
+      for(let i=0;i<n-1;i++){ // iterate through the list to find which segment our distance lies within.
+        if(distance.within(LUT[i], LUT[i+1])) { // check if out input distance lies between two distances.
+          return distance.remap(  // remap the distance range to the t-value range.
+            LUT[i],  // prev dist
+            LUT[i + 1], // next dist.
+            i / (n - 1f), // prev t-value
+            (i + 1) / (n - 1f) // next t-value.
+          )
+        }
+      }
+    }
+
+    return distance / arcLength // distance is outside the length of the curve - extrapolate value outside.
+  }
   
   this.drawControlSplineAndBezierPoint = (points, color, t, triggerable, groupIdx) => {
-
     const toggleControl = client.dragpoints.bezierPoints[groupIdx]["toggle"];
-  
+    
     const xc = world.width / 2.0;
     const yc = world.height / 2.0;
     const initPos = { x: xc + points[0].x, y: yc + points[0].y };
@@ -91,7 +113,7 @@ function Drawer(client) {
     client.circle.fillCircle(point, POINTRADIUS, color);
   
     if (!toggleControl.showControlLine && !toggleControl.showLPoints && !toggleControl.showRPoints) return
-    if (triggerable) { this.drawRecursiveLine(points, t, point, groupIdx); }
+    if (triggerable) { this.drawRecursiveLine(points, t, point, groupIdx); } 
     if (!toggleControl.showControlLine) return
     if (!triggerable) return
   
