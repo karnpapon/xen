@@ -11,6 +11,9 @@ function BezierPoint(client) {
         showRPoints: false,
         showControlLine: true,
       },
+      trigger: {
+        allPoint: false
+      },
       muted: false,
       midi: { 
         chan: 0,
@@ -31,6 +34,9 @@ function BezierPoint(client) {
         showLPoints: false,
         showRPoints: false,
         showControlLine: true,
+      },
+      trigger: {
+        allPoint: false
       },
       midi: { 
         chan: ( this.bezierPoints.length ) % 16,

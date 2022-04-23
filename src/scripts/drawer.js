@@ -93,6 +93,7 @@ function Drawer(client) {
   
   this.drawControlSplineAndBezierPoint = (points, color, t, triggerable, groupIdx) => {
     const toggleControl = client.dragpoints.bezierPoints[groupIdx]["toggle"];
+    const triggerControl = client.dragpoints.bezierPoints[groupIdx]["trigger"];
     
     const xc = world.width / 2.0;
     const yc = world.height / 2.0;
@@ -135,7 +136,9 @@ function Drawer(client) {
       );
   
       // prevent unneccessary triggering on first & last line(spline).
-      if(client.line.isFirstLine(i) || client.line.isLastLine(i, points)) continue;
+      if(!triggerControl.allPoint) {
+        if(client.line.isFirstLine(i) || client.line.isLastLine(i, points)) continue;
+      }
   
       if ( utils.linePointCollision(x1, y1, x2, y2, point.x, point.y)) {
         utils.throttle(() => this.trigger("chan", groupIdx), 60);

@@ -108,6 +108,12 @@ function GUI() {
       0,
       client.dragpoints.bezierPoints.length - 1
     );
+
+    ImGui.Checkbox(
+      "trigger All line",
+      (value = client.dragpoints.bezierPoints[client.dragPointGroup]["trigger"]["allPoint"]) => (client.dragpoints.bezierPoints[client.dragPointGroup]["trigger"]["allPoint"] = value)
+    );
+
     ImGui.Checkbox(
       "control line",
       (value = client.dragpoints.bezierPoints[client.dragPointGroup]["toggle"]["showControlLine"]) => (client.dragpoints.bezierPoints[client.dragPointGroup]["toggle"]["showControlLine"] = value)

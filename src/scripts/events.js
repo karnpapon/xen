@@ -14,9 +14,9 @@ function Events(client) {
     document.onmousemove = this.mouseMove;
     document.oncontextmenu = this.rightMouseClick;
     document.onkeydown = this.onKeyPressed;
-    document.addEventListener('toggleMap', function (e) {
-    client.mapSrc.style.display = e.detail.hideMap ? "none" : "block"
-  });
+    client.canvas.addEventListener('toggleMap', function (e) {
+      client.mapSrc.style.display = e.detail.hideMap ? "none" : "block"
+    });
   }
   
   this.relMouseCoords = (event) => {
@@ -200,6 +200,9 @@ function Events(client) {
 
     // c = toggle c points
     if (event.key === 'c') { toggleGroup(bezierPoints[dragPointGroup]["toggle"], "showControlLine") }
+
+    // t = trigger all line
+    if (event.key === 't') { toggleGroup(bezierPoints[dragPointGroup]["trigger"], "allPoint") }
 
     // l = toggle l points
     if (event.key === 'l') { toggleGroup(bezierPoints[dragPointGroup]["toggle"], "showLPoints") }
