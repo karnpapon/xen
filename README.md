@@ -24,7 +24,8 @@ node index.js
 - **play/pause**: `spacebar`
 - **add new point**: `cmd` + `left click`
 - **add point group**: `Shift` + `n` = spawn new point group.
-- **remove point**: `right click` at target point.
+- **remove point**: `right click` at target point (make sure group is selected).
+- **trigger first/last line** `t`, since cubic bezier calculated by four points. by nature the distance between point is basically a straight line. thus moving point cannot avoid colliding with first line(start) and last line(end). use this option to avoid trigger first/last line.
 - **switch between point group**: `tab`, selected group will be highlighted in `BLUE` color `rgb(0,0,255)`
 - **toggle control-line**: `c` = only current selected group, `Shift` + `C` = toggle all group.  
 - **toggle L-Point**: `l` = toggle even recursived points (collision in `RED`), `Shift` + `L` = toggle all points.
