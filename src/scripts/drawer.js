@@ -169,7 +169,7 @@ function Drawer(client) {
     }
 
     if(client.oscActived){
-      client.io.osc.push("/oscMsg", 112)
+      // client.io.osc.push("/oscMsg", 112)
     }
   }
   

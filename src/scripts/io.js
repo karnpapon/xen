@@ -4,14 +4,14 @@
 /* global Osc */
 
 function IO (client) {
-  this.ip = '0.0.0.0'
+  // this.ip = '0.0.0.0'
   
   this.midi = new Midi(client)
-  this.osc = new Osc(client)
+  // this.osc = new Osc(client)
 
   this.start = function () {
     this.midi.start()
-    this.osc.start()
+    // this.osc.start()
     this.clear()
   }
 
@@ -22,8 +22,8 @@ function IO (client) {
 
   this.run = function () {
     this.midi.run()
-    this.osc.run()
-    this.osc.clear()
+    // this.osc.run()
+    // this.osc.clear()
   }
 
   this.silence = function () {
@@ -34,7 +34,7 @@ function IO (client) {
     if (validateIP(addr) !== true && addr.indexOf('.local') === -1) { console.warn('IO', 'Invalid IP'); return }
     this.ip = addr
     console.log('IO', 'Set target IP to ' + this.ip)
-    this.osc.setup()
+    // this.osc.setup()
   }
 
   this.length = function () {
