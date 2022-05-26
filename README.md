@@ -1,6 +1,7 @@
 # xen
 
-an implementation on [ De Casteljau's ](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm) algorithm, capable of sending MIDI (trigger), [OSC](https://en.wikipedia.org/wiki/Open_Sound_Control) to target client/server, eg.[SuperCollider](https://supercollider.github.io/), NOTE: Currently since xen is intentionally used for live performance. thus, no built-in audio engine is implemented and can only send triggering msg.
+
+an implementation on [ De Casteljau's ](https://en.wikipedia.org/wiki/De_Casteljau%27s_algorithm) algorithm, capable of sending MIDI (trigger), [OSC](https://en.wikipedia.org/wiki/Open_Sound_Control) to target client/server  eg.[SuperCollider](https://supercollider.github.io/) (OSC only works in repl mode), NOTE: xen is backend-agnostic, Intentionally used for live performance. thus, no built-in audio engine is implemented.
 
 <img src="./src/imgs/ss3.gif">
 

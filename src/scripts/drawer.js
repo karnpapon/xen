@@ -173,7 +173,7 @@ function Drawer(client) {
     }
   }
   
-  // casteljau's algorithm (cursived lerp)
+  // casteljau's algorithm (recursived lerp)
   // P(t)=(1−t)A+tB
   this.getBezier = (points, t) => {
     if (points.length == 1) {
